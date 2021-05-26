@@ -24,7 +24,6 @@ let meal_text_split:string[];
 let school_meal_arr: string[] = [];
 
 client.fetch("http://gsm.gen.hs.kr/xboard/board.php?tbnum=8", {}, function (err:Error, $:any, res:Response, body:Body) {
-
   for (let week:number = 2; week <= 6; week++) {
     for (let day:number = 2; day <= 6; day++) {
       meal_text = $(`#xb_fm_list > div.calendar > ul:nth-child(${week}) > li:nth-child(${day}) > div > div.slider_food_list`).text();
@@ -64,38 +63,31 @@ index.post('/', function(req:Request,res: Response,next:NextFunction) {
         const refreshToken = jwt.sign({}, 
         process.env.JWT_SECRET, { 
         expiresIn: '14d',
-        issuer: 'ingyo' 
+        issuer: 'C.R.C_SERVER' 
         });
           connection.query("UPDATE crcdb.user SET refresh = ? WHERE id =?;",[refreshToken,id],
           function(err:Error, results:any,fields:any) {
             if(err) {
-              res.status(500).send("DATA UPDATE ERROR")
+              res.status(500).send("DATA UPDATE QUERY ERROR")
             }
           });
           try {
             const accessToken = jwt.sign({ id, password }, 
               process.env.JWT_SECRET, { 
                 expiresIn: '1h',
-                issuer: 'ingyo' 
+                issuer: 'C.R.C_SERVER' 
               });
               res.cookie('accessToken', accessToken);
               res.cookie('refreshToken', refreshToken);
           } catch (error) {
             res.send("JWT ERROR!")
           }
-            connection.query("SELECT * FROM crcdb.item",
-            async function(err:Error, results:any,fields:any) {
-              if(err) {
-                res.send("Can't Find Item Data");
-              }
-              await results;
-              res.send("LOGIN SUCCESS")
-            });
+          res.send("LOGIN SUCCESS")
       } else {
-        res.send("Wrong Password! Please Check Again")
+        res.send("Wrong Password")
       }
     }
-  })
+  });
 });
 //#region post 
 /*
