@@ -25,9 +25,8 @@ login.post("/", (req: Request, res: Response, next: NextFunction) => {
     let email:string = req.body.email;
     let password:string = req.body.password;
     let name:string = req.body.name;
-    let id:string = req.body.id;
     let student_data:string = req.body.student_data;
-    let salt:string;
+    let salt:any;
     let hashedPasswd:string;
 
   async function hash() {
@@ -42,13 +41,14 @@ login.post("/", (req: Request, res: Response, next: NextFunction) => {
             res.send('Email Select Error. Check DB');
           } else {
               if(results[0]) {
-                  res.send("This Email already used. Please use another email");
+                  res.send("This Email already used.");
               } else {
-                  connection.query("INSERT INTO crcdb.userdata(id,email,password, name,salt,student_data) VALUES(?,?,?,?,?,?)",
-                  [id,email,hashedPasswd,name,salt,student_data],
+                  connection.query("INSERT INTO crcdb.userdata(email,password,name,salt,student_data) VALUES(?,?,?,?,?)",
+                  [email,hashedPasswd,name,salt,student_data],
                   function(err:Error, results:any,fields:any ) {
                       if(err) {
-                          res.send('User Data insert Error')
+                          res.send('User Data insert Error');
+                          console.log(err)
                       } else {
                         res.send("REGISTER SUCCESS")
                       }
