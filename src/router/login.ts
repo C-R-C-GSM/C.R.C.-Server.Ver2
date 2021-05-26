@@ -12,10 +12,15 @@ var connection = mysql.createConnection({
     password:process.env.DB_PASSWORD,
     database:process.env.DB_DATABASE
 });
+
+connection.connect();
+
 login.get("/", (request: Request, response: Response, next: NextFunction) => {
     console.log('get success');
 });
 
-connection.
+login.post("/", (request: Request, response: Response, next: NextFunction) => {
+    
+});
 
 export = login;

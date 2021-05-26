@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "script": {
+  "scripts": {
     "start": "node dist/app.js",
     "dev": "nodemon src/app.ts",
     "build": "tsc -p ."
@@ -29,6 +29,7 @@
     "typescript": "^4.2.4"
   },
   "dependencies": {
+    "cheerio-httpcli": "^0.8.1",
     "dotenv": "^10.0.0",
     "mysql": "^2.18.1"
   }
