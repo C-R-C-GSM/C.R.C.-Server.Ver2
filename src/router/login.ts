@@ -21,6 +21,7 @@ login.get("/", (request: Request, response: Response, next: NextFunction) => {
     console.log('get success');
 });
 
+
 login.post("/", (req: Request, res: Response, next: NextFunction) => {
     let email:string = req.body.email;
     let password:string = req.body.password;
