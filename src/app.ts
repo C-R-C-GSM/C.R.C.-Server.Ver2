@@ -4,6 +4,7 @@ import login from "./router/login"
 import register from "./router/register"
 
 const app = express();
+const hostname = "10.120.75.224";
 
 require('dotenv').config();
 
@@ -32,6 +33,6 @@ app.use('/',index);
 app.use('/login',login);
 app.use('/register',register)
 
-app.listen(3000, () => {
+app.listen(3000,hostname, () => {
   console.log("start");
 });

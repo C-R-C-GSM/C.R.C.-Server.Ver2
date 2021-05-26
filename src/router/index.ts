@@ -1,9 +1,10 @@
 import express, { Request, Response, NextFunction } from "express";
+import request from 'request';
 
 const index = express.Router();
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const nodemailer = require('nodemailer');
+
 
 var client = require('cheerio-httpcli');
 
@@ -118,40 +119,6 @@ index.post('/', function(req:Request,res: Response,next:NextFunction) {
 //  }); 
 //#endregion
 
-index.post('/mail', async(req:Request, res:Response) => {
-  let authNum = Math.random().toString().substr(2,6);
 
-  const smtpTransport = nodemailer.createTransport({
-    service: "Gmail",
-    auth: {
-        user: process.env.NODEMAILER_USER,
-        pass: process.env.NODEMAILER_PASS
-    },
-    tls: {
-        rejectUnauthorized: false
-    }
-  });
-
-  const mailOptions = {
-    from:process.env.NODEMAILER_USER,
-    to:req.body.email,
-    subject:"회원가입 E-Mail인증번호",
-    text:`인증번호는 ${authNum} 입니다`
-  };
-
-  await smtpTransport.sendMail(mailOptions, (error:Error, response:Response)=> {
-    if(error) {
-      console.log('send error');
-      console.log(error);
-    } else {
-      console.log('send success');
-    }
-    smtpTransport.close(); 
-  });
-  //authNum입력 후 확인방법 생각하기
-  if(req.body.authNum == authNum) {
-    res.send("SUCCESS")
-  }
-});
 
 export = index;
