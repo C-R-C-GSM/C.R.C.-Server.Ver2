@@ -1,6 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
 
 const index = express.Router();
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 var client = require('cheerio-httpcli');
 
@@ -45,26 +47,55 @@ client.fetch("http://gsm.gen.hs.kr/xboard/board.php?tbnum=8", {}, function (err:
 let student:number = 0;
 
 index.get("/", (request: Request, response: Response, next: NextFunction) => {
-    console.log('get success');
-    response.json({student:student});
+  console.log('get success');
+  response.json({student:student});
 });
 
 index.post('/', function(req:Request,res: Response,next:NextFunction) {
   let id:string = req.body.id;
   let password = req.body.password;
-  connection.query("SELECT password FROM crcdb.userdata WHERE id = ?",[id],
-  function(err:Error, results:any, fields:any) {
+  connection.query("SELECT password,salt FROM crcdb.user WHERE id = ?",[id],
+  function(err:Error, results:any,fields:any) {
     if(err) {
-      res.send("DB CONNECT ERROR");
-      console.log(err)
+      res.send("DB ERROR");
     } else {
-      if(results[0].password == password) {
-        res.send("LOGIN SUCCESS");
+      let dbpasswd = crypto.pbkdf2Sync(password, results[0].salt, 1, 32, 'sha512').toString('hex')
+      if(results[0].passwd == dbpasswd) {
+        const refreshToken = jwt.sign({}, 
+        process.env.JWT_SECRET, { 
+        expiresIn: '14d',
+        issuer: 'ingyo' 
+        });
+          connection.query("UPDATE crcdb.user SET refresh = ? WHERE id =?;",[refreshToken,id],
+          function(err:Error, results:any,fields:any) {
+            if(err) {
+              res.status(500).send("DATA UPDATE ERROR")
+            }
+          });
+          try {
+            const accessToken = jwt.sign({ id, password }, 
+              process.env.JWT_SECRET, { 
+                expiresIn: '1h',
+                issuer: 'ingyo' 
+              });
+              res.cookie('accessToken', accessToken);
+              res.cookie('refreshToken', refreshToken);
+          } catch (error) {
+            res.send("JWT ERROR!")
+          }
+            connection.query("SELECT * FROM crcdb.item",
+            async function(err:Error, results:any,fields:any) {
+              if(err) {
+                res.send("Can't Find Item Data");
+              }
+              await results;
+              res.send("LOGIN SUCCESS")
+            });
       } else {
-        res.send("PASSWORD WRONG");
+        res.send("Wrong Password! Please Check Again")
       }
     }
-  });
+  })
 });
 //#region post 
 /*
