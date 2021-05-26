@@ -39,7 +39,7 @@ client.fetch("http://gsm.gen.hs.kr/xboard/board.php?tbnum=8", {}, function (err:
       school_meal_arr.push(meal_text_split[2]);
     }
   }
-  console.log(school_meal_arr[10]);
+  //console.log(school_meal_arr);
 });
 
 let student:number = 0;
@@ -52,10 +52,11 @@ index.get("/", (request: Request, response: Response, next: NextFunction) => {
 index.post('/', function(req:Request,res: Response,next:NextFunction) {
   let id:string = req.body.id;
   let password = req.body.password;
-  connection.query("SELECT password FROM crcdb.userdata WHERE = ?",[id],
+  connection.query("SELECT password FROM crcdb.userdata WHERE id = ?",[id],
   function(err:Error, results:any, fields:any) {
     if(err) {
       res.send("DB CONNECT ERROR");
+      console.log(err)
     } else {
       if(results[0].password == password) {
         res.send("LOGIN SUCCESS");

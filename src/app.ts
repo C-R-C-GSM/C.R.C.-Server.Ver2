@@ -27,7 +27,7 @@ const room = io.of('/test');
 
 http.listen(9000, function () { console.log('Listening on *:9000'); });
 */
-
+app.use(bodyParser.urlencoded({extended: false}))
 app.use('/',index);
 app.use('/login',login);
 app.use('/register',register)
