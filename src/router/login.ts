@@ -3,6 +3,7 @@ import express, { Request, Response, NextFunction } from "express";
 const login = express.Router();
 const mysql = require("mysql")
 const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 
 require('dotenv').config();
 
@@ -22,6 +23,7 @@ login.get("/", (request: Request, response: Response, next: NextFunction) => {
 
 
 login.post("/", (req: Request, res: Response, next: NextFunction) => {
+    console.log('login post')
     let email:string = req.body.email;
     let password:string = req.body.password;
     let name:string = req.body.name;
@@ -43,13 +45,43 @@ login.post("/", (req: Request, res: Response, next: NextFunction) => {
               if(results[0]) {
                   res.send("This Email already used.");
               } else {
-                  connection.query("INSERT INTO crcdb.userdata(email,password,name,salt,student_data) VALUES(?,?,?,?,?)",
-                  [email,hashedPasswd,name,salt,student_data],
+                let authNum = Math.random().toString().substr(2,6);
+
+                const smtpTransport = nodemailer.createTransport({
+                    service: "Gmail",
+                    auth: {
+                        user: process.env.NODEMAILER_USER,
+                        pass: process.env.NODEMAILER_PASS
+                    },
+                    tls: {
+                        rejectUnauthorized: false
+                    }
+                });
+
+                const mailOptions = {
+                    from:process.env.NODEMAILER_USER,
+                    to:req.body.email,
+                    subject:"회원가입 E-Mail인증번호",
+                    text:`http://10.120.75.224:3000/register/email-num-check?authNum=${authNum}&email=${req.body.email}`
+                };
+
+                await smtpTransport.sendMail(mailOptions, (error:Error, response:Response)=> {
+                    if(error) {
+                    console.log('send error');
+                    console.log(error);
+                    } else {
+                    console.log('send success');
+                    }
+                    smtpTransport.close();
+                });
+                  connection.query("INSERT INTO crcdb.userdata(email,password,name,salt,student_data,authNum) VALUES(?,?,?,?,?,?)",
+                  [email,hashedPasswd,name,salt,student_data,authNum],
                   function(err:Error, results:any,fields:any ) {
                       if(err) {
                           res.send('User Data insert Error');
                           console.log(err)
                       } else {
+                        
                         res.send("REGISTER SUCCESS")
                       }
                   });
