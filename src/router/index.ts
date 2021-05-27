@@ -55,6 +55,16 @@ index.get("/", (request: Request, response: Response, next: NextFunction) => {
 index.post('/', function(req:Request,res: Response,next:NextFunction) {
   let email:string = req.body.email;
   let password = req.body.password;
+  let key:number;
+  connection.query("SELECT userid FROM crcdb.userdata WHERE email = ?",[email],
+  function(err:Error, results:any,fields:any) {
+    if(err) {
+      res.send("DB ERROR");
+      console.log(err);
+    } else {
+      key = results[0].userid;
+    }
+  })
   connection.query("SELECT password,salt FROM crcdb.userdata WHERE email = ?",[email],
   function(err:Error, results:any,fields:any) {
     if(err) {
@@ -78,7 +88,7 @@ index.post('/', function(req:Request,res: Response,next:NextFunction) {
               console.log(err)
             } else {
               try {
-                const accessToken = jwt.sign({ email, password }, 
+                const accessToken = jwt.sign({ key }, 
                   process.env.JWT_SECRET, { 
                     expiresIn: '1h',
                     issuer: 'C.R.C_SERVER' 
