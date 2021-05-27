@@ -1,5 +1,4 @@
 import express, { Request, Response, NextFunction } from "express";
-import path from "path";
 
 const login = express.Router();
 const mysql = require("mysql")
@@ -37,7 +36,7 @@ login.post("/", (req: Request, res: Response, next: NextFunction) => {
 
   hash();
       connection.query("SELECT email FROM crcdb.userdata WHERE email = ?",[email],
-      async function(err:Error, results:any,fields:any ) {
+      async function(err:Error, results:any,fields:any) {
           if(err) {
             res.send('Email Select Error. Check DB');
           } else {

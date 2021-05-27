@@ -39,7 +39,7 @@ register.post('/', async(req:Request, res:Response) => {
         from:process.env.NODEMAILER_USER,
         to:req.body.email,
         subject:"회원가입 E-Mail인증번호",
-        text:`인증번호는 ${authNum} 입니다`
+        text:`http://10.120.75.224:3000/email-num-check?authNum=${authNum}&email=${req.body.email}`
     };
 
     await smtpTransport.sendMail(mailOptions, (error:Error, response:Response)=> {
@@ -48,35 +48,42 @@ register.post('/', async(req:Request, res:Response) => {
         console.log(error);
         } else {
         console.log('send success');
-        connection.query("UPDATE crcdb.userdata SET authNum = ? WHERE email =?;",[authNum,req.body.email],
-        function(err:Error, results:any,fields:any) {
-            if(err) {
-            res.send("DB CHECK");
-            console.log(err);
-            } else {
-            res.send("이메일을 확인해주세요!");
-            }
-        }) 
         }
         smtpTransport.close(); 
     });
 });
 
-register.post("/email-num-check", (request: Request, response: Response, next: NextFunction) => {
-    
-    connection.query("SELECT authNum FROM crcdb.userdata WHERE email = ?",[request.body.email],
+register.get("/:authNum", (request: Request, response: Response, next: NextFunction) => {
+    let authNum = request.query.authNum;
+    let email = request.query.email;
+    console.log(authNum,email);
+    connection.query("SELECT authNum FROM crcdb.userdata WHERE email = ?",[email],
     function(err:Error, results:any,fields:any) {
         if(err) {
-            response.send("DB ERROR");
             console.log(err);
+            response.send("DB ERROR");
         } else {
-            if(request.body.authNum == results[0].authNum) {
-                response.json({res:'success'});
+            console.log(results);
+            if(!results[0].authNum || !results[0].email) {
+                response.send("잘못된 요청입니다.")
             } else {
-                response.json({res:'fail'});
+                if(results[0].authNum == authNum) {
+                    connection.query("UPDATE crcdb.userdata SET auth = ? WHERE email = ?",[1,email],
+                    function(err:Error, results:any,fields:any) {
+                        if(err) {
+                            console.log(err);
+                            response.send("DB ERROR")
+                        }
+                    });
+                    response.send("인증번호 맞네요!");
+                } else {
+                    response.send("인증번호 맞지 않네유!");
+                }
             }
+            
         }
-    })
+    });
 });
+
 
 export = register;
