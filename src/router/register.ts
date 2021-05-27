@@ -6,6 +6,7 @@ const register = express.Router();
 const mysql = require("mysql")
 require('dotenv').config();
 const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
 
 var connection = mysql.createConnection({
   host:process.env.DB_HOST,
@@ -18,7 +19,25 @@ var connection = mysql.createConnection({
 connection.connect();
 
 register.get("/", (request: Request, response: Response, next: NextFunction) => {
-    console.log('get success');
+    let accesstoken = request.cookies.accessToken;
+    let refreshtoken = request.cookies.refreshToken;
+    /*
+    connection.query("SELECT userid FROM crcdb.userdata WHERE email = ?",[email],
+    function(err:Error, results:any,fields:any) {
+      if(err) {
+        response.send("DB ERROR");
+        console.log(err);
+      } else {
+        key = results[0].userid;
+      }
+    });
+    */
+    let decoded = jwt.vertify(accesstoken,process.env.JWT_SECRET);
+    if(!decoded) {
+        response.send("토큰이 만료되었습니다!");
+    } else {
+        console.log('get success');
+    }
 });
 
 register.post('/', async(req:Request, res:Response) => {
@@ -39,7 +58,7 @@ register.post('/', async(req:Request, res:Response) => {
         from:process.env.NODEMAILER_USER,
         to:req.body.email,
         subject:"회원가입 E-Mail인증번호",
-        text:`http://10.120.75.224:3000/email-num-check?authNum=${authNum}&email=${req.body.email}`
+        text:`http://10.120.75.224:3000/register/email-num-check?authNum=${authNum}&email=${req.body.email}`
     };
 
     await smtpTransport.sendMail(mailOptions, (error:Error, response:Response)=> {
@@ -51,6 +70,13 @@ register.post('/', async(req:Request, res:Response) => {
         }
         smtpTransport.close(); 
     });
+    connection.query("INSERT INTO crcdb.userdata(authNum) VALUES(?)",[authNum],
+    function(err:Error, results:any,fields:any) {
+        if(err) {
+            res.send("DB ERROR");
+            console.log(err);
+        }
+    })
 });
 
 register.get("/:authNum", (request: Request, response: Response, next: NextFunction) => {
