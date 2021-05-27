@@ -82,7 +82,7 @@ login.post("/", (req: Request, res: Response, next: NextFunction) => {
                           console.log(err)
                       } else {
                         
-                        res.send("REGISTER SUCCESS")
+                        res.send("회원가입 성공했습니다. 해당 이메일을 확인해주세요")
                       }
                   });
               }

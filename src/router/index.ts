@@ -108,6 +108,13 @@ index.post('/', function(req:Request,res: Response,next:NextFunction) {
     }
   });
 });
+
+index.post('/Main', (req:Request, res:Response) => {
+  let student_num = req.body;
+  res.send("student_num : "+student_num);
+  console.log(student_num);
+});
+
 //#region post 
 /*
   student = request.body.counter;

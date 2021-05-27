@@ -2,7 +2,8 @@ import express, { Request, Response, NextFunction } from "express";
 import index from "./router/index"
 import login from "./router/login"
 import register from "./router/register"
-
+import swaggerUi from "swagger-ui-express";
+import * as swaggerDocument from './swagger.json'
 const app = express();
 const hostname = "10.120.75.224";
 
@@ -28,10 +29,12 @@ const room = io.of('/test');
 
 http.listen(9000, function () { console.log('Listening on *:9000'); });
 */
+app.use(express.json());
 app.use(bodyParser.urlencoded({extended: false}))
 app.use('/',index);
 app.use('/login',login);
 app.use('/register',register)
+app.use('/swagger',swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.listen(3000,hostname, () => {
   console.log("start");
