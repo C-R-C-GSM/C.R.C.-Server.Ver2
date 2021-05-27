@@ -1,0 +1,246 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Swagger for Plask task API",
+        "description": "Open API docs with Swagger",
+        "license": {
+            "name": "MIT",
+            "url": "http://10.120.75.224:3000"
+        }
+    },
+    "host": "10.120.75.224:3000",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "C.R.C Server",
+            "description": "C.R.C Server Swagger"
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "tags": [
+                    "Main"
+                ],
+                "summary": "학생 수 체크 및 급식 확인 페이지",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Main"
+                ],
+                "summary": "로그인 정보 받는 페이지",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Register",
+                        "schema": {
+                            "$ref": "#/definitions/LoginData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Register Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/Main": {
+            "post": {
+                "tags": [
+                    "Main"
+                ],
+                "summary": "하드웨어에서 학생 수 전달",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Register",
+                        "schema": {
+                            "$ref": "#/definitions/Student_num_Data"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Filter Change Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/login": {
+            "get": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "로그인 페이지 받아오기",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "회원가입 페이지",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Register",
+                        "schema": {
+                            "$ref": "#/definitions/RegisterData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Register Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/register": {
+            "get": {
+                "tags": [
+                    "Register"
+                ],
+                "summary": "회원가입 페이지 받아고기",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/register/:authNum": {
+            "post": {
+                "tags": [
+                    "Register"
+                ],
+                "summary": "Register Data Post",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Register",
+                        "schema": {
+                            "$ref": "#/definitions/RegisterData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Register Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "userdata": {
+            "properties": {
+                "userid": {
+                    "type": "integer"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "student_data": {
+                    "type": "string"
+                },
+                "refresh": {
+                    "type": "string"
+                },
+                "salt": {
+                    "type": "string"
+                },
+                "auth": {
+                    "type": "integer"
+                },
+                "authNum": {
+                    "type": "integer"
+                }
+            }
+        },
+        "LoginData": {
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "RegisterData": {
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "student_data": {
+                    "type": "string"
+                }
+            }
+        },
+        "Student_num_Data": {
+            "properties": {
+                "student_num": {
+                    "type": "string"
+                }
+            }
+        },
+        "authNum_Check": {
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "authNum": {
+                    "type":"string"
+                }
+            }
+        }
+    }
+}
