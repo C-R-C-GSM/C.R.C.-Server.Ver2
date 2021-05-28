@@ -1,4 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
+import methodOverride from 'method-override'
+
 import index from "./router/index"
 import login from "./router/login"
 import register from "./router/register"
@@ -33,7 +35,9 @@ const room = io.of('/test');
 http.listen(9000, function () { console.log('Listening on *:9000'); });
 */
 app.use(express.json());
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(methodOverride('_method'));
+
 app.use('/',index);
 app.use('/login',login);
 app.use('/register',register);
