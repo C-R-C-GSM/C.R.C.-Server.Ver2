@@ -29,13 +29,22 @@ review.post('/',(request:Request, res:Response, next:NextFunction) => {
             res.send("DB ERROR");
             console.log(err)
         } else {
-            console.log('review insert success')
+            res.send("리뷰 등록!")
         }
     })
 });
 
 review.delete('/',(request:Request, res:Response, next:NextFunction) => {
-    console.log('delete');
+    let name = request.body.name;
+    connection.query("DELETE FROM crcdb.reviewdata WHERE reviewid IN ( SELECT reviewid FROM crcdb.reviewdata WHERE name = ?)",[name],
+    function(err:Error,results:any,fields:any) {
+        if(err) {
+            res.send("DB ERROR");
+            console.log(err);
+        } else {
+            res.send("삭제되었습니다.")
+        }
+    })
 });
 
 export = review;
