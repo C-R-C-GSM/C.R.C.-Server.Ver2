@@ -5,6 +5,7 @@ import index from "./router/index"
 import login from "./router/login"
 import register from "./router/register"
 import review from "./router/review"
+import suggest from "./router/suggest"
 
 import swaggerUi from "swagger-ui-express";
 import * as swaggerDocument from './swagger.json'
@@ -41,7 +42,8 @@ app.use(methodOverride('_method'));
 app.use('/',index);
 app.use('/login',login);
 app.use('/register',register);
-app.use('/review',review)
+app.use('/review',review);
+app.use('/suggest',suggest)
 
 app.use('/swagger',swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
