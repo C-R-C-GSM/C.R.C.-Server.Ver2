@@ -36,15 +36,26 @@ review.post('/',(request:Request, res:Response, next:NextFunction) => {
 
 review.delete('/',(request:Request, res:Response, next:NextFunction) => {
     let name = request.body.name;
-    connection.query("DELETE FROM crcdb.reviewdata WHERE reviewid IN ( SELECT reviewid FROM crcdb.reviewdata WHERE name = ?)",[name],
+    
+    connection.query("SELECT reviewid FROM crcdb.reviewdata WHERE name = ?",[name],
     function(err:Error,results:any,fields:any) {
         if(err) {
             res.send("DB ERROR");
             console.log(err);
         } else {
-            res.send("삭제되었습니다.")
+            connection.query("DELETE FROM crcdb.reviewdata WHERE reviewid = ?",[results[0].reviewid],
+            function(err1:Error,results1:any,fields1:any) {
+                if(err1) {
+                    res.send("DB ERROR");
+                    console.log(err1);
+                }else {
+                    res.send("삭제되었습니다.")
+                }
+            })
+            
         }
-    })
+    });
+    
 });
 
 export = review;
