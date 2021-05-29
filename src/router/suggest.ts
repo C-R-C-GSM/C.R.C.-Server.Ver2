@@ -19,7 +19,9 @@ suggest.get('/',(req:Request,res:Response,next:NextFunction) => {
 });
 
 suggest.post('/',(req:Request,res:Response,next:NextFunction) => {
-
+    let title = req.body.title;
+    let content = req.body.content;
+    let name = req.body.name;
 });
 
 export = suggest;
