@@ -22,6 +22,18 @@ suggest.post('/',(req:Request,res:Response,next:NextFunction) => {
     let title = req.body.title;
     let content = req.body.content;
     let name = req.body.name;
+
+    connection.query("INSERT INTO crcdb.userdata(title,content,name) VALUES(?,?,?)",
+        [title,content,name],
+        function(err:Error, results:any,fields:any ) {
+            if(err) {
+                res.send('DB error');
+                console.log(err)
+            } else {
+            
+            res.send("글 작성을 완료했습니다")
+            }
+        });
 });
 
 export = suggest;
