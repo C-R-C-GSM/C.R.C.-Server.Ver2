@@ -23,7 +23,7 @@ suggest.post('/',(req:Request,res:Response,next:NextFunction) => {
     let content = req.body.content;
     let name = req.body.name;
 
-    connection.query("INSERT INTO crcdb.userdata(title,content,name) VALUES(?,?,?)",
+    connection.query("INSERT INTO crcdb.suggest(title,content,name) VALUES(?,?,?)",
         [title,content,name],
         function(err:Error, results:any,fields:any ) {
             if(err) {
@@ -34,6 +34,30 @@ suggest.post('/',(req:Request,res:Response,next:NextFunction) => {
             res.send("글 작성을 완료했습니다")
             }
         });
+});
+
+suggest.delete('/',(request:Request, res:Response, next:NextFunction) => {
+    let name = request.body.name;
+    
+    connection.query("SELECT reviewid FROM crcdb.suggest WHERE name = ?",[name],
+    function(err:Error,results:any,fields:any) {
+        if(err) {
+            res.send("DB err");
+            console.log(err);
+        } else {
+            connection.query("DELETE FROM crcdb.suggest WHERE reviewid = ?",[results[0].reviewid],
+            function(err1:Error,results1:any,fields1:any) {
+                if(err1) {
+                    res.send("DB err");
+                    console.log(err1);
+                }else {
+                    res.send("성공적으로 삭제되었습니다.")
+                }
+            })
+            
+        }
+    });
+    
 });
 
 export = suggest;
