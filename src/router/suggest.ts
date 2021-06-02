@@ -13,9 +13,18 @@ var connection = mysql.createConnection({
     database:process.env.DB_DATABASE
 });
 connection.connect();
-
+let suggest_data: any;
 suggest.get('/',(req:Request,res:Response,next:NextFunction) => {
-    console.log('suggest get')
+    console.log('suggest get');
+    connection.query("SELECT * FROM crcdb.suggest",
+    function(err:Error,results:any,fields:any) {
+        if(err) {
+            res.send("DB ERROR");
+            console.log(err);
+        } else {
+            res.json(suggest_data:results)
+        }
+    })
 });
 
 suggest.post('/',(req:Request,res:Response,next:NextFunction) => {
