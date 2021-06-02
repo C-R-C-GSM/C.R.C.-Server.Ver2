@@ -62,7 +62,11 @@ index.post('/', function(req:Request,res: Response,next:NextFunction) {
       res.send("DB ERROR");
       console.log(err);
     } else {
-      key = results[0].userid;
+      if(results[0].userid) {
+        key = results[0].userid;
+      } else {
+        res.send("이메일이 없어요!")
+      }
     }
   })
   connection.query("SELECT password,salt FROM crcdb.userdata WHERE email = ?",[email],
@@ -95,10 +99,11 @@ index.post('/', function(req:Request,res: Response,next:NextFunction) {
                   });
                   res.cookie('accessToken', accessToken);
                   res.cookie('refreshToken', refreshToken);
+                  res.status(200).json({accessToken:accessToken,success:true})
               } catch (error) {
-                res.send("JWT ERROR!")
+                res.json({success:false})
               }
-              res.send("LOGIN SUCCESS")
+              
             }
           });
           
@@ -111,7 +116,7 @@ index.post('/', function(req:Request,res: Response,next:NextFunction) {
 
 index.post('/Main', (req:Request, res:Response) => {
   let student_num = req.body;
-  res.send("student_num : "+student_num);
+  res.status(200).send("student_num : "+student_num);
   console.log(student_num);
 });
 

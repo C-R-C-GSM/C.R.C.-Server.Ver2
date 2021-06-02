@@ -19,10 +19,11 @@ suggest.get('/',(req:Request,res:Response,next:NextFunction) => {
     connection.query("SELECT * FROM crcdb.suggest",
     function(err:Error,results:any,fields:any) {
         if(err) {
-            res.send("DB ERROR");
+            res.send("DB ERROR").json({success:false});
             console.log(err);
         } else {
-            res.json(suggest_data:results)
+            //res.json(suggest_data:results)
+            res.json({success:true})
         }
     })
 });
@@ -36,11 +37,11 @@ suggest.post('/',(req:Request,res:Response,next:NextFunction) => {
         [title,content,name],
         function(err:Error, results:any,fields:any ) {
             if(err) {
-                res.send('DB error');
+                res.send('DB error').json({success:false});
                 console.log(err)
             } else {
             
-            res.send("글 작성을 완료했습니다")
+            res.send("글 작성을 완료했습니다").json({success:true})
             }
         });
 });
@@ -51,16 +52,16 @@ suggest.delete('/',(request:Request, res:Response, next:NextFunction) => {
     connection.query("SELECT reviewid FROM crcdb.suggest WHERE name = ?",[name],
     function(err:Error,results:any,fields:any) {
         if(err) {
-            res.send("DB err");
+            res.send("DB err").json({success:false});
             console.log(err);
         } else {
             connection.query("DELETE FROM crcdb.suggest WHERE reviewid = ?",[results[0].reviewid],
             function(err1:Error,results1:any,fields1:any) {
                 if(err1) {
-                    res.send("DB err");
+                    res.send("DB err").json({success:false});
                     console.log(err1);
                 }else {
-                    res.send("성공적으로 삭제되었습니다.")
+                    res.status(200).send("성공적으로 삭제되었습니다.").json({success:true})
                 }
             })
             

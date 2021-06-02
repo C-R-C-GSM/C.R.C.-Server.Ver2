@@ -40,10 +40,10 @@ login.post("/", (req: Request, res: Response, next: NextFunction) => {
       connection.query("SELECT email FROM crcdb.userdata WHERE email = ?",[email],
       async function(err:Error, results:any,fields:any) {
           if(err) {
-            res.send('Email Select Error. Check DB');
+            res.send('Email Select Error. Check DB').json({success:false});
           } else {
               if(results[0]) {
-                  res.send("This Email already used.");
+                  res.send("This Email already used.").json({success:false});
               } else {
                 let authNum = Math.random().toString().substr(2,6);
 
@@ -67,24 +67,24 @@ login.post("/", (req: Request, res: Response, next: NextFunction) => {
 
                 await smtpTransport.sendMail(mailOptions, (error:Error, response:Response)=> {
                     if(error) {
-                    console.log('send error');
+                    res.json({success:false})
                     console.log(error);
                     } else {
                     console.log('send success');
+                    connection.query("INSERT INTO crcdb.userdata(email,password,name,salt,student_data,authNum) VALUES(?,?,?,?,?,?)",
+                    [email,hashedPasswd,name,salt,student_data,authNum],
+                    function(err:Error, results:any,fields:any ) {
+                        if(err) {
+                            res.send('User Data insert Error').json({success:false});
+                            console.log(err)
+                        } else {
+                          
+                          res.send("회원가입 성공했습니다. 해당 이메일을 확인해주세요").json({success:true})
+                        }
+                    });
                     }
                     smtpTransport.close();
                 });
-                  connection.query("INSERT INTO crcdb.userdata(email,password,name,salt,student_data,authNum) VALUES(?,?,?,?,?,?)",
-                  [email,hashedPasswd,name,salt,student_data,authNum],
-                  function(err:Error, results:any,fields:any ) {
-                      if(err) {
-                          res.send('User Data insert Error');
-                          console.log(err)
-                      } else {
-                        
-                        res.send("회원가입 성공했습니다. 해당 이메일을 확인해주세요")
-                      }
-                  });
               }
           }
       });

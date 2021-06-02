@@ -34,8 +34,9 @@ register.get("/", (request: Request, response: Response, next: NextFunction) => 
     */
     let decoded = jwt.vertify(accesstoken,process.env.JWT_SECRET);
     if(!decoded) {
-        response.status(400).send("토큰이 만료되었습니다!");
+        response.status(400).send("토큰이 만료되었습니다!").json({success:false});
     } else {
+        response.json({success:true});
         console.log('토큰 아직 있네요');
     }
 });
@@ -51,7 +52,7 @@ register.get("/:authNum", (request: Request, response: Response, next: NextFunct
     function(err:Error, results:any,fields:any) {
         if(err) {
             console.log(err);
-            response.send("DB ERROR");
+            response.send("DB ERROR").json({success:false});
         } else {
             console.log(results);
                 if(results[0].authNum == authNum) {
@@ -59,12 +60,12 @@ register.get("/:authNum", (request: Request, response: Response, next: NextFunct
                     function(err:Error, results:any,fields:any) {
                         if(err) {
                             console.log(err);
-                            response.send("DB ERROR")
+                            response.send("DB ERROR").json({success:false})
                         }
                     });
-                    response.send("인증번호 맞네요!");
+                    response.send("인증번호 맞네요!").json({success:true});
                 } else {
-                    response.send("인증번호 맞지 않네유!");
+                    response.send("인증번호 맞지 않네유!").json({success:false});
                 }
             }
             
