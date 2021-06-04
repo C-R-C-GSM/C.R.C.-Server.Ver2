@@ -79,7 +79,7 @@ login.post("/", (req: Request, res: Response, next: NextFunction) => {
                             console.log(err)
                         } else {
                           
-                          res.json({success:true,code:0})
+                          res.json({success:true,code:0,message:'register sucess'})
                         }
                     });
                     }

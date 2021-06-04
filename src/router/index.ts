@@ -48,7 +48,6 @@ client.fetch("http://gsm.gen.hs.kr/xboard/board.php?tbnum=8", {}, function (err:
 let student:number = 0;
 
 index.get("/", (request: Request, response: Response, next: NextFunction) => {
-  console.log('get success');
   response.json({student:student});
 });
 
@@ -59,7 +58,7 @@ index.post('/', function(req:Request,res: Response,next:NextFunction) {
   connection.query("SELECT userid FROM crcdb.userdata WHERE email = ?",[email],
   function(err:Error, results:any,fields:any) {
     if(err) {
-      res.send("DB ERROR");
+      res.json({success:false,code:-100})
       console.log(err);
     } else {
       if(results[0].userid) {
