@@ -15,7 +15,7 @@ connection.connect();
 
 review.get('/',(request:Request, res:Response, next:NextFunction) => {
     console.log('get');
-    res.status(200).json({success:true});
+    res.json({success:true,code:0,message:'get success'});
 });
 
 review.post('/',(request:Request, res:Response, next:NextFunction) => {
@@ -27,10 +27,10 @@ review.post('/',(request:Request, res:Response, next:NextFunction) => {
     connection.query("INSERT INTO crcdb.reviewdata(review_star,title,content,name) VALUES(?,?,?,?)",[review_star,title,content,name],
     function(err:Error,results:any,fields:any) {
         if(err) {
-            res.send("DB ERROR").json({success:false});
+            res.json({success:false,code:-100,message:'cannot connect db'});
             console.log(err)
         } else {
-            res.send("리뷰 등록!").json({success:true})
+            res.json({success:true,code:0,message:'register review'})
         }
     })
 });
@@ -41,16 +41,16 @@ review.delete('/',(request:Request, res:Response, next:NextFunction) => {
     connection.query("SELECT reviewid FROM crcdb.reviewdata WHERE name = ?",[name],
     function(err:Error,results:any,fields:any) {
         if(err) {
-            res.send("DB ERROR").json({success:false});
+            res.json({success:false,code:-100,message:'cannot connect db'});;
             console.log(err);
         } else {
             connection.query("DELETE FROM crcdb.reviewdata WHERE reviewid = ?",[results[0].reviewid],
             function(err1:Error,results1:any,fields1:any) {
                 if(err1) {
-                    res.send("DB ERROR").json({success:false});
+                    res.json({success:false,code:-100,message:'cannot connect db'});;
                     console.log(err1);
                 }else {
-                    res.status(200).send("삭제되었습니다.").json({success:true})
+                    res.json({success:true,code:0,message:'delete success'})
                 }
             })
             
