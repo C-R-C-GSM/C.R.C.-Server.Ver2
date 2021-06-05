@@ -48,7 +48,6 @@ client.fetch("http://gsm.gen.hs.kr/xboard/board.php?tbnum=8", {}, function (err:
 let student:number = 0;
 
 index.get("/", (request: Request, response: Response, next: NextFunction) => {
-  console.log('get success');
   response.json({student:student});
 });
 
@@ -59,22 +58,23 @@ index.post('/', function(req:Request,res: Response,next:NextFunction) {
   connection.query("SELECT userid FROM crcdb.userdata WHERE email = ?",[email],
   function(err:Error, results:any,fields:any) {
     if(err) {
-      res.send("DB ERROR");
+      res.json({success:false,code:-100,message:'cannot connect db'});
       console.log(err);
     } else {
-      key = results[0].userid;
+      if(results[0].userid) {
+        key = results[0].userid;
+      } else {
+        res.json({success:false,code:202,message:'cannot find this email'})
+      }
     }
   })
   connection.query("SELECT password,salt FROM crcdb.userdata WHERE email = ?",[email],
   function(err:Error, results:any,fields:any) {
     if(err) {
-      res.send("DB ERROR");
+      res.json({success:false,code:-100,message:'cannot connect db'});
       console.log(err)
     } else {
-      console.log(results[0])
       let dbpasswd = crypto.pbkdf2Sync(password, results[0].salt, 1, 32, 'sha512').toString('hex')
-      console.log(results[0].password);
-      console.log(dbpasswd);
       if(results[0].password == dbpasswd) {
         const refreshToken = jwt.sign({}, 
         process.env.JWT_SECRET, { 
@@ -84,7 +84,7 @@ index.post('/', function(req:Request,res: Response,next:NextFunction) {
           connection.query("UPDATE crcdb.userdata SET refresh = ? WHERE email =?;",[refreshToken,email],
           function(err:Error, results:any,fields:any) {
             if(err) {
-              res.send("DATA UPDATE QUERY ERROR");
+              res.json({success:false,code:-100,message:'cannot connect db'});;
               console.log(err)
             } else {
               try {
@@ -93,25 +93,25 @@ index.post('/', function(req:Request,res: Response,next:NextFunction) {
                     expiresIn: '1h',
                     issuer: 'C.R.C_SERVER' 
                   });
-                  res.cookie('accessToken', accessToken);
-                  res.cookie('refreshToken', refreshToken);
+                  res.json({accessToken:accessToken,success:true,code:0,message:'토큰 발급 및 로그인 성공'})
               } catch (error) {
-                res.send("JWT ERROR!")
+                res.json({success:false,code:-400,message:'token error'})
               }
-              res.send("LOGIN SUCCESS")
+              
             }
           });
           
       } else {
-        res.send("Wrong Password")
+        res.json({success:false,code:-300,message:'wrong password'})
       }
     }
   });
 });
 
+//라파 post용
 index.post('/Main', (req:Request, res:Response) => {
   let student_num = req.body;
-  res.send("student_num : "+student_num);
+  res.status(200).send("student_num : "+student_num);
   console.log(student_num);
 });
 

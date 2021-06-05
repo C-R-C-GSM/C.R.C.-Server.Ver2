@@ -19,8 +19,8 @@ var connection = mysql.createConnection({
 connection.connect();
 
 register.get("/", (request: Request, response: Response, next: NextFunction) => {
-    let accesstoken = request.cookies.accessToken;
-    let refreshtoken = request.cookies.refreshToken;
+    let accesstoken = request.headers.accessToken;
+    let refreshtoken = request.headers.refreshToken;
     /*
     connection.query("SELECT userid FROM crcdb.userdata WHERE email = ?",[email],
     function(err:Error, results:any,fields:any) {
@@ -34,8 +34,9 @@ register.get("/", (request: Request, response: Response, next: NextFunction) => 
     */
     let decoded = jwt.vertify(accesstoken,process.env.JWT_SECRET);
     if(!decoded) {
-        response.status(400).send("토큰이 만료되었습니다!");
+        response.json({success:false,code:-401,message:'expired token'});
     } else {
+        response.json({success:true,code:0,message:'token check success'});
         console.log('토큰 아직 있네요');
     }
 });
@@ -51,7 +52,7 @@ register.get("/:authNum", (request: Request, response: Response, next: NextFunct
     function(err:Error, results:any,fields:any) {
         if(err) {
             console.log(err);
-            response.send("DB ERROR");
+            response.json({success:false,code:-100,message:'cannot connect db'});;
         } else {
             console.log(results);
                 if(results[0].authNum == authNum) {
@@ -59,12 +60,12 @@ register.get("/:authNum", (request: Request, response: Response, next: NextFunct
                     function(err:Error, results:any,fields:any) {
                         if(err) {
                             console.log(err);
-                            response.send("DB ERROR")
+                            response.json({success:false,code:-100,message:'cannot connect db'});
                         }
                     });
-                    response.send("인증번호 맞네요!");
+                    response.send("인증번호 맞네요!").json({success:true,code:0,message:'correct authNum'});
                 } else {
-                    response.send("인증번호 맞지 않네유!");
+                    response.send("인증번호 맞지 않네유!").json({success:false,code:-500,message:'Wrong authNum'});
                 }
             }
             

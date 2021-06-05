@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/C-R-C-GSM/C.R.C.-Server.Ver2#readme",
   "devDependencies": {
+    "@types/cors": "^2.8.10",
     "@types/express": "^4.17.12",
     "@types/jsonwebtoken": "^8.5.1",
     "@types/method-override": "0.0.31",
@@ -36,6 +37,7 @@
     "@types/express-jwt": "^6.0.1",
     "cheerio-httpcli": "^0.8.1",
     "composable-middleware": "^0.3.0",
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express-jwt": "^6.0.0",
     "jsonwebtoken": "^8.5.1",

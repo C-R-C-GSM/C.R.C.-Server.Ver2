@@ -23,7 +23,7 @@ login.get("/", (request: Request, response: Response, next: NextFunction) => {
 
 
 login.post("/", (req: Request, res: Response, next: NextFunction) => {
-    console.log('login post')
+    console.log('register')
     let email:string = req.body.email;
     let password:string = req.body.password;
     let name:string = req.body.name;
@@ -40,10 +40,10 @@ login.post("/", (req: Request, res: Response, next: NextFunction) => {
       connection.query("SELECT email FROM crcdb.userdata WHERE email = ?",[email],
       async function(err:Error, results:any,fields:any) {
           if(err) {
-            res.send('Email Select Error. Check DB');
+            res.json({success:false,code:-100,message:'cannot connect db'}); //DB error
           } else {
               if(results[0]) {
-                  res.send("This Email already used.");
+                  res.json({success:false,code:-200,message:'email already existed'}); //email existed
               } else {
                 let authNum = Math.random().toString().substr(2,6);
 
@@ -67,24 +67,24 @@ login.post("/", (req: Request, res: Response, next: NextFunction) => {
 
                 await smtpTransport.sendMail(mailOptions, (error:Error, response:Response)=> {
                     if(error) {
-                    console.log('send error');
+                    res.json({success:false,code:-201,message:'invalid email address'})   //email send error
                     console.log(error);
                     } else {
                     console.log('send success');
+                    connection.query("INSERT INTO crcdb.userdata(email,password,name,salt,student_data,authNum) VALUES(?,?,?,?,?,?)",
+                    [email,hashedPasswd,name,salt,student_data,authNum],
+                    function(err:Error, results:any,fields:any ) {
+                        if(err) {
+                            res.json({success:false,code:-100,message:'cannot connect db'});
+                            console.log(err)
+                        } else {
+                          
+                          res.json({success:true,code:0,message:'register sucess'})
+                        }
+                    });
                     }
                     smtpTransport.close();
                 });
-                  connection.query("INSERT INTO crcdb.userdata(email,password,name,salt,student_data,authNum) VALUES(?,?,?,?,?,?)",
-                  [email,hashedPasswd,name,salt,student_data,authNum],
-                  function(err:Error, results:any,fields:any ) {
-                      if(err) {
-                          res.send('User Data insert Error');
-                          console.log(err)
-                      } else {
-                        
-                        res.send("회원가입 성공했습니다. 해당 이메일을 확인해주세요")
-                      }
-                  });
               }
           }
       });
