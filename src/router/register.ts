@@ -63,9 +63,9 @@ register.get("/:authNum", (request: Request, response: Response, next: NextFunct
                             response.json({success:false,code:-100,message:'cannot connect db'});
                         }
                     });
-                    response.send("인증번호 맞네요!").json({success:true,code:0,message:'correct authNum'});
+                    response.json({success:true,code:0,message:'correct authNum'});
                 } else {
-                    response.send("인증번호 맞지 않네유!").json({success:false,code:-500,message:'Wrong authNum'});
+                    response.json({success:false,code:-500,message:'Wrong authNum'});
                 }
             }
             
