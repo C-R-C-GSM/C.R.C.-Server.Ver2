@@ -111,7 +111,6 @@ index.post('/', function(req:Request,res: Response,next:NextFunction) {
 //라파 post용
 index.post('/Main', (req:Request, res:Response) => {
   let student_num = req.body;
-  res.status(200).send("student_num : "+student_num);
   console.log(student_num);
 });
 
