@@ -46,28 +46,4 @@ suggest.post('/',(req:Request,res:Response,next:NextFunction) => {
         });
 });
 
-suggest.delete('/',(request:Request, res:Response, next:NextFunction) => {
-    let name = request.body.name;
-    
-    connection.query("SELECT reviewid FROM crcdb.suggest WHERE name = ?",[name],
-    function(err:Error,results:any,fields:any) {
-        if(err) {
-            res.json({success:false,code:-100,message:'cannot connect db'});
-            console.log(err);
-        } else {
-            connection.query("DELETE FROM crcdb.suggest WHERE reviewid = ?",[results[0].reviewid],
-            function(err1:Error,results1:any,fields1:any) {
-                if(err1) {
-                    res.json({success:false,code:-100,message:'cannot connect db'});
-                    console.log(err1);
-                }else {
-                    res.json({success:true,code:0,message:'delete success'})
-                }
-            })
-            
-        }
-    });
-    
-});
-
 export = suggest;

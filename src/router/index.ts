@@ -25,6 +25,7 @@ let meal_text:string;
 let meal_text_split:string[];
 let school_meal_arr: string[] = [];
 
+/*
 client.fetch("http://gsm.gen.hs.kr/xboard/board.php?tbnum=8", {}, function (err:Error, $:any, res:Response, body:Body) {
   for (let week:number = 2; week <= 6; week++) {
     for (let day:number = 2; day <= 6; day++) {
@@ -44,69 +45,14 @@ client.fetch("http://gsm.gen.hs.kr/xboard/board.php?tbnum=8", {}, function (err:
   }
   //console.log(school_meal_arr);
 });
-
+*/
 let student:number = 0;
 
 index.get("/", (request: Request, response: Response, next: NextFunction) => {
   response.json({student:student});
 });
 
-index.post('/', function(req:Request,res: Response,next:NextFunction) {
-  let email:string = req.body.email;
-  let password = req.body.password;
-  let key:number;
-  connection.query("SELECT userid FROM crcdb.userdata WHERE email = ?",[email],
-  function(err:Error, results:any,fields:any) {
-    if(err) {
-      res.json({success:false,code:-100,message:'cannot connect db'});
-      console.log(err);
-    } else {
-      if(results[0].userid) {
-        key = results[0].userid;
-      } else {
-        res.json({success:false,code:202,message:'cannot find this email'})
-      }
-    }
-  })
-  connection.query("SELECT password,salt FROM crcdb.userdata WHERE email = ?",[email],
-  function(err:Error, results:any,fields:any) {
-    if(err) {
-      res.json({success:false,code:-100,message:'cannot connect db'});
-      console.log(err)
-    } else {
-      let dbpasswd = crypto.pbkdf2Sync(password, results[0].salt, 1, 32, 'sha512').toString('hex')
-      if(results[0].password == dbpasswd) {
-        const refreshToken = jwt.sign({}, 
-        process.env.JWT_SECRET, { 
-        expiresIn: '14d',
-        issuer: 'C.R.C_SERVER' 
-        });
-          connection.query("UPDATE crcdb.userdata SET refresh = ? WHERE email =?;",[refreshToken,email],
-          function(err:Error, results:any,fields:any) {
-            if(err) {
-              res.json({success:false,code:-100,message:'cannot connect db'});;
-              console.log(err)
-            } else {
-              try {
-                const accessToken = jwt.sign({ key }, 
-                  process.env.JWT_SECRET, { 
-                    expiresIn: '1h',
-                    issuer: 'C.R.C_SERVER' 
-                  });
-                  res.json({accessToken:accessToken,success:true,code:0,message:'토큰 발급 및 로그인 성공'})
-              } catch (error) {
-                res.json({success:false,code:-400,message:'token error'})
-              }
-              
-            }
-          });
-          
-      } else {
-        res.json({success:false,code:-300,message:'wrong password'})
-      }
-    }
-  });
-});
+
 
 //라파 post용
 index.post('/Main', (req:Request, res:Response) => {

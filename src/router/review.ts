@@ -4,6 +4,7 @@ const review = express.Router();
 
 const mysql = require('mysql');
 require('dotenv').config();
+const jwt = require('jsonwebtoken');
 var connection = mysql.createConnection({
     host:process.env.DB_HOST,
     port:process.env.DB_PORT,
@@ -15,7 +16,26 @@ connection.connect();
 
 review.get('/',(request:Request, res:Response, next:NextFunction) => {
     console.log('get');
-    res.json({success:true,code:0,message:'get success'});
+    let accesstoken = request.headers.accessToken;
+    let refreshtoken = request.headers.refreshToken;
+    /*
+    connection.query("SELECT userid FROM crcdb.userdata WHERE email = ?",[email],
+    function(err:Error, results:any,fields:any) {
+      if(err) {
+        response.send("DB ERROR");
+        console.log(err);
+      } else {
+        key = results[0].userid;
+      }
+    });
+    */
+    let decoded = jwt.vertify(accesstoken,process.env.JWT_SECRET);
+    if(!decoded) {
+        res.json({success:false,code:-401,message:'expired token'});
+    } else {
+        res.json({success:true,code:0,message:'token check success'});
+        console.log('토큰 아직 있네요');
+    }
 });
 
 review.post('/',(request:Request, res:Response, next:NextFunction) => {
@@ -33,30 +53,6 @@ review.post('/',(request:Request, res:Response, next:NextFunction) => {
             res.json({success:true,code:0,message:'register review'})
         }
     })
-});
-
-review.delete('/',(request:Request, res:Response, next:NextFunction) => {
-    let name = request.body.name;
-    
-    connection.query("SELECT reviewid FROM crcdb.reviewdata WHERE name = ?",[name],
-    function(err:Error,results:any,fields:any) {
-        if(err) {
-            res.json({success:false,code:-100,message:'cannot connect db'});;
-            console.log(err);
-        } else {
-            connection.query("DELETE FROM crcdb.reviewdata WHERE reviewid = ?",[results[0].reviewid],
-            function(err1:Error,results1:any,fields1:any) {
-                if(err1) {
-                    res.json({success:false,code:-100,message:'cannot connect db'});;
-                    console.log(err1);
-                }else {
-                    res.json({success:true,code:0,message:'delete success'})
-                }
-            })
-            
-        }
-    });
-    
 });
 
 export = review;
