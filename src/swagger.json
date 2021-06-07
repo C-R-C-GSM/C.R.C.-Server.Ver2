@@ -32,34 +32,10 @@
                 "tags": [
                     "Main"
                 ],
-                "summary": "학생 수 체크 및 급식 확인 페이지",
+                "summary": "학생 수 체크",
                 "responses": {
                     "200": {
                         "description": "OK"
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "Main"
-                ],
-                "summary": "로그인 정보 받는 페이지",
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "Register",
-                        "schema": {
-                            "$ref": "#/definitions/LoginData"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Register Success"
-                    },
-                    "404": {
-                        "description": "Failed. Bad Request"
                     }
                 }
             }
@@ -91,22 +67,37 @@
             }
         },
         "/login": {
-            "get": {
-                "tags": [
-                    "Login"
-                ],
-                "summary": "로그인 페이지 받아오기",
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            },
             "post": {
                 "tags": [
                     "Login"
                 ],
-                "summary": "회원가입 페이지",
+                "summary": "로그인",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Register",
+                        "schema": {
+                            "$ref": "#/definitions/LoginData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Register Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/register": {
+            "post": {
+                "tags": [
+                    "Register"
+                ],
+                "summary": "회원가입",
                 "parameters": [
                     {
                         "in": "body",
@@ -127,25 +118,12 @@
                 }
             }
         },
-        "/register": {
-            "get": {
-                "tags": [
-                    "Register"
-                ],
-                "summary": "회원가입 페이지 받아고기",
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
         "/register/:authNum": {
             "get": {
                 "tags": [
                     "Register"
                 ],
-                "summary": "Register Data Post",
+                "summary": "인증번호 인증 페이지",
                 "parameters": [
                     {
                         "in": "body",
