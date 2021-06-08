@@ -47,7 +47,6 @@ client.fetch("http://gsm.gen.hs.kr/xboard/board.php?tbnum=8", {}, function (err:
 });
 */
 let student:number = 0;
-
 index.get("/", (request: Request, response: Response, next: NextFunction) => {
   response.json({student:student});
 });

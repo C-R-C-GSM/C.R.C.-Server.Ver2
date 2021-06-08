@@ -13,7 +13,7 @@ var connection = mysql.createConnection({
     database:process.env.DB_DATABASE
 });
 connection.connect();
-
+let reviewdata_value:JSON;
 review.get('/',(request:Request, res:Response, next:NextFunction) => {
     console.log('get');
     let accesstoken = request.headers.accessToken;
@@ -33,7 +33,11 @@ review.get('/',(request:Request, res:Response, next:NextFunction) => {
     if(!decoded) {
         res.json({success:false,code:-401,message:'expired token'});
     } else {
-        res.json({success:true,code:0,message:'token check success'});
+        connection.query("SELECT * FROM crcdb.reviewdata",
+        async function(err:Error,results:any,fields:any) {
+            reviewdata_value = await results;
+        })
+        res.json({success:true,code:0,message:'token check success',review_data:reviewdata_value});
         console.log('토큰 아직 있네요');
     }
 });
