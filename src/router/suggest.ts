@@ -13,17 +13,17 @@ var connection = mysql.createConnection({
     database:process.env.DB_DATABASE
 });
 connection.connect();
-let suggest_data: any;
+let suggest_data:JSON;
 suggest.get('/',(req:Request,res:Response,next:NextFunction) => {
     console.log('suggest get');
     connection.query("SELECT * FROM crcdb.suggest",
-    function(err:Error,results:any,fields:any) {
+    async function(err:Error,results:any,fields:any) {
         if(err) {
             res.json({success:false,code:-100,message:'cannot connect db'});
             console.log(err);
         } else {
-            //res.json(suggest_data:results)
-            res.json({success:true,code:0,message:'suggest get'})
+            suggest_data = await results;
+            res.json({success:true,code:0,message:'suggest get',suggest_data:suggest_data});
         }
     })
 });
