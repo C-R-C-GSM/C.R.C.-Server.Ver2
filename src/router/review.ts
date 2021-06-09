@@ -70,7 +70,7 @@ review.post('/empathy',(req:Request,res:Response,next:NextFunction) => {
                 res.json({success:false,code:-100,message:'cannot connect db'});
                 console.log(err)
             } else {
-                connection.query("empathyDATE crcdb.reviewdata SET empathy = ?",[results+1],
+                connection.query("UPDATE crcdb.reviewdata SET empathy = ? WHERE reviewid = ?",[results+1,req.body.reviewid],
                 function(err1:Error,results1:any,fields1:any) {
                     if(err) {
                         res.json({success:false,code:-100,message:'cannot connect db'});
@@ -82,8 +82,24 @@ review.post('/empathy',(req:Request,res:Response,next:NextFunction) => {
             }
         })
     } else {
-        res.json({success:false,code:-1,message:'empathy이 존재하지 않습니다.'})
+        res.json({success:false,code:-1,message:'empathy가 존재하지 않습니다.'})
     }
-})
+});
+
+review.post('/reply',(req:Request,res:Response,next:NextFunction) => {
+    if(req.body.reply) {
+        connection.query("UPDATE crcdb.reviewdata SET reply = ? WHERE reviewid = ?",[req.body.reply,req.body.reviewid],
+        function(err:Error,results:any,fields:any) {
+            if(err) {
+                res.json({success:false,code:-100,message:'cannot connect db'});
+                console.log(err)
+            } else {
+                res.json({success:true,code:0,message:'reply success'});
+            }
+        })
+    } else {
+        res.json({success:false,code:-1,message:'reply가 존재하지 않습니다.'});
+    }
+});
 
 export = review;
