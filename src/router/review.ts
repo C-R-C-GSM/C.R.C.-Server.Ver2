@@ -1,4 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
+import { connected } from "process";
+import request from "request";
 
 const review = express.Router();
 
@@ -59,5 +61,29 @@ review.post('/',(request:Request, res:Response, next:NextFunction) => {
         }
     })
 });
+
+review.post('/up',(req:Request,res:Response,next:NextFunction) => {
+    if(req.body.up) {
+        connection.query("SELECT up FROM crcdb.reviewdata WHERE reviewid = ?",[req.body.reviewid],
+        function(err:Error,results:any,fields:any) {
+            if(err) {
+                res.json({success:false,code:-100,message:'cannot connect db'});
+                console.log(err)
+            } else {
+                connection.query("UPDATE crcdb.reviewdata SET up = ?",[results+1],
+                function(err1:Error,results1:any,fields1:any) {
+                    if(err) {
+                        res.json({success:false,code:-100,message:'cannot connect db'});
+                        console.log(err)
+                    } else {
+                        res.json({success:true,code:0,message:'up success'})
+                    }
+                })
+            }
+        })
+    } else {
+        res.json({success:false,code:-1,message:'up이 존재하지 않습니다.'})
+    }
+})
 
 export = review;
