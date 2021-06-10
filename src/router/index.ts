@@ -59,26 +59,6 @@ index.post('/Main', (req:Request, res:Response) => {
   console.log(student_num);
 });
 
-//#region post 
-/*
-  student = request.body.counter;
-  console.log(request.body.counter);
-  console.log('post success');
-    나중에 쓸 쿼리문 1. 학생의 번호를 가져오는 쿼리문 2. 학생의 체크를 모두 가져오는 것
-  connection.query("SELECT students FROM student", function(error, results, fields) {
-    console.log(results[0].number);
-    res.send(results[0].number);
-  });
-  connection.query("SELECT students FROM student", function(error, results, fields) {
-    console.log(results[0].check);
-  });
-  */
-//  connection.query("INSERT INTO students(check) VALUE('"+true+"'", function(error, results, fields) {
-//    if(error) {
-//      console.log(error);
-//    }
-//  }); 
-//#endregion
 
 
 

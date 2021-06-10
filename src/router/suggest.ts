@@ -14,6 +14,7 @@ var connection = mysql.createConnection({
 });
 connection.connect();
 let suggest_data:JSON;
+
 suggest.get('/',(req:Request,res:Response,next:NextFunction) => {
     console.log('suggest get');
     connection.query("SELECT * FROM crcdb.suggest",
