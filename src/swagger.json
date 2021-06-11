@@ -143,6 +143,98 @@
                     }
                 }
             }
+        },
+        "/review": {
+            "get": {
+                "tags": [
+                    "Review"
+                ],
+                "summary": "리뷰 불러오기",
+                "responses": {
+                    "200": {
+                        "description": "Review Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Review"
+                ],
+                "summary": "리뷰 작성",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Review Write",
+                        "schema": {
+                            "$ref": "#/definitions/Reivew_Write"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Review Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/review/empathy": {
+            "post": {
+                "tags": [
+                    "Review"
+                ],
+                "summary": "리뷰 공감",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Review empathy",
+                        "schema": {
+                            "$ref": "#/definitions/RegisterData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Review Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/review/reply": {
+            "post": {
+                "tags": [
+                    "Review"
+                ],
+                "summary": "리뷰 응답",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Review reply",
+                        "schema": {
+                            "$ref": "#/definitions/RegisterData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Review Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -217,6 +309,42 @@
                 },
                 "authNum": {
                     "type":"string"
+                }
+            }
+        },
+        "Review_Write": {
+            "properties": {
+                "review_star": {
+                    "type":"string"
+                },
+                "title": {
+                    "type":"string"
+                },
+                "content": {
+                    "type":"string"
+                },
+                "name": {
+                    "type":"string"
+                }
+            }
+        },
+        "Review_empathy": {
+            "properties": {
+                "empathy": {
+                    "type":"string"
+                },
+                "reviewid": {
+                    "type":"integer"
+                }
+            }
+        },
+        "Review_reply": {
+            "properties": {
+                "reply": {
+                    "type":"string"
+                },
+                "reviewid": {
+                    "type":"integer"
                 }
             }
         }
