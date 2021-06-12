@@ -19,7 +19,6 @@ let reviewdata_value:JSON;
 review.get('/',(request:Request, res:Response, next:NextFunction) => {
     console.log('get');
     let accesstoken = request.headers.accessToken;
-    let refreshtoken = request.headers.refreshToken;
     /*
     connection.query("SELECT userid FROM crcdb.userdata WHERE email = ?",[email],
     function(err:Error, results:any,fields:any) {
