@@ -20,7 +20,7 @@ let reviewdata_value:JSON;
 
 review.post('/review_check',(request:Request, res:Response, next:NextFunction) => {
     console.log('post');
-    let accesstoken = request.headers.accessToken;
+    let accesstoken = request.body.accessToken;
     /*
     connection.query("SELECT userid FROM crcdb.userdata WHERE email = ?",[email],
     function(err:Error, results:any,fields:any) {
