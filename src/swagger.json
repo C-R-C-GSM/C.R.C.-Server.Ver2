@@ -144,21 +144,33 @@
                 }
             }
         },
-        "/review": {
-            "get": {
+        "/review_check": {
+            "post": {
                 "tags": [
                     "Review"
                 ],
-                "summary": "리뷰 불러오기",
+                "summary": "리뷰 목록 확인",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Review Check",
+                        "schema": {
+                            "$ref": "#/definitions/get_accessToken"
+                        }
+                    }
+                ],
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "Review Success"
                     },
                     "404": {
                         "description": "Failed. Bad Request"
                     }
                 }
-            },
+            }
+        },
+        "/review": {
             "post": {
                 "tags": [
                     "Review"
@@ -235,9 +247,120 @@
                     }
                 }
             }
+        },
+        "/suggest_check": {
+            "post": {
+                "tags": [
+                    "suggest"
+                ],
+                "summary": "리뷰 목록 확인",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "suggest Check",
+                        "schema": {
+                            "$ref": "#/definitions/get_accessToken"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "suggest Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/suggest": {
+            "post": {
+                "tags": [
+                    "suggest"
+                ],
+                "summary": "리뷰 작성",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "suggest Write",
+                        "schema": {
+                            "$ref": "#/definitions/Reivew_Write"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "suggest Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/suggest/empathy": {
+            "post": {
+                "tags": [
+                    "suggest"
+                ],
+                "summary": "리뷰 공감",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "suggest empathy",
+                        "schema": {
+                            "$ref": "#/definitions/RegisterData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "suggest Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/suggest/reply": {
+            "post": {
+                "tags": [
+                    "suggest"
+                ],
+                "summary": "리뷰 응답",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "suggest reply",
+                        "schema": {
+                            "$ref": "#/definitions/RegisterData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "suggest Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "get_accessToken": {
+            "properties": {
+                "accessToken": {
+                    "type":"string"
+                }
+            }
+        },
         "userdata": {
             "properties": {
                 "userid": {
