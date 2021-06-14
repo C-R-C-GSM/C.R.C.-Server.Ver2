@@ -13,17 +13,18 @@ var connection = mysql.createConnection({
     database:process.env.DB_DATABASE
 });
 connection.connect();
-let suggest_data: any;
+let suggest_data:JSON;
+
 suggest.get('/',(req:Request,res:Response,next:NextFunction) => {
     console.log('suggest get');
     connection.query("SELECT * FROM crcdb.suggest",
-    function(err:Error,results:any,fields:any) {
+    async function(err:Error,results:any,fields:any) {
         if(err) {
             res.json({success:false,code:-100,message:'cannot connect db'});
             console.log(err);
         } else {
-            //res.json(suggest_data:results)
-            res.json({success:true,code:0,message:'suggest get'})
+            suggest_data = await results;
+            res.json({success:true,code:0,message:'suggest get',suggest_data:suggest_data});
         }
     })
 });
@@ -46,28 +47,44 @@ suggest.post('/',(req:Request,res:Response,next:NextFunction) => {
         });
 });
 
-suggest.delete('/',(request:Request, res:Response, next:NextFunction) => {
-    let name = request.body.name;
-    
-    connection.query("SELECT reviewid FROM crcdb.suggest WHERE name = ?",[name],
-    function(err:Error,results:any,fields:any) {
-        if(err) {
-            res.json({success:false,code:-100,message:'cannot connect db'});
-            console.log(err);
-        } else {
-            connection.query("DELETE FROM crcdb.suggest WHERE reviewid = ?",[results[0].reviewid],
-            function(err1:Error,results1:any,fields1:any) {
-                if(err1) {
-                    res.json({success:false,code:-100,message:'cannot connect db'});
-                    console.log(err1);
-                }else {
-                    res.json({success:true,code:0,message:'delete success'})
-                }
-            })
-            
-        }
-    });
-    
+suggest.post('/empathy',(req:Request,res:Response,next:NextFunction) => {
+    if(req.body.empathy) {
+        connection.query("SELECT empathy FROM crcdb.suggest WHERE suggestid = ?",[req.body.suggestid],
+        function(err:Error,results:any,fields:any) {
+            if(err) {
+                res.json({success:false,code:-100,message:'cannot connect db'});
+                console.log(err)
+            } else {
+                connection.query("UPDATE crcdb.suggest SET empathy = ? WHERE suggestid = ?",[results+1,req.body.suggestid],
+                function(err1:Error,results1:any,fields1:any) {
+                    if(err) {
+                        res.json({success:false,code:-100,message:'cannot connect db'});
+                        console.log(err)
+                    } else {
+                        res.json({success:true,code:0,message:'empathy success'})
+                    }
+                })
+            }
+        })
+    } else {
+        res.json({success:false,code:-1,message:'empathy가 존재하지 않습니다.'})
+    }
+});
+
+suggest.post('/reply',(req:Request,res:Response,next:NextFunction) => {
+    if(req.body.reply) {
+        connection.query("UPDATE crcdb.suggest SET reply = ? WHERE suggestid = ?",[req.body.reply,req.body.suggestid],
+        function(err:Error,results:any,fields:any) {
+            if(err) {
+                res.json({success:false,code:-100,message:'cannot connect db'});
+                console.log(err)
+            } else {
+                res.json({success:true,code:0,message:'reply success'});
+            }
+        })
+    } else {
+        res.json({success:false,code:-1,message:'reply가 존재하지 않습니다.'});
+    }
 });
 
 export = suggest;

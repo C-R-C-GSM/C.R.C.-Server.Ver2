@@ -1,9 +1,12 @@
 import express, { Request, Response, NextFunction } from "express";
+import { connected } from "process";
+import request from "request";
 
 const review = express.Router();
 
 const mysql = require('mysql');
 require('dotenv').config();
+const jwt = require('jsonwebtoken');
 var connection = mysql.createConnection({
     host:process.env.DB_HOST,
     port:process.env.DB_PORT,
@@ -12,10 +15,33 @@ var connection = mysql.createConnection({
     database:process.env.DB_DATABASE
 });
 connection.connect();
-
+let reviewdata_value:JSON;
 review.get('/',(request:Request, res:Response, next:NextFunction) => {
     console.log('get');
-    res.json({success:true,code:0,message:'get success'});
+    let accesstoken = request.headers.accessToken;
+    /*
+    connection.query("SELECT userid FROM crcdb.userdata WHERE email = ?",[email],
+    function(err:Error, results:any,fields:any) {
+      if(err) {
+        response.send("DB ERROR");
+        console.log(err);
+      } else {
+        key = results[0].userid;
+      }
+    });
+    */
+    let decoded = jwt.vertify(accesstoken,process.env.JWT_SECRET);
+    
+    if(!decoded) {
+        res.json({success:false,code:-401,message:'expired token'});
+    } else {
+        connection.query("SELECT * FROM crcdb.reviewdata",
+        async function(err:Error,results:any,fields:any) {
+            reviewdata_value = await results;
+        })
+        res.json({success:true,code:0,message:'token check success',review_data:reviewdata_value});
+        console.log('토큰 아직 있네요');
+    }
 });
 
 review.post('/',(request:Request, res:Response, next:NextFunction) => {
@@ -35,28 +61,44 @@ review.post('/',(request:Request, res:Response, next:NextFunction) => {
     })
 });
 
-review.delete('/',(request:Request, res:Response, next:NextFunction) => {
-    let name = request.body.name;
-    
-    connection.query("SELECT reviewid FROM crcdb.reviewdata WHERE name = ?",[name],
-    function(err:Error,results:any,fields:any) {
-        if(err) {
-            res.json({success:false,code:-100,message:'cannot connect db'});;
-            console.log(err);
-        } else {
-            connection.query("DELETE FROM crcdb.reviewdata WHERE reviewid = ?",[results[0].reviewid],
-            function(err1:Error,results1:any,fields1:any) {
-                if(err1) {
-                    res.json({success:false,code:-100,message:'cannot connect db'});;
-                    console.log(err1);
-                }else {
-                    res.json({success:true,code:0,message:'delete success'})
-                }
-            })
-            
-        }
-    });
-    
+review.post('/empathy',(req:Request,res:Response,next:NextFunction) => {
+    if(req.body.empathy) {
+        connection.query("SELECT empathy FROM crcdb.reviewdata WHERE reviewid = ?",[req.body.reviewid],
+        function(err:Error,results:any,fields:any) {
+            if(err) {
+                res.json({success:false,code:-100,message:'cannot connect db'});
+                console.log(err)
+            } else {
+                connection.query("UPDATE crcdb.reviewdata SET empathy = ? WHERE reviewid = ?",[results+1,req.body.reviewid],
+                function(err1:Error,results1:any,fields1:any) {
+                    if(err) {
+                        res.json({success:false,code:-100,message:'cannot connect db'});
+                        console.log(err)
+                    } else {
+                        res.json({success:true,code:0,message:'empathy success'})
+                    }
+                })
+            }
+        })
+    } else {
+        res.json({success:false,code:-1,message:'empathy가 존재하지 않습니다.'})
+    }
+});
+
+review.post('/reply',(req:Request,res:Response,next:NextFunction) => {
+    if(req.body.reply) {
+        connection.query("UPDATE crcdb.reviewdata SET reply = ? WHERE reviewid = ?",[req.body.reply,req.body.reviewid],
+        function(err:Error,results:any,fields:any) {
+            if(err) {
+                res.json({success:false,code:-100,message:'cannot connect db'});
+                console.log(err)
+            } else {
+                res.json({success:true,code:0,message:'reply success'});
+            }
+        })
+    } else {
+        res.json({success:false,code:-1,message:'reply가 존재하지 않습니다.'});
+    }
 });
 
 export = review;
