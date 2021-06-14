@@ -28,14 +28,27 @@
     ],
     "paths": {
         "/": {
-            "get": {
+            "post": {
                 "tags": [
                     "Main"
                 ],
-                "summary": "학생 수 체크",
+                "summary": "메인 페이지 페이지 받아오기",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Register",
+                        "schema": {
+                            "$ref": "#/definitions/get_accessToken"
+                        }
+                    }
+                ],
                 "responses": {
-                    "200": {
-                        "description": "OK"
+                    "201": {
+                        "description": "Main Get Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
                     }
                 }
             }
