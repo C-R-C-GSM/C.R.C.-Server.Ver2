@@ -15,8 +15,8 @@ var connection = mysql.createConnection({
 connection.connect();
 let suggest_data:JSON;
 
-suggest.get('/',(req:Request,res:Response,next:NextFunction) => {
-    console.log('suggest get');
+suggest.post('/suggest_check',(req:Request,res:Response,next:NextFunction) => {
+    console.log('suggest post');
     connection.query("SELECT * FROM crcdb.suggest",
     async function(err:Error,results:any,fields:any) {
         if(err) {
