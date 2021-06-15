@@ -25,7 +25,7 @@ let meal_text:string;
 let meal_text_split:string[];
 let school_meal_arr: string[] = [];
 
-/*
+
 client.fetch("http://gsm.gen.hs.kr/xboard/board.php?tbnum=8", {}, function (err:Error, $:any, res:Response, body:Body) {
   for (let week:number = 2; week <= 6; week++) {
     for (let day:number = 2; day <= 6; day++) {
@@ -45,7 +45,7 @@ client.fetch("http://gsm.gen.hs.kr/xboard/board.php?tbnum=8", {}, function (err:
   }
   //console.log(school_meal_arr);
 });
-*/
+
 let student:number = 0;
 index.post("/", (request: Request, response: Response, next: NextFunction) => {
   response.json({student:student});

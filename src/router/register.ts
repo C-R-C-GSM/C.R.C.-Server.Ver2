@@ -29,12 +29,12 @@ register.post("/", (req: Request, res: Response, next: NextFunction) => {
     let salt:any;
     let hashedPasswd:string;
 
-  async function hash() {
-    salt = await crypto.randomBytes(32).toString()
-    hashedPasswd = await crypto.pbkdf2Sync(password, salt, 1, 32, 'sha512').toString('hex');
-  }
+    async function hash() {
+        salt = await crypto.randomBytes(32).toString()
+        hashedPasswd = await crypto.pbkdf2Sync(password, salt, 1, 32, 'sha512').toString('hex');
+    }
 
-  hash();
+    hash();
       connection.query("SELECT email FROM crcdb.userdata WHERE email = ?",[email],
       async function(err:Error, results:any,fields:any) {
           if(err) {

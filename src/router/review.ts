@@ -46,7 +46,7 @@ review.post('/review_check',(request:Request, res:Response, next:NextFunction) =
     }
 });
 
-review.post('/',(request:Request, res:Response, next:NextFunction) => {
+review.post('/review_register',(request:Request, res:Response, next:NextFunction) => {
     let review_star = request.body.review_star;
     let title = request.body.title;
     let content = request.body.content;
