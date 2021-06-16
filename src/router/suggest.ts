@@ -15,7 +15,9 @@ var connection = mysql.createConnection({
 connection.connect();
 let suggest_data:JSON;
 
-
+let today = new Date();
+let time = today.toLocaleString().substring(0,today.toLocaleString().indexOf(' '));
+console.log(time);
 
 suggest.post('/suggest_check',(req:Request,res:Response,next:NextFunction) => {
     console.log('suggest post');
@@ -35,10 +37,11 @@ suggest.post('/suggest_register',(req:Request,res:Response,next:NextFunction) =>
     let title = req.body.title;
     let content = req.body.content;
     let name = req.body.name;
+    let when = req.body.when;
     let today = new Date();   
     let time = today.toLocaleString().substring(0,today.toLocaleString().indexOf('├')-1);
-    connection.query("INSERT INTO crcdb.suggest(title,content,name,time) VALUES(?,?,?,?)",
-        [title,content,name,time],
+    connection.query("INSERT INTO crcdb.suggest(title,content,name,time,when) VALUES(?,?,?,?,?)",
+        [title,content,name,time,when],
         function(err:Error, results:any,fields:any ) {
             if(err) {
                 res.json({success:false,code:-100,message:'cannot connect db'});

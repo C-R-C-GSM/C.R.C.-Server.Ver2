@@ -461,6 +461,9 @@
                 },
                 "name": {
                     "type":"string"
+                },
+                "when": {
+                    "type":"string"
                 }
             }
         },
@@ -496,6 +499,9 @@
                     "type":"string"
                 },
                 "name": {
+                    "type":"string"
+                },
+                "when": {
                     "type":"string"
                 }
             }
