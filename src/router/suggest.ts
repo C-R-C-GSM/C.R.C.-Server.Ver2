@@ -16,7 +16,7 @@ connection.connect();
 let suggest_data:JSON;
 
 let today = new Date();   
-console.log(today.toLocaleString());
+console.log(today.toLocaleString().substring(0,today.toLocaleString().indexOf('├')-1));
 
 suggest.post('/suggest_check',(req:Request,res:Response,next:NextFunction) => {
     console.log('suggest post');
