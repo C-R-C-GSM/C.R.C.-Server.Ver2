@@ -1,0 +1,527 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Swagger for Plask task API",
+        "description": "Open API docs with Swagger",
+        "license": {
+            "name": "MIT",
+            "url": "http://10.120.75.224:3000"
+        }
+    },
+    "host": "10.120.75.224:3000",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "C.R.C Server",
+            "description": "C.R.C Server Swagger"
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/": {
+            "post": {
+                "tags": [
+                    "Main"
+                ],
+                "summary": "메인 페이지 페이지 받아오기",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Register",
+                        "schema": {
+                            "$ref": "#/definitions/get_accessToken"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Main Get Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/Main": {
+            "post": {
+                "tags": [
+                    "Main"
+                ],
+                "summary": "하드웨어에서 학생 수 전달",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Register",
+                        "schema": {
+                            "$ref": "#/definitions/Student_num_Data"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Filter Change Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "로그인",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Register",
+                        "schema": {
+                            "$ref": "#/definitions/LoginData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Register Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/register": {
+            "post": {
+                "tags": [
+                    "Register"
+                ],
+                "summary": "회원가입",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Register",
+                        "schema": {
+                            "$ref": "#/definitions/RegisterData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Register Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/register/:authNum": {
+            "get": {
+                "tags": [
+                    "Register"
+                ],
+                "summary": "인증번호 인증 페이지",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "query",
+                        "description": "Auth Check",
+                        "schema": {
+                            "$ref": "#/definitions/authNum_Check"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Auth Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/review_check": {
+            "post": {
+                "tags": [
+                    "Review"
+                ],
+                "summary": "리뷰 목록 확인",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Review Check",
+                        "schema": {
+                            "$ref": "#/definitions/get_accessToken"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Review Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/review_register": {
+            "post": {
+                "tags": [
+                    "Review"
+                ],
+                "summary": "리뷰 작성",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Review Write",
+                        "schema": {
+                            "$ref": "#/definitions/Reivew_Write"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Review Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/review/empathy": {
+            "post": {
+                "tags": [
+                    "Review"
+                ],
+                "summary": "리뷰 공감",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Review empathy",
+                        "schema": {
+                            "$ref": "#/definitions/RegisterData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Review Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/review/reply": {
+            "post": {
+                "tags": [
+                    "Review"
+                ],
+                "summary": "리뷰 응답",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Review reply",
+                        "schema": {
+                            "$ref": "#/definitions/RegisterData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Review Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/suggest_check": {
+            "post": {
+                "tags": [
+                    "suggest"
+                ],
+                "summary": "리뷰 목록 확인",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "suggest Check",
+                        "schema": {
+                            "$ref": "#/definitions/get_accessToken"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "suggest Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/suggest_register": {
+            "post": {
+                "tags": [
+                    "suggest"
+                ],
+                "summary": "리뷰 작성",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "suggest Write",
+                        "schema": {
+                            "$ref": "#/definitions/Reivew_Write"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "suggest Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/suggest/empathy": {
+            "post": {
+                "tags": [
+                    "suggest"
+                ],
+                "summary": "리뷰 공감",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "suggest empathy",
+                        "schema": {
+                            "$ref": "#/definitions/RegisterData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "suggest Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/suggest/reply": {
+            "post": {
+                "tags": [
+                    "suggest"
+                ],
+                "summary": "리뷰 응답",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "suggest reply",
+                        "schema": {
+                            "$ref": "#/definitions/RegisterData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "suggest Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "get_accessToken": {
+            "properties": {
+                "accessToken": {
+                    "type":"string"
+                }
+            }
+        },
+        "userdata": {
+            "properties": {
+                "userid": {
+                    "type": "integer"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "student_data": {
+                    "type": "string"
+                },
+                "refresh": {
+                    "type": "string"
+                },
+                "salt": {
+                    "type": "string"
+                },
+                "auth": {
+                    "type": "integer"
+                },
+                "authNum": {
+                    "type": "integer"
+                }
+            }
+        },
+        "LoginData": {
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "RegisterData": {
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "student_data": {
+                    "type": "string"
+                }
+            }
+        },
+        "Student_num_Data": {
+            "properties": {
+                "student_num": {
+                    "type": "string"
+                }
+            }
+        },
+        "authNum_Check": {
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "authNum": {
+                    "type":"string"
+                }
+            }
+        },
+        "Review_Write": {
+            "properties": {
+                "review_star": {
+                    "type":"string"
+                },
+                "title": {
+                    "type":"string"
+                },
+                "content": {
+                    "type":"string"
+                },
+                "nickname": {
+                    "type":"string"
+                },
+                "when": {
+                    "type":"string"
+                }
+            }
+        },
+        "Review_empathy": {
+            "properties": {
+                "empathy": {
+                    "type":"string"
+                },
+                "reviewid": {
+                    "type":"integer"
+                }
+            }
+        },
+        "Review_reply": {
+            "properties": {
+                "reply": {
+                    "type":"string"
+                },
+                "reviewid": {
+                    "type":"integer"
+                }
+            }
+        },
+        "Suggest_Write": {
+            "properties": {
+                "suggest_star": {
+                    "type":"string"
+                },
+                "title": {
+                    "type":"string"
+                },
+                "content": {
+                    "type":"string"
+                },
+                "nickname": {
+                    "type":"string"
+                },
+                "when": {
+                    "type":"string"
+                }
+            }
+        },
+        "Suggest_empathy": {
+            "properties": {
+                "suggestid": {
+                    "type":"integer"
+                }
+            }
+        },
+        "Suggest_reply": {
+            "properties": {
+                "reply": {
+                    "type":"string"
+                },
+                "suggestid": {
+                    "type":"integer"
+                }
+            }
+        }
+    }
+}
