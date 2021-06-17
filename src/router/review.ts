@@ -16,9 +16,11 @@ var connection = mysql.createConnection({
 });
 connection.connect();
 let reviewdata_value:JSON;
-review.get('/',(request:Request, res:Response, next:NextFunction) => {
-    console.log('get');
-    let accesstoken = request.headers.accessToken;
+
+
+review.post('/review_check',(request:Request, res:Response, next:NextFunction) => {
+    console.log('post');
+    let accesstoken = request.body.accessToken;
     /*
     connection.query("SELECT userid FROM crcdb.userdata WHERE email = ?",[email],
     function(err:Error, results:any,fields:any) {
@@ -44,13 +46,14 @@ review.get('/',(request:Request, res:Response, next:NextFunction) => {
     }
 });
 
-review.post('/',(request:Request, res:Response, next:NextFunction) => {
+review.post('/review_register',(request:Request, res:Response, next:NextFunction) => {
     let review_star = request.body.review_star;
     let title = request.body.title;
     let content = request.body.content;
     let name = request.body.name;
-
-    connection.query("INSERT INTO crcdb.reviewdata(review_star,title,content,name) VALUES(?,?,?,?)",[review_star,title,content,name],
+    let when = request.body.when;
+    let nickname= request.body.nickname;
+    connection.query("INSERT INTO crcdb.reviewdata(review_star,title,content,name,when,nickname) VALUES(?,?,?,?,?,?)",[review_star,title,content,name,when,nickname],
     function(err:Error,results:any,fields:any) {
         if(err) {
             res.json({success:false,code:-100,message:'cannot connect db'});

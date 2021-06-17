@@ -28,14 +28,27 @@
     ],
     "paths": {
         "/": {
-            "get": {
+            "post": {
                 "tags": [
                     "Main"
                 ],
-                "summary": "학생 수 체크",
+                "summary": "메인 페이지 페이지 받아오기",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Register",
+                        "schema": {
+                            "$ref": "#/definitions/get_accessToken"
+                        }
+                    }
+                ],
                 "responses": {
-                    "200": {
-                        "description": "OK"
+                    "201": {
+                        "description": "Main Get Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
                     }
                 }
             }
@@ -144,21 +157,33 @@
                 }
             }
         },
-        "/review": {
-            "get": {
+        "/review_check": {
+            "post": {
                 "tags": [
                     "Review"
                 ],
-                "summary": "리뷰 불러오기",
+                "summary": "리뷰 목록 확인",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Review Check",
+                        "schema": {
+                            "$ref": "#/definitions/get_accessToken"
+                        }
+                    }
+                ],
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "Review Success"
                     },
                     "404": {
                         "description": "Failed. Bad Request"
                     }
                 }
-            },
+            }
+        },
+        "/review_register": {
             "post": {
                 "tags": [
                     "Review"
@@ -235,9 +260,120 @@
                     }
                 }
             }
+        },
+        "/suggest_check": {
+            "post": {
+                "tags": [
+                    "suggest"
+                ],
+                "summary": "리뷰 목록 확인",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "suggest Check",
+                        "schema": {
+                            "$ref": "#/definitions/get_accessToken"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "suggest Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/suggest_register": {
+            "post": {
+                "tags": [
+                    "suggest"
+                ],
+                "summary": "리뷰 작성",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "suggest Write",
+                        "schema": {
+                            "$ref": "#/definitions/Reivew_Write"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "suggest Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/suggest/empathy": {
+            "post": {
+                "tags": [
+                    "suggest"
+                ],
+                "summary": "리뷰 공감",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "suggest empathy",
+                        "schema": {
+                            "$ref": "#/definitions/RegisterData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "suggest Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/suggest/reply": {
+            "post": {
+                "tags": [
+                    "suggest"
+                ],
+                "summary": "리뷰 응답",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "suggest reply",
+                        "schema": {
+                            "$ref": "#/definitions/RegisterData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "suggest Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "get_accessToken": {
+            "properties": {
+                "accessToken": {
+                    "type":"string"
+                }
+            }
+        },
         "userdata": {
             "properties": {
                 "userid": {
@@ -323,7 +459,10 @@
                 "content": {
                     "type":"string"
                 },
-                "name": {
+                "nickname": {
+                    "type":"string"
+                },
+                "when": {
                     "type":"string"
                 }
             }
@@ -344,6 +483,42 @@
                     "type":"string"
                 },
                 "reviewid": {
+                    "type":"integer"
+                }
+            }
+        },
+        "Suggest_Write": {
+            "properties": {
+                "suggest_star": {
+                    "type":"string"
+                },
+                "title": {
+                    "type":"string"
+                },
+                "content": {
+                    "type":"string"
+                },
+                "nickname": {
+                    "type":"string"
+                },
+                "when": {
+                    "type":"string"
+                }
+            }
+        },
+        "Suggest_empathy": {
+            "properties": {
+                "suggestid": {
+                    "type":"integer"
+                }
+            }
+        },
+        "Suggest_reply": {
+            "properties": {
+                "reply": {
+                    "type":"string"
+                },
+                "suggestid": {
                     "type":"integer"
                 }
             }
