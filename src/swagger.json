@@ -459,7 +459,7 @@
                 "content": {
                     "type":"string"
                 },
-                "name": {
+                "nickname": {
                     "type":"string"
                 },
                 "when": {
@@ -498,7 +498,7 @@
                 "content": {
                     "type":"string"
                 },
-                "name": {
+                "nickname": {
                     "type":"string"
                 },
                 "when": {
