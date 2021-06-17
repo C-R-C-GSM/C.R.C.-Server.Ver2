@@ -26,6 +26,7 @@ register.post("/", (req: Request, res: Response, next: NextFunction) => {
     let password:string = req.body.password;
     let name:string = req.body.name;
     let student_data:string = req.body.student_data;
+    let nickname:string = req.body.nickname;
     let salt:any;
     let hashedPasswd:string;
 
@@ -69,8 +70,8 @@ register.post("/", (req: Request, res: Response, next: NextFunction) => {
                     console.log(error);
                     } else {
                     console.log('send success');
-                    connection.query("INSERT INTO crcdb.userdata(email,password,name,salt,student_data,authNum) VALUES(?,?,?,?,?,?)",
-                    [email,hashedPasswd,name,salt,student_data,authNum],
+                    connection.query("INSERT INTO crcdb.userdata(email,password,name,salt,student_data,authNum,nickname) VALUES(?,?,?,?,?,?,?)",
+                    [email,hashedPasswd,name,salt,student_data,authNum,nickname],
                     function(err:Error, results:any,fields:any ) {
                         if(err) {
                             res.json({success:false,code:-100,message:'cannot connect db'});

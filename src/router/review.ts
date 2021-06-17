@@ -52,7 +52,8 @@ review.post('/review_register',(request:Request, res:Response, next:NextFunction
     let content = request.body.content;
     let name = request.body.name;
     let when = request.body.when;
-    connection.query("INSERT INTO crcdb.reviewdata(review_star,title,content,name,when) VALUES(?,?,?,?,?)",[review_star,title,content,name,when],
+    let nickname= request.body.nickname;
+    connection.query("INSERT INTO crcdb.reviewdata(review_star,title,content,name,when,nickname) VALUES(?,?,?,?,?,?)",[review_star,title,content,name,when,nickname],
     function(err:Error,results:any,fields:any) {
         if(err) {
             res.json({success:false,code:-100,message:'cannot connect db'});

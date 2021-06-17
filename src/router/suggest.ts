@@ -38,10 +38,11 @@ suggest.post('/suggest_register',(req:Request,res:Response,next:NextFunction) =>
     let content = req.body.content;
     let name = req.body.name;
     let when = req.body.when;
+    let nickname = req.body.nickname
     let today = new Date();   
     let time = today.toLocaleString().substring(0,today.toLocaleString().indexOf('├')-1);
-    connection.query("INSERT INTO crcdb.suggest(title,content,name,time,when) VALUES(?,?,?,?,?)",
-        [title,content,name,time,when],
+    connection.query("INSERT INTO crcdb.suggest(title,content,name,time,when,nickname) VALUES(?,?,?,?,?,?)",
+        [title,content,name,time,when,nickname],
         function(err:Error, results:any,fields:any ) {
             if(err) {
                 res.json({success:false,code:-100,message:'cannot connect db'});
