@@ -5,6 +5,7 @@ const suggest = express.Router();
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql');
 require('dotenv').config();
+
 var connection = mysql.createConnection({
     host:process.env.DB_HOST,
     port:process.env.DB_PORT,
@@ -12,6 +13,7 @@ var connection = mysql.createConnection({
     password:process.env.DB_PASSWORD,
     database:process.env.DB_DATABASE
 });
+
 connection.connect();
 let suggest_data:JSON;
 

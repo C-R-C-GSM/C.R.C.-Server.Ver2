@@ -7,6 +7,7 @@ const review = express.Router();
 const mysql = require('mysql');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
+
 var connection = mysql.createConnection({
     host:process.env.DB_HOST,
     port:process.env.DB_PORT,
@@ -14,6 +15,7 @@ var connection = mysql.createConnection({
     password:process.env.DB_PASSWORD,
     database:process.env.DB_DATABASE
 });
+
 connection.connect();
 let reviewdata_value:JSON;
 
