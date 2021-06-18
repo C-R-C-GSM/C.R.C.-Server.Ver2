@@ -25,12 +25,16 @@ let meal_text:string;
 let meal_text_split:string[];
 let school_meal_arr: string[] = [];
 
-
-
-
 let student:number = 0;
 index.post("/", (request: Request, response: Response, next: NextFunction) => {
-  response.json({student:student});
+  let accesstoken = request.body.accessToken;
+  let decoded = jwt.vertify(accesstoken,process.env.JWT_SECRET);
+
+  if(!decoded) {
+      response.json({success:false,code:-401,message:'expired token'});
+  } else {
+    response.json({success:true, code:0, message:'get meal data',student:student});
+  }
 });
 
 index.post("/get_meal",(req:Request, res:Response) => {
