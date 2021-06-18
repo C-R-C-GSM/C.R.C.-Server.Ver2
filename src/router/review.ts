@@ -17,7 +17,6 @@ var connection = mysql.createConnection({
 connection.connect();
 let reviewdata_value:JSON;
 
-
 review.post('/check',(request:Request, res:Response, next:NextFunction) => {
     console.log('post');
     let accesstoken = request.body.accessToken;

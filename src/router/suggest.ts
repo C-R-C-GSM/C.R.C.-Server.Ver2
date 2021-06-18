@@ -2,7 +2,7 @@ import { config } from 'dotenv';
 import express,{Request, Response, NextFunction} from 'express';
 
 const suggest = express.Router();
-
+const jwt = require('jsonwebtoken');
 const mysql = require('mysql');
 require('dotenv').config();
 var connection = mysql.createConnection({
@@ -21,16 +21,19 @@ console.log(time);
 
 suggest.post('/check',(req:Request,res:Response,next:NextFunction) => {
     console.log('suggest post');
-    connection.query("SELECT * FROM crcdb.suggest",
-    async function(err:Error,results:any,fields:any) {
-        if(err) {
-            res.json({success:false,code:-100,message:'cannot connect db'});
-            console.log(err);
-        } else {
+    let accesstoken = req.body.accessToken;
+    let decoded = jwt.vertify(accesstoken,process.env.JWT_SECRET);
+
+    if(!decoded) {
+        res.json({success:false,code:-401,message:'expired token'});
+    } else {
+        connection.query("SELECT * FROM crcdb.suggest",
+        async function(err:Error,results:any,fields:any) {
             suggest_data = await results;
-            res.json({success:true,code:0,message:'suggest get',suggest_data:suggest_data});
-        }
-    })
+        })
+        res.json({success:true,code:0,message:'token check success',suggest_data:suggest_data});
+        console.log('토큰 아직 있네요');
+    }
 });
 
 suggest.post('/register',(req:Request,res:Response,next:NextFunction) => {
