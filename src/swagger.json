@@ -32,7 +32,7 @@
                 "tags": [
                     "Main"
                 ],
-                "summary": "메인 페이지 페이지 받아오기",
+                "summary": "학생 수 받아오기",
                 "parameters": [
                     {
                         "in": "body",
@@ -72,6 +72,32 @@
                 "responses": {
                     "201": {
                         "description": "Filter Change Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/get_meal": {
+            "post": {
+                "tags": [
+                    "Main"
+                ],
+                "summary": "급식 메뉴 받아오기",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Register",
+                        "schema": {
+                            "$ref": "#/definitions/get_accessToken"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Main Get Success"
                     },
                     "404": {
                         "description": "Failed. Bad Request"
