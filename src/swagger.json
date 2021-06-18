@@ -229,22 +229,12 @@
                         "examples":{
                             "application/json": {
                                 "success":false,
-                                "code":-100,
+                                "code":-202,
                                 "message":"cannot find this email"
                             }
                         }
                     },
                     "402": {
-                        "description": "token error",
-                        "examples":{
-                            "application/json": {
-                                "success":false,
-                                "code":-400,
-                                "message":"token error"
-                            }
-                        }
-                    },
-                    "403": {
                         "description": "wrong password",
                         "examples":{
                             "application/json": {
@@ -253,7 +243,18 @@
                                 "message":"wrong password"
                             }
                         }
+                    },
+                    "403": {
+                        "description": "token error",
+                        "examples":{
+                            "application/json": {
+                                "success":false,
+                                "code":-400,
+                                "message":"token error"
+                            }
+                        }
                     }
+                    
                 }
             }
         },
