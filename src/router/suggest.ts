@@ -19,7 +19,7 @@ let today = new Date();
 let time = today.toLocaleString().substring(0,today.toLocaleString().indexOf(' '));
 console.log(time);
 
-suggest.post('/suggest_check',(req:Request,res:Response,next:NextFunction) => {
+suggest.post('/check',(req:Request,res:Response,next:NextFunction) => {
     console.log('suggest post');
     connection.query("SELECT * FROM crcdb.suggest",
     async function(err:Error,results:any,fields:any) {
@@ -33,7 +33,7 @@ suggest.post('/suggest_check',(req:Request,res:Response,next:NextFunction) => {
     })
 });
 
-suggest.post('/suggest_register',(req:Request,res:Response,next:NextFunction) => {
+suggest.post('/register',(req:Request,res:Response,next:NextFunction) => {
     let title = req.body.title;
     let content = req.body.content;
     let name = req.body.name;
