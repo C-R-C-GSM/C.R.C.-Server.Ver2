@@ -268,7 +268,7 @@
                     {
                         "in": "body",
                         "name": "body",
-                        "description": "회원가입시 필요 데이터",
+                        "description": "회원가입시 필요 데이터 수집",
                         "schema": {
                             "$ref": "#/definitions/RegisterData"
                         }
