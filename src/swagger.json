@@ -2,8 +2,8 @@
     "swagger": "2.0",
     "info": {
         "version": "1.0.0",
-        "title": "Swagger for Plask task API",
-        "description": "Open API docs with Swagger",
+        "title": "C.R.C Ver.2의 Swagger",
+        "description": "Swagger를 이용하여 만들었습니다 ㅎ",
         "license": {
             "name": "MIT",
             "url": "http://10.120.75.224:3000"
