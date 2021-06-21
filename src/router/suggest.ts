@@ -2,9 +2,10 @@ import { config } from 'dotenv';
 import express,{Request, Response, NextFunction} from 'express';
 
 const suggest = express.Router();
-
+const jwt = require('jsonwebtoken');
 const mysql = require('mysql');
 require('dotenv').config();
+
 var connection = mysql.createConnection({
     host:process.env.DB_HOST,
     port:process.env.DB_PORT,
@@ -12,6 +13,7 @@ var connection = mysql.createConnection({
     password:process.env.DB_PASSWORD,
     database:process.env.DB_DATABASE
 });
+
 connection.connect();
 let suggest_data:JSON;
 
@@ -19,21 +21,24 @@ let today = new Date();
 let time = today.toLocaleString().substring(0,today.toLocaleString().indexOf(' '));
 console.log(time);
 
-suggest.post('/suggest_check',(req:Request,res:Response,next:NextFunction) => {
+suggest.post('/check',(req:Request,res:Response,next:NextFunction) => {
     console.log('suggest post');
-    connection.query("SELECT * FROM crcdb.suggest",
-    async function(err:Error,results:any,fields:any) {
-        if(err) {
-            res.json({success:false,code:-100,message:'cannot connect db'});
-            console.log(err);
-        } else {
+    let accesstoken = req.body.accessToken;
+    let decoded = jwt.vertify(accesstoken,process.env.JWT_SECRET);
+
+    if(!decoded) {
+        res.json({success:false,code:-401,message:'expired token'});
+    } else {
+        connection.query("SELECT * FROM crcdb.suggest",
+        async function(err:Error,results:any,fields:any) {
             suggest_data = await results;
-            res.json({success:true,code:0,message:'suggest get',suggest_data:suggest_data});
-        }
-    })
+        })
+        res.json({success:true,code:0,message:'token check success',suggest_data:suggest_data});
+        console.log('토큰 아직 있네요');
+    }
 });
 
-suggest.post('/suggest_register',(req:Request,res:Response,next:NextFunction) => {
+suggest.post('/register',(req:Request,res:Response,next:NextFunction) => {
     let title = req.body.title;
     let content = req.body.content;
     let name = req.body.name;

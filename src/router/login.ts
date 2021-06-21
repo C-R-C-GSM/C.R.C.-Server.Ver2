@@ -32,7 +32,7 @@ login.post('/', function(req:Request,res: Response,next:NextFunction) {
         if(results[0].userid) {
           key = results[0].userid;
         } else {
-          res.json({success:false,code:202,message:'cannot find this email'})
+          res.json({success:false,code:-202,message:'cannot find this email'})
         }
       }
     })

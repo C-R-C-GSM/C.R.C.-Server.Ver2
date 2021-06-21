@@ -32,12 +32,12 @@
                 "tags": [
                     "Main"
                 ],
-                "summary": "메인 페이지 페이지 받아오기",
+                "summary": "학생 수 받아오기",
                 "parameters": [
                     {
                         "in": "body",
                         "name": "body",
-                        "description": "Register",
+                        "description": "AccessToken",
                         "schema": {
                             "$ref": "#/definitions/get_accessToken"
                         }
@@ -45,10 +45,24 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "Main Get Success"
+                        "description": "success",
+                        "examples":{
+                            "application/json": {
+                                "success":true,
+                                "code":100,
+                                "message":"get meal data"
+                            }
+                        }
                     },
                     "404": {
-                        "description": "Failed. Bad Request"
+                        "description": "fail",
+                        "examples":{
+                            "application/json": {
+                                "success":false,
+                                "code":-401,
+                                "message":"expired token"
+                            }
+                        }
                     }
                 }
             }
@@ -63,7 +77,7 @@
                     {
                         "in": "body",
                         "name": "body",
-                        "description": "Register",
+                        "description": "post student_data",
                         "schema": {
                             "$ref": "#/definitions/Student_num_Data"
                         }
@@ -71,10 +85,104 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "Filter Change Success"
+                        "description": "Post student data",
+                        "examples":{
+                            "application/json": {
+                                "success":true,
+                                "code":0,
+                                "message":"get meal data"
+                            }
+                        }
                     },
                     "404": {
-                        "description": "Failed. Bad Request"
+                        "description": "Failed. Bad Request",
+                        "examples":{
+                            "application/json": {
+                                "success":false,
+                                "code":-401,
+                                "message":"expired token"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/get_meal": {
+            "post": {
+                "tags": [
+                    "Main"
+                ],
+                "summary": "급식 메뉴 받아오기",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "AccessToken",
+                        "schema": {
+                            "$ref": "#/definitions/get_accessToken"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Main Get Success",
+                        "examples":{
+                            "application/json": {
+                                "success":true,
+                                "code":0,
+                                "message":"success to get meal data"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request",
+                        "examples":{
+                            "application/json": {
+                                "success":false,
+                                "code":-401,
+                                "message":"expired token"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/refresh": {
+            "post": {
+                "tags": [
+                    "Main"
+                ],
+                "summary": "accessToken 재발급",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "미정",
+                        "schema": {
+                            "$ref": "#/definitions/get_accessToken"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "accessToken issue Success",
+                        "examples":{
+                            "application/json": {
+                                "success":true,
+                                "code":0,
+                                "message":"reissue accessToken"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request",
+                        "examples":{
+                            "application/json": {
+                                "success":false,
+                                "code":999,
+                                "message":"wrong user data"
+                            }
+                        }
                     }
                 }
             }
@@ -89,7 +197,7 @@
                     {
                         "in": "body",
                         "name": "body",
-                        "description": "Register",
+                        "description": "Login",
                         "schema": {
                             "$ref": "#/definitions/LoginData"
                         }
@@ -97,11 +205,56 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "Register Success"
+                        "description": "Login Success",
+                        "examples":{
+                            "application/json": {
+                                "success":true,
+                                "code":0,
+                                "message":"expired token"
+                            }
+                        }
                     },
-                    "404": {
-                        "description": "Failed. Bad Request"
+                    "400": {
+                        "description": "Cannot connect db",
+                        "examples":{
+                            "application/json": {
+                                "success":false,
+                                "code":-100,
+                                "message":"cannot connect db"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "cannot find this email",
+                        "examples":{
+                            "application/json": {
+                                "success":false,
+                                "code":-202,
+                                "message":"cannot find this email"
+                            }
+                        }
+                    },
+                    "402": {
+                        "description": "wrong password",
+                        "examples":{
+                            "application/json": {
+                                "success":false,
+                                "code":-300,
+                                "message":"wrong password"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "token error",
+                        "examples":{
+                            "application/json": {
+                                "success":false,
+                                "code":-400,
+                                "message":"token error"
+                            }
+                        }
                     }
+                    
                 }
             }
         },
@@ -115,7 +268,7 @@
                     {
                         "in": "body",
                         "name": "body",
-                        "description": "Register",
+                        "description": "회원가입시 필요 데이터 수집",
                         "schema": {
                             "$ref": "#/definitions/RegisterData"
                         }
@@ -157,7 +310,7 @@
                 }
             }
         },
-        "/review_check": {
+        "/review/check": {
             "post": {
                 "tags": [
                     "Review"
@@ -183,7 +336,7 @@
                 }
             }
         },
-        "/review_register": {
+        "/review/register": {
             "post": {
                 "tags": [
                     "Review"
@@ -221,7 +374,7 @@
                         "name": "body",
                         "description": "Review empathy",
                         "schema": {
-                            "$ref": "#/definitions/RegisterData"
+                            "$ref": "#/definitions/Review_empathy"
                         }
                     }
                 ],
@@ -247,7 +400,7 @@
                         "name": "body",
                         "description": "Review reply",
                         "schema": {
-                            "$ref": "#/definitions/RegisterData"
+                            "$ref": "#/definitions/Review_reply"
                         }
                     }
                 ],
@@ -261,7 +414,7 @@
                 }
             }
         },
-        "/suggest_check": {
+        "/suggest/check": {
             "post": {
                 "tags": [
                     "suggest"
@@ -287,7 +440,7 @@
                 }
             }
         },
-        "/suggest_register": {
+        "/suggest/register": {
             "post": {
                 "tags": [
                     "suggest"
@@ -299,7 +452,7 @@
                         "name": "body",
                         "description": "suggest Write",
                         "schema": {
-                            "$ref": "#/definitions/Reivew_Write"
+                            "$ref": "#/definitions/Suggest_Write"
                         }
                     }
                 ],
@@ -325,7 +478,7 @@
                         "name": "body",
                         "description": "suggest empathy",
                         "schema": {
-                            "$ref": "#/definitions/RegisterData"
+                            "$ref": "#/definitions/Suggest_empathy"
                         }
                     }
                 ],
@@ -351,7 +504,7 @@
                         "name": "body",
                         "description": "suggest reply",
                         "schema": {
-                            "$ref": "#/definitions/RegisterData"
+                            "$ref": "#/definitions/Suggest_reply"
                         }
                     }
                 ],
@@ -469,9 +622,6 @@
         },
         "Review_empathy": {
             "properties": {
-                "empathy": {
-                    "type":"string"
-                },
                 "reviewid": {
                     "type":"integer"
                 }

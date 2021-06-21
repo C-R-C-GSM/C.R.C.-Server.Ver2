@@ -7,6 +7,7 @@ const review = express.Router();
 const mysql = require('mysql');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
+
 var connection = mysql.createConnection({
     host:process.env.DB_HOST,
     port:process.env.DB_PORT,
@@ -14,11 +15,11 @@ var connection = mysql.createConnection({
     password:process.env.DB_PASSWORD,
     database:process.env.DB_DATABASE
 });
+
 connection.connect();
 let reviewdata_value:JSON;
 
-
-review.post('/review_check',(request:Request, res:Response, next:NextFunction) => {
+review.post('/check',(request:Request, res:Response, next:NextFunction) => {
     console.log('post');
     let accesstoken = request.body.accessToken;
     /*
@@ -46,7 +47,7 @@ review.post('/review_check',(request:Request, res:Response, next:NextFunction) =
     }
 });
 
-review.post('/review_register',(request:Request, res:Response, next:NextFunction) => {
+review.post('/register',(request:Request, res:Response, next:NextFunction) => {
     let review_star = request.body.review_star;
     let title = request.body.title;
     let content = request.body.content;
@@ -65,27 +66,23 @@ review.post('/review_register',(request:Request, res:Response, next:NextFunction
 });
 
 review.post('/empathy',(req:Request,res:Response,next:NextFunction) => {
-    if(req.body.empathy) {
-        connection.query("SELECT empathy FROM crcdb.reviewdata WHERE reviewid = ?",[req.body.reviewid],
-        function(err:Error,results:any,fields:any) {
-            if(err) {
-                res.json({success:false,code:-100,message:'cannot connect db'});
-                console.log(err)
-            } else {
-                connection.query("UPDATE crcdb.reviewdata SET empathy = ? WHERE reviewid = ?",[results+1,req.body.reviewid],
-                function(err1:Error,results1:any,fields1:any) {
-                    if(err) {
-                        res.json({success:false,code:-100,message:'cannot connect db'});
-                        console.log(err)
-                    } else {
-                        res.json({success:true,code:0,message:'empathy success'})
-                    }
-                })
-            }
-        })
-    } else {
-        res.json({success:false,code:-1,message:'empathy가 존재하지 않습니다.'})
-    }
+    connection.query("SELECT empathy FROM crcdb.reviewdata WHERE reviewid = ?",[req.body.reviewid],
+    function(err:Error,results:any,fields:any) {
+        if(err) {
+            res.json({success:false,code:-100,message:'cannot connect db'});
+            console.log(err)
+        } else {
+            connection.query("UPDATE crcdb.reviewdata SET empathy = ? WHERE reviewid = ?",[results+1,req.body.reviewid],
+            function(err1:Error,results1:any,fields1:any) {
+                if(err) {
+                    res.json({success:false,code:-100,message:'cannot connect db'});
+                    console.log(err)
+                } else {
+                    res.json({success:true,code:0,message:'empathy success'})
+                }
+            })
+        }
+    })
 });
 
 review.post('/reply',(req:Request,res:Response,next:NextFunction) => {
