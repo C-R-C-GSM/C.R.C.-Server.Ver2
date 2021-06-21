@@ -2,11 +2,12 @@ import express, { Request, Response, NextFunction } from "express";
 import methodOverride from 'method-override'
 import cors from 'cors'
 
-import index from "./router/index"
-import login from "./router/login"
-import register from "./router/register"
-import review from "./router/review"
-import suggest from "./router/suggest"
+import indexRouter from "./router/index"
+import loginRouter from "./router/login"
+import registerRouter from "./router/register"
+import reviewRouter from "./router/review"
+import suggestRouter from "./router/suggest"
+import checkRouter from './router/check'
 
 import swaggerUi from "swagger-ui-express";
 import * as swaggerDocument from './swagger.json'
@@ -28,24 +29,18 @@ var connection = mysql.createConnection({
 });
 
 connection.connect();
-/*
-const socketapp = require('express'); 
-const http = require('http').Server(socketapp); 
-const io = require('socket.io')(http);
-const room = io.of('/test');
 
-http.listen(9000, function () { console.log('Listening on *:9000'); });
-*/
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(methodOverride('_method'));
 app.use((cors()));
 
-app.use('/',index);
-app.use('/login',login);
-app.use('/register',register);
-app.use('/review',review);
-app.use('/suggest',suggest)
+app.use('/',indexRouter);
+app.use('/login',loginRouter);
+app.use('/register',registerRouter);
+app.use('/review',reviewRouter);
+app.use('/suggest',suggestRouter);
+app.use('/check',checkRouter);
 
 app.use('/swagger',swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
