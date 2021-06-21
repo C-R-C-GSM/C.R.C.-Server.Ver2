@@ -66,12 +66,6 @@ index.post("/get_meal",(req:Request, res:Response) => {
   }
 })
 
-//라파 post용
-index.post('/Main', (req:Request, res:Response) => {
-  let student_num = req.body;
-  console.log(student_num);
-});
-
 index.post('/refresh', (req:Request, res:Response) => {
   
 })
