@@ -26,10 +26,25 @@ let meal_data:JSON;
 notice.get('/check', (req:Request, res:Response) => {
 });
 
-notice.get('/register', (req:Request, res:Response) => {
+notice.post('/register', (req:Request, res:Response) => {
+    let title:string = req.body.title;
+    let content:string = req.body.content;
+    let today = new Date();
+    let time = today.toLocaleString().substring(0,today.toLocaleString().indexOf('├')-1);
+
+    connection.query("INSERT INTO crcdb.notice(title,content,time) VALUES(?,?,?)",[title,content,time],
+    function(err:Error, results:any,fields:any ) {
+        if(err) {
+            res.json({success:false,code:-100,message:'cannot connect db'});
+            console.log(err)
+        } else {
+        
+        res.json({success:true,code:0,message:'notice register'})
+        }
+    });
 });
 
-notice.post("/get_meal",(req:Request, res:Response) => {
+notice.get("/get_meal",(req:Request, res:Response) => {
     let accesstoken = req.body.accessToken;
     let decoded = jwt.vertify(accesstoken,process.env.JWT_SECRET);
   
