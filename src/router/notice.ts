@@ -23,7 +23,15 @@ let meal_text_split:string[];
 let school_meal_arr: string[] = [];
 let meal_data:JSON;
 
+let notice_list:JSON;
 notice.get('/check', (req:Request, res:Response) => {
+    connection.query("SELECT * FROM crcdb.notice", function(err:Error,results:any, fields:any) {
+        if(err) {
+            res.json({success:false,code:-100, message:'cant connect db'});
+        } else {
+            res.json({success:true,code:0,message:'notice list check',notice_list:results})
+        }
+    })
 });
 
 notice.post('/register', (req:Request, res:Response) => {
