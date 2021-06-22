@@ -23,6 +23,7 @@ login.post('/', function(req:Request,res: Response,next:NextFunction) {
     let email:string = req.body.email;
     let password = req.body.password;
     let key:number;
+    let roll:number;
     connection.query("SELECT userid FROM crcdb.userdata WHERE email = ?",[email],
     function(err:Error, results:any,fields:any) {
       if(err) {
@@ -31,6 +32,7 @@ login.post('/', function(req:Request,res: Response,next:NextFunction) {
       } else {
         if(results[0].userid) {
           key = results[0].userid;
+          roll = results[0].roll;
         } else {
           res.json({success:false,code:-202,message:'cannot find this email'})
         }
@@ -56,7 +58,7 @@ login.post('/', function(req:Request,res: Response,next:NextFunction) {
                 console.log(err)
               } else {
                 try {
-                  const accessToken = jwt.sign({ key }, 
+                  const accessToken = jwt.sign({ key,roll }, 
                     process.env.JWT_SECRET, { 
                       expiresIn: '1h',
                       issuer: 'C.R.C_SERVER' 
