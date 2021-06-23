@@ -19,7 +19,7 @@ var connection = mysql.createConnection({
 connection.connect();
 let reviewdata_value:JSON;
 
-review.post('/check',(request:Request, res:Response, next:NextFunction) => {
+review.get('/check',(request:Request, res:Response, next:NextFunction) => {
     console.log('post');
     /*
     connection.query("SELECT userid FROM crcdb.userdata WHERE email = ?",[email],
@@ -77,7 +77,7 @@ review.post('/register',(request:Request, res:Response, next:NextFunction) => {
     }
 });
 
-review.post('/empathy',(req:Request,res:Response,next:NextFunction) => {
+review.get('/empathy',(req:Request,res:Response,next:NextFunction) => {
     connection.query("SELECT empathy FROM crcdb.reviewdata WHERE reviewid = ?",[req.body.reviewid],
     function(err:Error,results:any,fields:any) {
         if(err) {
