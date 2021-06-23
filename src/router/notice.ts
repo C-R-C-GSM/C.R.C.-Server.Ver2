@@ -25,31 +25,52 @@ let meal_data:JSON;
 
 let notice_list:JSON;
 notice.get('/check', (req:Request, res:Response) => {
-    connection.query("SELECT * FROM crcdb.notice", function(err:Error,results:any, fields:any) {
-        if(err) {
-            res.json({success:false,code:-100, message:'cant connect db'});
-        } else {
-            res.json({success:true,code:0,message:'notice list check',notice_list:results})
-        }
-    })
+    let Token = req.get('Token');
+    let decoded = jwt.vertify(Token,process.env.JWT_SECRET);
+    if(!decoded) {
+        res.json({success:false,code:-401,message:'expired token'});
+    } else {
+        connection.query("SELECT * FROM crcdb.notice", function(err:Error,results:any, fields:any) {
+            if(err) {
+                res.json({success:false,code:-100, message:'cant connect db'});
+            } else {
+                res.json({success:true,code:0,message:'notice list check',notice_list:results})
+            }
+        })
+    }
 });
 
 notice.post('/register', (req:Request, res:Response) => {
-    let title:string = req.body.title;
-    let content:string = req.body.content;
-    let today = new Date();
-    let time = today.toLocaleString().substring(0,today.toLocaleString().indexOf('├')-1);
-
-    connection.query("INSERT INTO crcdb.notice(title,content,time) VALUES(?,?,?)",[title,content,time],
-    function(err:Error, results:any,fields:any ) {
-        if(err) {
-            res.json({success:false,code:-100,message:'cannot connect db'});
-            console.log(err)
-        } else {
-        
-        res.json({success:true,code:0,message:'notice register'})
-        }
-    });
+  let Token = req.get('Token');
+  let decoded = jwt.vertify(Token,process.env.JWT_SECRET);
+  if(!decoded) {
+    res.json({success:false,code:-401,message:'expired token'});
+  } else {
+      if(decoded.roll == 0) {
+        res.json({success:false,code:-600,message:'wrong roll'});
+      } else {
+          connection.query("SELECT * FROM crcdb.notice", function(err:Error,results:any, fields:any) {
+            if(err) {
+                res.json({success:false,code:-100, message:'cant connect db'});
+            } else {
+              let title:string = req.body.title;
+              let content:string = req.body.content;
+              let today = new Date();
+              let time = today.toLocaleString().substring(0,today.toLocaleString().indexOf('├')-1);
+          
+              connection.query("INSERT INTO crcdb.notice(title,content,time) VALUES(?,?,?)",[title,content,time],
+              function(err:Error, results:any,fields:any ) {
+                  if(err) {
+                      res.json({success:false,code:-100,message:'cannot connect db'});
+                      console.log(err)
+                  } else {
+                  res.json({success:true,code:0,message:'notice register'})
+                  }
+              });
+            }
+        });
+      }
+    }
 });
 
 notice.get("/get_meal",(req:Request, res:Response) => {
