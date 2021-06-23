@@ -21,7 +21,6 @@ let reviewdata_value:JSON;
 
 review.post('/check',(request:Request, res:Response, next:NextFunction) => {
     console.log('post');
-    let accesstoken = request.body.accessToken;
     /*
     connection.query("SELECT userid FROM crcdb.userdata WHERE email = ?",[email],
     function(err:Error, results:any,fields:any) {
@@ -33,7 +32,8 @@ review.post('/check',(request:Request, res:Response, next:NextFunction) => {
       }
     });
     */
-    let decoded = jwt.vertify(accesstoken,process.env.JWT_SECRET);
+   let Token = request.get('Token')
+    let decoded = jwt.vertify(Token,process.env.JWT_SECRET);
     
     if(!decoded) {
         res.json({success:false,code:-401,message:'expired token'});
@@ -48,21 +48,33 @@ review.post('/check',(request:Request, res:Response, next:NextFunction) => {
 });
 
 review.post('/register',(request:Request, res:Response, next:NextFunction) => {
-    let review_star = request.body.review_star;
-    let title = request.body.title;
-    let content = request.body.content;
-    let name = request.body.name;
-    let when = request.body.when;
-    let nickname= request.body.nickname;
-    connection.query("INSERT INTO crcdb.reviewdata(review_star,title,content,name,when,nickname) VALUES(?,?,?,?,?,?)",[review_star,title,content,name,when,nickname],
-    function(err:Error,results:any,fields:any) {
-        if(err) {
-            res.json({success:false,code:-100,message:'cannot connect db'});
-            console.log(err)
+    let Token = request.get('Token');
+    let decoded = jwt.vertify(Token,process.env.JWT_SECRET);
+    
+    if(!decoded) {
+        res.json({success:false,code:-401,message:'expired token'});
+    } else {
+        if(decoded.roll == 0) {
+            let review_star = request.body.review_star;
+            let title = request.body.title;
+            let content = request.body.content;
+            let name = request.body.name;
+            let when = request.body.when;
+            let nickname= request.body.nickname;
+            connection.query("INSERT INTO crcdb.reviewdata(review_star,title,content,name,when,nickname) VALUES(?,?,?,?,?,?)",[review_star,title,content,name,when,nickname],
+            function(err:Error,results:any,fields:any) {
+                if(err) {
+                    res.json({success:false,code:-100,message:'cannot connect db'});
+                    console.log(err)
+                } else {
+                    res.json({success:true,code:0,message:'register review'})
+                }
+            })
         } else {
-            res.json({success:true,code:0,message:'register review'})
+            res.json({success:false,code:-600, message:'권한 없음'})
         }
-    })
+
+    }
 });
 
 review.post('/empathy',(req:Request,res:Response,next:NextFunction) => {
