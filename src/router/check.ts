@@ -60,7 +60,7 @@ check.post('/come_student', (req:Request, res:Response) => {
 });
   
 
-check.post('/total', (req:Request, res:Response) => {
+check.get('/total', (req:Request, res:Response) => {
     res.json({success:true, code:0,message:'total_data_send',total_num:total_num})
 });
 

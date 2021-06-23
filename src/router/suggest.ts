@@ -23,8 +23,8 @@ console.log(time);
 
 suggest.post('/check',(req:Request,res:Response,next:NextFunction) => {
     console.log('suggest post');
-    let accesstoken = req.body.accessToken;
-    let decoded = jwt.vertify(accesstoken,process.env.JWT_SECRET);
+    let Token = req.get('Token');
+    let decoded = jwt.vertify(Token,process.env.JWT_SECRET);
 
     if(!decoded) {
         res.json({success:false,code:-401,message:'expired token'});

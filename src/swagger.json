@@ -28,18 +28,16 @@
     ],
     "paths": {
         "/": {
-            "post": {
+            "get": {
                 "tags": [
                     "Main"
                 ],
                 "summary": "학생 수 받아오기",
                 "parameters": [
                     {
-                        "in": "body",
-                        "name": "body",
                         "description": "AccessToken",
                         "schema": {
-                            "$ref": "#/definitions/get_accessToken"
+                            "type": "string"
                         }
                     }
                 ],
@@ -323,7 +321,7 @@
             }
         },
         "/review/empathy": {
-            "get": {
+            "post": {
                 "tags": [
                     "Review"
                 ],
@@ -375,7 +373,7 @@
             }
         },
         "/suggest/check": {
-            "post": {
+            "get": {
                 "tags": [
                     "suggest"
                 ],
@@ -471,6 +469,162 @@
                 "responses": {
                     "201": {
                         "description": "suggest Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/check/total": {
+            "get": {
+                "tags": [
+                    "check"
+                ],
+                "summary": "전체 학생 수 확인",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "전체 인원 확인",
+                        "schema": {
+                            "$ref": "#/definitions/get_AccessToken"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "check Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/check/one": {
+            "get": {
+                "tags": [
+                    "check"
+                ],
+                "summary": "1학년 학생 수 확인",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "1학년 학생 수 확인",
+                        "schema": {
+                            "$ref": "#/definitions/get_AccessToken"
+                        } 
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "check Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/check/two": {
+            "get": {
+                "tags": [
+                    "check"
+                ],
+                "summary": "2학년 학생 수 확인",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "2학년 학생 수 확인",
+                        "schema": {
+                            "$ref": "#/definitions/get_AccessToken"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "check Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/check/three": {
+            "get": {
+                "tags": [
+                    "check"
+                ],
+                "summary": "3학년 학생 수 확인",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "3학년 학생 수 확인",
+                        "schema": {
+                            "$ref": "#/definitions/get_AccessToken"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "check Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/notice/check": {
+            "get": {
+                "tags": [
+                    "notice"
+                ],
+                "summary": "공지사항 조회",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "공지사항 조회",
+                        "schema": {
+                            "$ref": "#/definitions/get_AccessToken"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "check Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/notice/register": {
+            "post": {
+                "tags": [
+                    "notice"
+                ],
+                "summary": "공지사항 등록",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "토큰 확인 및 내용 확인",
+                        "schema": {
+                            "$ref": "#/definitions/notice_register"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "check Success"
                     },
                     "404": {
                         "description": "Failed. Bad Request"
@@ -630,6 +784,16 @@
                 },
                 "suggestid": {
                     "type":"integer"
+                }
+            }
+        },
+        "notice_register": {
+            "properties": {
+                "title": {
+                    "type":"string"
+                },
+                "content": {
+                    "type":"string"
                 }
             }
         }
