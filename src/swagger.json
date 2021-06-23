@@ -67,46 +67,6 @@
                 }
             }
         },
-        "/Main": {
-            "post": {
-                "tags": [
-                    "Main"
-                ],
-                "summary": "하드웨어에서 학생 수 전달",
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "post student_data",
-                        "schema": {
-                            "$ref": "#/definitions/Student_num_Data"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Post student data",
-                        "examples":{
-                            "application/json": {
-                                "success":true,
-                                "code":0,
-                                "message":"get meal data"
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Failed. Bad Request",
-                        "examples":{
-                            "application/json": {
-                                "success":false,
-                                "code":-401,
-                                "message":"expired token"
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/get_meal": {
             "post": {
                 "tags": [
@@ -311,7 +271,7 @@
             }
         },
         "/review/check": {
-            "post": {
+            "get": {
                 "tags": [
                     "Review"
                 ],
@@ -363,7 +323,7 @@
             }
         },
         "/review/empathy": {
-            "post": {
+            "get": {
                 "tags": [
                     "Review"
                 ],
