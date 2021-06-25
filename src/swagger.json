@@ -35,6 +35,8 @@
                 "summary": "학생 수 받아오기",
                 "parameters": [
                     {
+                        "in": "body",
+                        "name": "body",
                         "description": "AccessToken",
                         "schema": {
                             "type": "string"
@@ -581,7 +583,7 @@
             }
         },
         "/notice/check": {
-            "get": {
+            "post": {
                 "tags": [
                     "notice"
                 ],
