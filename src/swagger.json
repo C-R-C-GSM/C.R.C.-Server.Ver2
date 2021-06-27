@@ -35,12 +35,9 @@
                 "summary": "학생 수 받아오기",
                 "parameters": [
                     {
-                        "in": "body",
-                        "name": "body",
-                        "description": "AccessToken",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
@@ -75,12 +72,9 @@
                 "summary": "급식 메뉴 받아오기",
                 "parameters": [
                     {
-                        "in": "body",
-                        "name": "body",
-                        "description": "AccessToken",
-                        "schema": {
-                            "$ref": "#/definitions/get_accessToken"
-                        }
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
@@ -278,12 +272,9 @@
                 "summary": "리뷰 목록 확인",
                 "parameters": [
                     {
-                        "in": "body",
-                        "name": "body",
-                        "description": "Review Check",
-                        "schema": {
-                            "$ref": "#/definitions/get_accessToken"
-                        }
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
@@ -382,12 +373,9 @@
                 "summary": "리뷰 목록 확인",
                 "parameters": [
                     {
-                        "in": "body",
-                        "name": "body",
-                        "description": "suggest Check",
-                        "schema": {
-                            "$ref": "#/definitions/get_accessToken"
-                        }
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
@@ -486,12 +474,9 @@
                 "summary": "전체 학생 수 확인",
                 "parameters": [
                     {
-                        "in": "body",
-                        "name": "body",
-                        "description": "전체 인원 확인",
-                        "schema": {
-                            "$ref": "#/definitions/get_AccessToken"
-                        }
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
@@ -512,12 +497,9 @@
                 "summary": "1학년 학생 수 확인",
                 "parameters": [
                     {
-                        "in": "body",
-                        "name": "body",
-                        "description": "1학년 학생 수 확인",
-                        "schema": {
-                            "$ref": "#/definitions/get_AccessToken"
-                        } 
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
@@ -538,12 +520,9 @@
                 "summary": "2학년 학생 수 확인",
                 "parameters": [
                     {
-                        "in": "body",
-                        "name": "body",
-                        "description": "2학년 학생 수 확인",
-                        "schema": {
-                            "$ref": "#/definitions/get_AccessToken"
-                        }
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
@@ -564,12 +543,9 @@
                 "summary": "3학년 학생 수 확인",
                 "parameters": [
                     {
-                        "in": "body",
-                        "name": "body",
-                        "description": "3학년 학생 수 확인",
-                        "schema": {
-                            "$ref": "#/definitions/get_AccessToken"
-                        }
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
@@ -590,12 +566,9 @@
                 "summary": "공지사항 조회",
                 "parameters": [
                     {
-                        "in": "body",
-                        "name": "body",
-                        "description": "공지사항 조회",
-                        "schema": {
-                            "$ref": "#/definitions/get_AccessToken"
-                        }
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
