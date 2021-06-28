@@ -32,7 +32,7 @@ review.get('/check',(request:Request, res:Response, next:NextFunction) => {
     });
     */
    let Token = request.get('Token')
-    console.log(jwt.vertify(Token,process.env.JWT_SECRET));/*
+    let decoded = jwt.decode(Token,process.env.JWT_SECRET);
     if(!decoded) {
         res.json({success:false,code:-401,message:'expired token'});
     } else {
@@ -42,12 +42,12 @@ review.get('/check',(request:Request, res:Response, next:NextFunction) => {
         })
         res.json({success:true,code:0,message:'token check success',review_data:reviewdata_value});
         console.log('토큰 아직 있네요');
-    }*/
+    }
 });
 
 review.post('/register',(request:Request, res:Response, next:NextFunction) => {
     let Token = request.get('Token');
-    let decoded = jwt.vertify(Token,process.env.JWT_SECRET);
+    let decoded = jwt.decode(Token,process.env.JWT_SECRET);
     
     if(!decoded) {
         res.json({success:false,code:-401,message:'expired token'});

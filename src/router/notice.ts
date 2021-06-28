@@ -23,7 +23,7 @@ connection.connect();
 let notice_list:JSON;
 notice.get('/check', (req:Request, res:Response) => {
     let Token = req.get('Token');
-    let decoded = jwt.vertify(Token,process.env.JWT_SECRET);
+    let decoded = jwt.decode(Token,process.env.JWT_SECRET);
     if(!decoded) {
         res.json({success:false,code:-401,message:'expired token'});
     } else {
@@ -39,7 +39,7 @@ notice.get('/check', (req:Request, res:Response) => {
 
 notice.post('/register', (req:Request, res:Response) => {
   let Token = req.get('Token');
-  let decoded = jwt.vertify(Token,process.env.JWT_SECRET);
+  let decoded = jwt.decode(Token,process.env.JWT_SECRET);
   if(!decoded) {
     res.json({success:false,code:-401,message:'expired token'});
   } else {

@@ -25,16 +25,6 @@ suggest.get('/check',(req:Request,res:Response,next:NextFunction) => {
     let Token:any = req.get('Token');
     let decoded = jwt.decode(Token);
     console.log(decoded)
-/*
-    let secretKey = process.env.JWT_SECRET;
-    jwt.verify(Token, secretKey, (err, verfied) => {
-        if (err) {
-          res.status(401).send({success: false, err: err});
-        }
-        //if no err we gud
-        next();
-      });
-*/
     if(!decoded) {
         res.json({success:false,code:-401,message:'expired token'});
     } else {

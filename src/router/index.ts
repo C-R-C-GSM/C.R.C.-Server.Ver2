@@ -30,7 +30,7 @@ let student:number = 0;
 
 index.post("/", (request: Request, response: Response, next: NextFunction) => {
   let accesstoken = request.body.accessToken;
-  let decoded = jwt.vertify(accesstoken,process.env.JWT_SECRET);
+  let decoded = jwt.decode(accesstoken,process.env.JWT_SECRET);
 
   if(!decoded) {
       response.json({success:false,code:-401,message:'expired token'});
@@ -47,7 +47,7 @@ index.post('/refresh', (req:Request, res:Response) => {
 
 index.get("/get_meal",(req:Request, res:Response) => {
   let Token = req.get('Token');
-  let decoded = jwt.vertify(Token,process.env.JWT_SECRET);
+  let decoded = jwt.decode(Token,process.env.JWT_SECRET);
 
   if(!decoded) {
       res.json({success:false,code:-401,message:'expired token'});
