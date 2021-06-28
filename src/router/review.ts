@@ -76,23 +76,30 @@ review.post('/register',(request:Request, res:Response, next:NextFunction) => {
 });
 
 review.get('/empathy',(req:Request,res:Response,next:NextFunction) => {
-    connection.query("SELECT empathy FROM crcdb.reviewdata WHERE reviewid = ?",[req.body.reviewid],
-    function(err:Error,results:any,fields:any) {
-        if(err) {
-            res.json({success:false,code:-100,message:'cannot connect db'});
-            console.log(err)
-        } else {
-            connection.query("UPDATE crcdb.reviewdata SET empathy = ? WHERE reviewid = ?",[results+1,req.body.reviewid],
-            function(err1:Error,results1:any,fields1:any) {
-                if(err) {
-                    res.json({success:false,code:-100,message:'cannot connect db'});
-                    console.log(err)
-                } else {
-                    res.json({success:true,code:0,message:'empathy success'})
-                }
-            })
-        }
-    })
+    let Token = request.get('Token');
+    let decoded = jwt.decode(Token,process.env.JWT_SECRET);
+    
+    if(!decoded) {
+        res.json({success:false,code:-401,message:'expired token'});
+    } else {
+        connection.query("SELECT empathy FROM crcdb.reviewdata WHERE reviewid = ?",[req.body.reviewid],
+        function(err:Error,results:any,fields:any) {
+            if(err) {
+                res.json({success:false,code:-100,message:'cannot connect db'});
+                console.log(err)
+            } else {
+                connection.query("UPDATE crcdb.reviewdata SET empathy = ? WHERE reviewid = ?",[results+1,req.body.reviewid],
+                function(err1:Error,results1:any,fields1:any) {
+                    if(err) {
+                        res.json({success:false,code:-100,message:'cannot connect db'});
+                        console.log(err)
+                    } else {
+                        res.json({success:true,code:0,message:'empathy success'})
+                    }
+                })
+            }
+        });
+    }
 });
 
 review.post('/reply',(req:Request,res:Response,next:NextFunction) => {

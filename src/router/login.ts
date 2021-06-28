@@ -31,7 +31,7 @@ login.post('/', function(req:Request,res: Response,next:NextFunction) {
         res.json({success:false,code:-100,message:'cannot connect db'});
         console.log(err);
       } else {
-        if(!results) {
+        if(results[0]) {
           key = results[0].userid;
           roll = results[0].roll;
           connection.query("SELECT password,salt FROM crcdb.userdata WHERE email = ?",[email],

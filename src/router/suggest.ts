@@ -40,7 +40,7 @@ suggest.get('/check',(req:Request,res:Response,next:NextFunction) => {
 suggest.post('/register',(req:Request,res:Response,next:NextFunction) => {
     let Token:any = req.get('Token');
     let decoded = jwt.decode(Token);
-    console.log(JSON.stringify(decoded))
+    //console.log(decoded.key);
     if(!decoded) {
         res.json({success:false,code:-401,message:'expired token'});
     } else {
