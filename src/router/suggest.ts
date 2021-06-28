@@ -1,8 +1,8 @@
 import { config } from 'dotenv';
 import express,{Request, Response, NextFunction} from 'express';
+import jwt, { Secret } from 'jsonwebtoken'
 
 const suggest = express.Router();
-const jwt = require('jsonwebtoken');
 const mysql = require('mysql');
 require('dotenv').config();
 
@@ -21,11 +21,20 @@ let today = new Date();
 let time = today.toLocaleString().substring(0,today.toLocaleString().indexOf(' '));
 console.log(time);
 
-suggest.post('/check',(req:Request,res:Response,next:NextFunction) => {
-    console.log('suggest post');
-    let Token = req.get('Token');
-    let decoded = jwt.vertify(Token,process.env.JWT_SECRET);
-
+suggest.get('/check',(req:Request,res:Response,next:NextFunction) => {
+    let Token:any = req.get('Token');
+    let decoded = jwt.decode(Token);
+    console.log(decoded)
+/*
+    let secretKey = process.env.JWT_SECRET;
+    jwt.verify(Token, secretKey, (err, verfied) => {
+        if (err) {
+          res.status(401).send({success: false, err: err});
+        }
+        //if no err we gud
+        next();
+      });
+*/
     if(!decoded) {
         res.json({success:false,code:-401,message:'expired token'});
     } else {

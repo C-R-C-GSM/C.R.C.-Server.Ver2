@@ -64,6 +64,7 @@ login.post('/', function(req:Request,res: Response,next:NextFunction) {
                       issuer: 'C.R.C_SERVER' 
                     });
                     res.json({accessToken:accessToken,success:true,code:0,message:'토큰 발급 및 로그인 성공'})
+                    console.log(accessToken)
                 } catch (error) {
                   res.json({success:false,code:-400,message:'token error'})
                 }

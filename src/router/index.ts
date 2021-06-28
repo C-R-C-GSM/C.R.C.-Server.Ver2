@@ -46,8 +46,8 @@ index.post('/refresh', (req:Request, res:Response) => {
 })
 
 index.get("/get_meal",(req:Request, res:Response) => {
-  let accesstoken = req.body.accessToken;
-  let decoded = jwt.vertify(accesstoken,process.env.JWT_SECRET);
+  let Token = req.get('Token');
+  let decoded = jwt.vertify(Token,process.env.JWT_SECRET);
 
   if(!decoded) {
       res.json({success:false,code:-401,message:'expired token'});
