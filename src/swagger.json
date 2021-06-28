@@ -115,6 +115,11 @@
                         "schema": {
                             "$ref": "#/definitions/get_accessToken"
                         }
+                    },
+                    {
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
@@ -302,6 +307,11 @@
                         "schema": {
                             "$ref": "#/definitions/Reivew_Write"
                         }
+                    },
+                    {
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
@@ -328,6 +338,11 @@
                         "schema": {
                             "$ref": "#/definitions/Review_empathy"
                         }
+                    },
+                    {
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
@@ -354,6 +369,11 @@
                         "schema": {
                             "$ref": "#/definitions/Review_reply"
                         }
+                    },
+                    {
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
@@ -435,6 +455,11 @@
                         "schema": {
                             "$ref": "#/definitions/Suggest_empathy"
                         }
+                    },
+                    {
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
@@ -461,6 +486,11 @@
                         "schema": {
                             "$ref": "#/definitions/Suggest_reply"
                         }
+                    },
+                    {
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
@@ -555,6 +585,7 @@
                         "type":"string"
                     }
                 ],
+                
                 "responses": {
                     "201": {
                         "description": "check Success"
@@ -602,6 +633,11 @@
                         "schema": {
                             "$ref": "#/definitions/notice_register"
                         }
+                    },
+                    {
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
