@@ -59,7 +59,7 @@ login.post('/', function(req:Request,res: Response,next:NextFunction) {
                               expiresIn: '1h',
                               issuer: 'C.R.C_SERVER' 
                             });
-                            res.json({Token:accessToken,success:true,code:0,message:'토큰 발급 및 로그인 성공'})
+                            res.json({Token:accessToken,success:true,code:0,message:'Issue Token and Login Success'})
                             console.log(accessToken)
                         } catch (error) {
                           res.json({success:false,code:-400,message:'token error'})
