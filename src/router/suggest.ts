@@ -37,10 +37,11 @@ suggest.get('/check',(req:Request,res:Response,next:NextFunction) => {
     }
 });
 
-suggest.post('/register',(req:Request,res:Response,next:NextFunction) => {
+suggest.post('/register',async (req:Request,res:Response,next:NextFunction) => {
     let Token:any = req.get('Token');
-    let decoded = jwt.decode(Token);
-    //console.log(decoded.key);
+    let decoded:any = jwt.decode(Token);
+    let data = Object.keys(decoded);
+    console.log(data[0])
     if(!decoded) {
         res.json({success:false,code:-401,message:'expired token'});
     } else {
@@ -48,9 +49,9 @@ suggest.post('/register',(req:Request,res:Response,next:NextFunction) => {
         let content = req.body.content;
         let when = req.body.when;
         let nickname = req.body.nickname
-        let today = new Date();
-        let time = today.toLocaleString().substring(0,today.toLocaleString().indexOf('├')-1);
-        connection.query("INSERT INTO crcdb.suggest(title,content,time,when,nickname) VALUES(?,?,?,?,?)",
+        let today = await new Date();
+        let time = await today.toLocaleString().substring(0,today.toLocaleString().indexOf(' '));
+        connection.query("INSERT INTO crcdb.suggest(title,content,suggest_time,suggest_when,nickname) VALUES(?,?,?,?,?)",
             [title,content,time,when,nickname],
             function(err:Error, results:any,fields:any ) {
                 if(err) {
