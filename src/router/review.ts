@@ -96,7 +96,11 @@ review.get('/empathy',(req:Request,res:Response,next:NextFunction) => {
 });
 
 review.post('/reply',(req:Request,res:Response,next:NextFunction) => {
-    if(req.body.reply) {
+    let Token:any = req.get('Token');
+    let decoded = jwt.decode(Token);
+    if(!decoded) {
+        res.json({success:false,code:-401,message:'expired token'});
+    } else {
         connection.query("UPDATE crcdb.reviewdata SET reply = ? WHERE reviewid = ?",[req.body.reply,req.body.reviewid],
         function(err:Error,results:any,fields:any) {
             if(err) {
@@ -106,8 +110,6 @@ review.post('/reply',(req:Request,res:Response,next:NextFunction) => {
                 res.json({success:true,code:0,message:'reply success'});
             }
         })
-    } else {
-        res.json({success:false,code:-1,message:'reply가 존재하지 않습니다.'});
     }
 });
 

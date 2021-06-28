@@ -38,24 +38,30 @@ suggest.get('/check',(req:Request,res:Response,next:NextFunction) => {
 });
 
 suggest.post('/register',(req:Request,res:Response,next:NextFunction) => {
-    let title = req.body.title;
-    let content = req.body.content;
-    let name = req.body.name;
-    let when = req.body.when;
-    let nickname = req.body.nickname
-    let today = new Date();
-    let time = today.toLocaleString().substring(0,today.toLocaleString().indexOf('├')-1);
-    connection.query("INSERT INTO crcdb.suggest(title,content,name,time,when,nickname) VALUES(?,?,?,?,?,?)",
-        [title,content,name,time,when,nickname],
-        function(err:Error, results:any,fields:any ) {
-            if(err) {
-                res.json({success:false,code:-100,message:'cannot connect db'});
-                console.log(err)
-            } else {
-            
-            res.json({success:true,code:0,message:'success'})
-            }
-        });
+    let Token:any = req.get('Token');
+    let decoded = jwt.decode(Token);
+    console.log(JSON.stringify(decoded))
+    if(!decoded) {
+        res.json({success:false,code:-401,message:'expired token'});
+    } else {
+        let title = req.body.title;
+        let content = req.body.content;
+        let when = req.body.when;
+        let nickname = req.body.nickname
+        let today = new Date();
+        let time = today.toLocaleString().substring(0,today.toLocaleString().indexOf('├')-1);
+        connection.query("INSERT INTO crcdb.suggest(title,content,time,when,nickname) VALUES(?,?,?,?,?)",
+            [title,content,time,when,nickname],
+            function(err:Error, results:any,fields:any ) {
+                if(err) {
+                    res.json({success:false,code:-100,message:'cannot connect db'});
+                    console.log(err)
+                } else {
+                res.json({success:true,code:0,message:'success'})
+                }
+            });
+    }
+    
 });
 
 suggest.post('/empathy',(req:Request,res:Response,next:NextFunction) => {

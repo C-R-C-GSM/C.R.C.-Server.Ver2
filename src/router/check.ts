@@ -61,37 +61,65 @@ check.post('/come_student', (req:Request, res:Response) => {
   
 
 check.get('/total', (req:Request, res:Response) => {
-    res.json({success:true, code:0,message:'total_data_send',total_num:total_num})
+    let Token:any = req.get('Token');
+    let decoded = jwt.decode(Token);
+    if(!decoded) {
+        res.json({success:false,code:-401,message:'expired token'});
+    } else {
+        res.json({success:true, code:0,message:'total_data_send',total_num:total_num})
+    }
+    
 });
 
 check.get('/one', (req:Request, res:Response) => {
-  connection.query("SELECT student_data1,student_name1,check FROM crcdb.1student",
-  function(err:Error,results:any, fields:any) {
-      if(err) res.json({success:false,code:-100,message:'cannot connect db'});
-      else {
-          res.json({success:true, code:0, message:'check success',oneData:results})
-      }
-  });
+    let Token:any = req.get('Token');
+    let decoded = jwt.decode(Token);
+    if(!decoded) {
+        res.json({success:false,code:-401,message:'expired token'});
+    } else {
+        connection.query("SELECT student_data1,student_name1,check FROM crcdb.1student",
+        function(err:Error,results:any, fields:any) {
+            if(err) res.json({success:false,code:-100,message:'cannot connect db'});
+            else {
+                res.json({success:true, code:0, message:'check success',oneData:results})
+            }
+        });
+    }
+
 });
 
 check.get('/two', (req:Request, res:Response) => {
-    connection.query("SELECT student_data2,student_name2,check FROM crcdb.2student",
-    function(err:Error,results:any, fields:any) {
-        if(err) res.json({success:false,code:-100,message:'cannot connect db'});
-        else {
-            res.json({success:true, code:0, message:'check success',twoData:results})
-        }
-    });
+    let Token:any = req.get('Token');
+    let decoded = jwt.decode(Token);
+    if(!decoded) {
+        res.json({success:false,code:-401,message:'expired token'});
+    } else {
+        connection.query("SELECT student_data2,student_name2,check FROM crcdb.2student",
+        function(err:Error,results:any, fields:any) {
+            if(err) res.json({success:false,code:-100,message:'cannot connect db'});
+            else {
+                res.json({success:true, code:0, message:'check success',twoData:results})
+            }
+        });
+    }
+
 });
 
 check.get('/three', (req:Request, res:Response) => {
-    connection.query("SELECT student_data3,student_name3,check FROM crcdb.3student",
-    function(err:Error,results:any, fields:any) {
-        if(err) res.json({success:false,code:-100,message:'cannot connect db'});
-        else {
-            res.json({success:true, code:0, message:'check success',threeData:results})
-        }
-    });
+    let Token:any = req.get('Token');
+    let decoded = jwt.decode(Token);
+    if(!decoded) {
+        res.json({success:false,code:-401,message:'expired token'});
+    } else {
+        connection.query("SELECT student_data3,student_name3,check FROM crcdb.3student",
+        function(err:Error,results:any, fields:any) {
+            if(err) res.json({success:false,code:-100,message:'cannot connect db'});
+            else {
+                res.json({success:true, code:0, message:'check success',threeData:results})
+            }
+        });
+    }
+
 });
 
 
