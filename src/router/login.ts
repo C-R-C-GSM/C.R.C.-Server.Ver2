@@ -24,7 +24,9 @@ login.post('/', function(req:Request,res: Response,next:NextFunction) {
     let password = req.body.password;
     let key:number;
     let roll:number;
-    connection.query("SELECT userid FROM crcdb.userdata WHERE email = ?",[email],
+    let nickname:string;
+    let name:string;
+    connection.query("SELECT userid,roll,nickname,name FROM crcdb.userdata WHERE email = ?",[email],
     function(err:Error, results:any,fields:any) {
       if(err) {
         res.json({success:false,code:-100,message:'cannot connect db'});
@@ -33,6 +35,7 @@ login.post('/', function(req:Request,res: Response,next:NextFunction) {
         if(results[0].userid) {
           key = results[0].userid;
           roll = results[0].roll;
+
         } else {
           res.json({success:false,code:-202,message:'cannot find this email'})
         }
@@ -58,12 +61,12 @@ login.post('/', function(req:Request,res: Response,next:NextFunction) {
                 console.log(err)
               } else {
                 try {
-                  const accessToken = jwt.sign({ key,roll }, 
+                  const accessToken = jwt.sign({ key,roll,nickname,name }, 
                     process.env.JWT_SECRET, { 
                       expiresIn: '1h',
                       issuer: 'C.R.C_SERVER' 
                     });
-                    res.json({accessToken:accessToken,success:true,code:0,message:'토큰 발급 및 로그인 성공'})
+                    res.json({Token:accessToken,success:true,code:0,message:'토큰 발급 및 로그인 성공'})
                     console.log(accessToken)
                 } catch (error) {
                   res.json({success:false,code:-400,message:'token error'})
