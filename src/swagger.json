@@ -28,19 +28,16 @@
     ],
     "paths": {
         "/": {
-            "post": {
+            "get": {
                 "tags": [
                     "Main"
                 ],
                 "summary": "학생 수 받아오기",
                 "parameters": [
                     {
-                        "in": "body",
-                        "name": "body",
-                        "description": "AccessToken",
-                        "schema": {
-                            "$ref": "#/definitions/get_accessToken"
-                        }
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
@@ -67,46 +64,6 @@
                 }
             }
         },
-        "/Main": {
-            "post": {
-                "tags": [
-                    "Main"
-                ],
-                "summary": "하드웨어에서 학생 수 전달",
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "post student_data",
-                        "schema": {
-                            "$ref": "#/definitions/Student_num_Data"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Post student data",
-                        "examples":{
-                            "application/json": {
-                                "success":true,
-                                "code":0,
-                                "message":"get meal data"
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Failed. Bad Request",
-                        "examples":{
-                            "application/json": {
-                                "success":false,
-                                "code":-401,
-                                "message":"expired token"
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/get_meal": {
             "post": {
                 "tags": [
@@ -115,12 +72,9 @@
                 "summary": "급식 메뉴 받아오기",
                 "parameters": [
                     {
-                        "in": "body",
-                        "name": "body",
-                        "description": "AccessToken",
-                        "schema": {
-                            "$ref": "#/definitions/get_accessToken"
-                        }
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
@@ -161,6 +115,11 @@
                         "schema": {
                             "$ref": "#/definitions/get_accessToken"
                         }
+                    },
+                    {
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
@@ -210,7 +169,8 @@
                             "application/json": {
                                 "success":true,
                                 "code":0,
-                                "message":"expired token"
+                                "message":"expired token",
+                                "token":"accessToken"
                             }
                         }
                     },
@@ -311,19 +271,16 @@
             }
         },
         "/review/check": {
-            "post": {
+            "get": {
                 "tags": [
                     "Review"
                 ],
                 "summary": "리뷰 목록 확인",
                 "parameters": [
                     {
-                        "in": "body",
-                        "name": "body",
-                        "description": "Review Check",
-                        "schema": {
-                            "$ref": "#/definitions/get_accessToken"
-                        }
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
@@ -350,6 +307,11 @@
                         "schema": {
                             "$ref": "#/definitions/Reivew_Write"
                         }
+                    },
+                    {
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
@@ -376,6 +338,11 @@
                         "schema": {
                             "$ref": "#/definitions/Review_empathy"
                         }
+                    },
+                    {
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
@@ -402,6 +369,11 @@
                         "schema": {
                             "$ref": "#/definitions/Review_reply"
                         }
+                    },
+                    {
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
@@ -415,19 +387,16 @@
             }
         },
         "/suggest/check": {
-            "post": {
+            "get": {
                 "tags": [
                     "suggest"
                 ],
                 "summary": "리뷰 목록 확인",
                 "parameters": [
                     {
-                        "in": "body",
-                        "name": "body",
-                        "description": "suggest Check",
-                        "schema": {
-                            "$ref": "#/definitions/get_accessToken"
-                        }
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
@@ -454,8 +423,14 @@
                         "schema": {
                             "$ref": "#/definitions/Suggest_Write"
                         }
+                    },
+                    {
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
+                
                 "responses": {
                     "201": {
                         "description": "suggest Success"
@@ -480,6 +455,11 @@
                         "schema": {
                             "$ref": "#/definitions/Suggest_empathy"
                         }
+                    },
+                    {
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
@@ -506,11 +486,163 @@
                         "schema": {
                             "$ref": "#/definitions/Suggest_reply"
                         }
+                    },
+                    {
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
                     }
                 ],
                 "responses": {
                     "201": {
                         "description": "suggest Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/check/total": {
+            "get": {
+                "tags": [
+                    "check"
+                ],
+                "summary": "전체 학생 수 확인",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "check Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/check/one": {
+            "get": {
+                "tags": [
+                    "check"
+                ],
+                "summary": "1학년 학생 수 확인",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "check Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/check/two": {
+            "get": {
+                "tags": [
+                    "check"
+                ],
+                "summary": "2학년 학생 수 확인",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "check Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/check/three": {
+            "get": {
+                "tags": [
+                    "check"
+                ],
+                "summary": "3학년 학생 수 확인",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
+                    }
+                ],
+                
+                "responses": {
+                    "201": {
+                        "description": "check Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/notice/check": {
+            "post": {
+                "tags": [
+                    "notice"
+                ],
+                "summary": "공지사항 조회",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "check Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/notice/register": {
+            "post": {
+                "tags": [
+                    "notice"
+                ],
+                "summary": "공지사항 등록",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "토큰 확인 및 내용 확인",
+                        "schema": {
+                            "$ref": "#/definitions/notice_register"
+                        }
+                    },
+                    {
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "check Success"
                     },
                     "404": {
                         "description": "Failed. Bad Request"
@@ -639,9 +771,6 @@
         },
         "Suggest_Write": {
             "properties": {
-                "suggest_star": {
-                    "type":"string"
-                },
                 "title": {
                     "type":"string"
                 },
@@ -651,7 +780,7 @@
                 "nickname": {
                     "type":"string"
                 },
-                "when": {
+                "when":{
                     "type":"string"
                 }
             }
@@ -670,6 +799,16 @@
                 },
                 "suggestid": {
                     "type":"integer"
+                }
+            }
+        },
+        "notice_register": {
+            "properties": {
+                "title": {
+                    "type":"string"
+                },
+                "content": {
+                    "type":"string"
                 }
             }
         }

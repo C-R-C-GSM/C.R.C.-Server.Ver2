@@ -24,58 +24,61 @@ login.post('/', function(req:Request,res: Response,next:NextFunction) {
     let password = req.body.password;
     let key:number;
     let roll:number;
-    connection.query("SELECT userid FROM crcdb.userdata WHERE email = ?",[email],
+    let name:string;
+    connection.query("SELECT userid,roll,name FROM crcdb.userdata WHERE email = ?",[email],
     function(err:Error, results:any,fields:any) {
       if(err) {
         res.json({success:false,code:-100,message:'cannot connect db'});
         console.log(err);
       } else {
-        if(results[0].userid) {
+        if(results[0]) {
           key = results[0].userid;
           roll = results[0].roll;
+          connection.query("SELECT password,salt FROM crcdb.userdata WHERE email = ?",[email],
+            function(err:Error, results:any,fields:any) {
+              if(err) {
+                res.json({success:false,code:-100,message:'cannot connect db'});
+                console.log(err)
+              } else {
+                let dbpasswd = crypto.pbkdf2Sync(password, results[0].salt, 1, 32, 'sha512').toString('hex')
+                if(results[0].password == dbpasswd) {
+                  const refreshToken = jwt.sign({}, 
+                  process.env.JWT_SECRET, { 
+                  expiresIn: '14d',
+                  issuer: 'C.R.C_SERVER' 
+                  });
+                    connection.query("UPDATE crcdb.userdata SET refresh = ? WHERE email =?;",[refreshToken,email],
+                    function(err:Error, results:any,fields:any) {
+                      if(err) {
+                        res.json({success:false,code:-100,message:'cannot connect db'});;
+                        console.log(err)
+                      } else {
+                        try {
+                          const accessToken = jwt.sign({ key,roll }, 
+                            process.env.JWT_SECRET, { 
+                              expiresIn: '1h',
+                              issuer: 'C.R.C_SERVER' 
+                            });
+                            res.json({Token:accessToken,success:true,code:0,message:'Issue Token and Login Success'})
+                            console.log(accessToken)
+                        } catch (error) {
+                          res.json({success:false,code:-400,message:'token error'})
+                        }
+                        
+                      }
+                    });
+                    
+                } else {
+                  res.json({success:false,code:-300,message:'wrong password'})
+                }
+              }
+            });
         } else {
           res.json({success:false,code:-202,message:'cannot find this email'})
         }
       }
-    })
-    connection.query("SELECT password,salt FROM crcdb.userdata WHERE email = ?",[email],
-    function(err:Error, results:any,fields:any) {
-      if(err) {
-        res.json({success:false,code:-100,message:'cannot connect db'});
-        console.log(err)
-      } else {
-        let dbpasswd = crypto.pbkdf2Sync(password, results[0].salt, 1, 32, 'sha512').toString('hex')
-        if(results[0].password == dbpasswd) {
-          const refreshToken = jwt.sign({}, 
-          process.env.JWT_SECRET, { 
-          expiresIn: '14d',
-          issuer: 'C.R.C_SERVER' 
-          });
-            connection.query("UPDATE crcdb.userdata SET refresh = ? WHERE email =?;",[refreshToken,email],
-            function(err:Error, results:any,fields:any) {
-              if(err) {
-                res.json({success:false,code:-100,message:'cannot connect db'});;
-                console.log(err)
-              } else {
-                try {
-                  const accessToken = jwt.sign({ key,roll }, 
-                    process.env.JWT_SECRET, { 
-                      expiresIn: '1h',
-                      issuer: 'C.R.C_SERVER' 
-                    });
-                    res.json({accessToken:accessToken,success:true,code:0,message:'토큰 발급 및 로그인 성공'})
-                } catch (error) {
-                  res.json({success:false,code:-400,message:'token error'})
-                }
-                
-              }
-            });
-            
-        } else {
-          res.json({success:false,code:-300,message:'wrong password'})
-        }
-      }
     });
+    
   });
 
 
