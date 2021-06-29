@@ -40,10 +40,13 @@ notice.get('/check', (req:Request, res:Response) => {
 notice.post('/register', (req:Request, res:Response) => {
   let Token = req.get('Token');
   let decoded = jwt.decode(Token,process.env.JWT_SECRET);
+  let data = Object.keys(decoded);
+  let key = data[0];
+  let roll = data[1]
   if(!decoded) {
     res.json({success:false,code:-401,message:'expired token'});
   } else {
-      if(decoded.roll == 0) {
+      if(roll == '0') {
         res.json({success:false,code:-600,message:'wrong roll'});
       } else {
           connection.query("SELECT * FROM crcdb.notice", function(err:Error,results:any, fields:any) {
@@ -53,7 +56,7 @@ notice.post('/register', (req:Request, res:Response) => {
               let title:string = req.body.title;
               let content:string = req.body.content;
               let today = new Date();
-              let time = today.toLocaleString().substring(0,today.toLocaleString().indexOf('├')-1);
+              let time = today.toLocaleString().substring(0,today.toLocaleString().indexOf(' ')-1);
           
               connection.query("INSERT INTO crcdb.notice(title,content,time) VALUES(?,?,?)",[title,content,time],
               function(err:Error, results:any,fields:any ) {
