@@ -19,9 +19,7 @@ var connection = mysql.createConnection({
 connection.connect();
 let reviewdata_value:JSON;
 
-review.post('/check',(request:Request, res:Response, next:NextFunction) => {
-    console.log('post');
-    let accesstoken = request.body.accessToken;
+review.get('/check',(request:Request, res:Response, next:NextFunction) => {
     /*
     connection.query("SELECT userid FROM crcdb.userdata WHERE email = ?",[email],
     function(err:Error, results:any,fields:any) {
@@ -33,8 +31,8 @@ review.post('/check',(request:Request, res:Response, next:NextFunction) => {
       }
     });
     */
-    let decoded = jwt.vertify(accesstoken,process.env.JWT_SECRET);
-    
+   let Token = request.get('Token')
+    let decoded = jwt.decode(Token,process.env.JWT_SECRET);
     if(!decoded) {
         res.json({success:false,code:-401,message:'expired token'});
     } else {
@@ -48,45 +46,68 @@ review.post('/check',(request:Request, res:Response, next:NextFunction) => {
 });
 
 review.post('/register',(request:Request, res:Response, next:NextFunction) => {
-    let review_star = request.body.review_star;
-    let title = request.body.title;
-    let content = request.body.content;
-    let name = request.body.name;
-    let when = request.body.when;
-    let nickname= request.body.nickname;
-    connection.query("INSERT INTO crcdb.reviewdata(review_star,title,content,name,when,nickname) VALUES(?,?,?,?,?,?)",[review_star,title,content,name,when,nickname],
-    function(err:Error,results:any,fields:any) {
-        if(err) {
-            res.json({success:false,code:-100,message:'cannot connect db'});
-            console.log(err)
-        } else {
-            res.json({success:true,code:0,message:'register review'})
-        }
-    })
-});
-
-review.post('/empathy',(req:Request,res:Response,next:NextFunction) => {
-    connection.query("SELECT empathy FROM crcdb.reviewdata WHERE reviewid = ?",[req.body.reviewid],
-    function(err:Error,results:any,fields:any) {
-        if(err) {
-            res.json({success:false,code:-100,message:'cannot connect db'});
-            console.log(err)
-        } else {
-            connection.query("UPDATE crcdb.reviewdata SET empathy = ? WHERE reviewid = ?",[results+1,req.body.reviewid],
-            function(err1:Error,results1:any,fields1:any) {
+    let Token = request.get('Token');
+    let decoded = jwt.decode(Token,process.env.JWT_SECRET);
+    
+    if(!decoded) {
+        res.json({success:false,code:-401,message:'expired token'});
+    } else {
+        if(decoded.roll == 0) {
+            let review_star = request.body.review_star;
+            let title = request.body.title;
+            let content = request.body.content;
+            let name = request.body.name;
+            let when = request.body.when;
+            let nickname= request.body.nickname;
+            connection.query("INSERT INTO crcdb.reviewdata(review_star,title,content,name,when,nickname) VALUES(?,?,?,?,?,?)",[review_star,title,content,name,when,nickname],
+            function(err:Error,results:any,fields:any) {
                 if(err) {
                     res.json({success:false,code:-100,message:'cannot connect db'});
                     console.log(err)
                 } else {
-                    res.json({success:true,code:0,message:'empathy success'})
+                    res.json({success:true,code:0,message:'register review'})
                 }
             })
+        } else {
+            res.json({success:false,code:-600, message:'권한 없음'})
         }
-    })
+
+    }
+});
+
+review.get('/empathy',(req:Request,res:Response,next:NextFunction) => {
+    let Token = request.get('Token');
+    let decoded = jwt.decode(Token,process.env.JWT_SECRET);
+    
+    if(!decoded) {
+        res.json({success:false,code:-401,message:'expired token'});
+    } else {
+        connection.query("SELECT empathy FROM crcdb.reviewdata WHERE reviewid = ?",[req.body.reviewid],
+        function(err:Error,results:any,fields:any) {
+            if(err) {
+                res.json({success:false,code:-100,message:'cannot connect db'});
+                console.log(err)
+            } else {
+                connection.query("UPDATE crcdb.reviewdata SET empathy = ? WHERE reviewid = ?",[results+1,req.body.reviewid],
+                function(err1:Error,results1:any,fields1:any) {
+                    if(err) {
+                        res.json({success:false,code:-100,message:'cannot connect db'});
+                        console.log(err)
+                    } else {
+                        res.json({success:true,code:0,message:'empathy success'})
+                    }
+                })
+            }
+        });
+    }
 });
 
 review.post('/reply',(req:Request,res:Response,next:NextFunction) => {
-    if(req.body.reply) {
+    let Token:any = req.get('Token');
+    let decoded = jwt.decode(Token);
+    if(!decoded) {
+        res.json({success:false,code:-401,message:'expired token'});
+    } else {
         connection.query("UPDATE crcdb.reviewdata SET reply = ? WHERE reviewid = ?",[req.body.reply,req.body.reviewid],
         function(err:Error,results:any,fields:any) {
             if(err) {
@@ -96,8 +117,6 @@ review.post('/reply',(req:Request,res:Response,next:NextFunction) => {
                 res.json({success:true,code:0,message:'reply success'});
             }
         })
-    } else {
-        res.json({success:false,code:-1,message:'reply가 존재하지 않습니다.'});
     }
 });
 

@@ -21,14 +21,16 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
+
 let meal_text:string;
 let meal_text_split:string[];
 let school_meal_arr: string[] = [];
-
+let meal_data:JSON;
 let student:number = 0;
+
 index.post("/", (request: Request, response: Response, next: NextFunction) => {
   let accesstoken = request.body.accessToken;
-  let decoded = jwt.vertify(accesstoken,process.env.JWT_SECRET);
+  let decoded = jwt.decode(accesstoken,process.env.JWT_SECRET);
 
   if(!decoded) {
       response.json({success:false,code:-401,message:'expired token'});
@@ -37,9 +39,15 @@ index.post("/", (request: Request, response: Response, next: NextFunction) => {
   }
 });
 
-index.post("/get_meal",(req:Request, res:Response) => {
-  let accesstoken = req.body.accessToken;
-  let decoded = jwt.vertify(accesstoken,process.env.JWT_SECRET);
+
+
+index.post('/refresh', (req:Request, res:Response) => {
+  
+})
+
+index.get("/get_meal",(req:Request, res:Response) => {
+  let Token = req.get('Token');
+  let decoded = jwt.decode(Token,process.env.JWT_SECRET);
 
   if(!decoded) {
       res.json({success:false,code:-401,message:'expired token'});
@@ -62,13 +70,8 @@ index.post("/get_meal",(req:Request, res:Response) => {
         }
       }
     });
-    res.json({success:true, code:0,message:'post meal data'})
+    res.json({success:true, code:0,message:'post meal data',meal_data:school_meal_arr})
   }
 })
-
-index.post('/refresh', (req:Request, res:Response) => {
-  
-})
-
-
+;
 export = index;

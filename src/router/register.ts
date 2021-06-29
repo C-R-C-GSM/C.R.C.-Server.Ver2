@@ -26,7 +26,6 @@ register.post("/", (req: Request, res: Response, next: NextFunction) => {
     let password:string = req.body.password;
     let name:string = req.body.name;
     let student_data:string = req.body.student_data;
-    let nickname:string = req.body.nickname;
     let salt:any;
     let hashedPasswd:string;
 
@@ -70,8 +69,8 @@ register.post("/", (req: Request, res: Response, next: NextFunction) => {
                     console.log(error);
                     } else {
                     console.log('send success');
-                    connection.query("INSERT INTO crcdb.userdata(email,password,name,salt,student_data,authNum,nickname) VALUES(?,?,?,?,?,?,?)",
-                    [email,hashedPasswd,name,salt,student_data,authNum,nickname],
+                    connection.query("INSERT INTO crcdb.userdata(email,password,name,salt,student_data,authNum) VALUES(?,?,?,?,?,?)",
+                    [email,hashedPasswd,name,salt,student_data,authNum],
                     function(err:Error, results:any,fields:any ) {
                         if(err) {
                             res.json({success:false,code:-100,message:'cannot connect db'});
@@ -105,12 +104,12 @@ register.get("/:authNum", (request: Request, response: Response, next: NextFunct
                     function(err:Error, results:any,fields:any) {
                         if(err) {
                             console.log(err);
-                            response.json({success:false,code:-100,message:'cannot connect db'});
+                            response.send("DB 에러!")
                         }
                     });
-                    response.json({success:true,code:0,message:'correct authNum'});
+                    response.send("인증 성공!")
                 } else {
-                    response.json({success:false,code:-500,message:'Wrong authNum'});
+                    response.send("인증 실패")
                 }
             }
             
