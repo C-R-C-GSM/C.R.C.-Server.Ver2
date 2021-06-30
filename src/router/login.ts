@@ -54,7 +54,7 @@ login.post('/', function(req:Request,res: Response,next:NextFunction) {
                         console.log(err)
                       } else {
                         try {
-                          const accessToken = jwt.sign({ key,roll }, 
+                          const accessToken = jwt.sign({ key, roll }, 
                             process.env.JWT_SECRET, { 
                               expiresIn: '1h',
                               issuer: 'C.R.C_SERVER' 

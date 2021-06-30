@@ -28,8 +28,8 @@ let school_meal_arr: string[] = [];
 let meal_data:JSON;
 let student:number = 0;
 
-index.post("/", (request: Request, response: Response, next: NextFunction) => {
-  let accesstoken = request.body.accessToken;
+index.get("/", (request: Request, response: Response, next: NextFunction) => {
+  let accesstoken = request.get('Token');
   let decoded = jwt.decode(accesstoken,process.env.JWT_SECRET);
 
   if(!decoded) {
