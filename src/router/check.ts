@@ -77,7 +77,7 @@ check.get('/one', (req:Request, res:Response) => {
     if(!decoded) {
         res.json({success:false,code:-401,message:'expired token'});
     } else {
-        connection.query("SELECT student_data1,student_name1,check1 FROM crcdb.1student",
+        connection.query("SELECT student_data1,student_name1,check1 FROM crcdb.student1",
         function(err:Error,results:any, fields:any) {
             if(err) res.json({success:false,code:-100,message:'cannot connect db'});
             else {
@@ -94,7 +94,7 @@ check.get('/two', (req:Request, res:Response) => {
     if(!decoded) {
         res.json({success:false,code:-401,message:'expired token'});
     } else {
-        connection.query("SELECT student_data2,student_name2,check2 FROM crcdb.2student",
+        connection.query("SELECT student_data2,student_name2,check2 FROM crcdb.student2",
         function(err:Error,results:any, fields:any) {
             if(err) res.json({success:false,code:-100,message:'cannot connect db'});
             else {
@@ -111,7 +111,7 @@ check.get('/three', (req:Request, res:Response) => {
     if(!decoded) {
         res.json({success:false,code:-401,message:'expired token'});
     } else {
-        connection.query("SELECT student_data3,student_name3,check3 FROM crcdb.3student",
+        connection.query("SELECT student_data3,student_name3,check3 FROM crcdb.student3",
         function(err:Error,results:any, fields:any) {
             if(err) res.json({success:false,code:-100,message:'cannot connect db'});
             else {
