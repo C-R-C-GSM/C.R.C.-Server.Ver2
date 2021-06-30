@@ -21,19 +21,23 @@ let today = new Date();
 let time = today.toLocaleString().substring(0,today.toLocaleString().indexOf(' '));
 console.log(time);
 
-suggest.get('/check',(req:Request,res:Response,next:NextFunction) => {
+suggest.get('/check', (req:Request,res:Response,next:NextFunction) => {
     let Token:any = req.get('Token');
-    let decoded = jwt.decode(Token);
-    console.log(decoded)
-    if(!decoded) {
-        res.json({success:false,code:-401,message:'expired token'});
-    } else {
+    let secretKey:Secret|any =  process.env.JWT_SECRET;
+    console.log(secretKey)
+    let decoded =  jwt.decode(Token);
+    try {
+        let data1:any =  jwt.verify(Token,secretKey);    
+        console.log(data1);
         connection.query("SELECT * FROM crcdb.suggest",
         async function(err:Error,results:any,fields:any) {
             suggest_data = await results;
         })
         res.json({success:true,code:0,message:'token check success',suggest_data:suggest_data});
         console.log('토큰 아직 있네요');
+    } catch (err) {
+        console.log(err)
+        res.json({success:false,code:-401,message:'expired token'});
     }
 });
 
