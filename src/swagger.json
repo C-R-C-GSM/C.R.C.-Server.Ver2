@@ -305,7 +305,7 @@
                         "name": "body",
                         "description": "Review Write",
                         "schema": {
-                            "$ref": "#/definitions/Reivew_Write"
+                            "$ref": "#/definitions/Review_Write"
                         }
                     },
                     {
