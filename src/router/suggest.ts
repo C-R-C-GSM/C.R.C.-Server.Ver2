@@ -43,7 +43,7 @@ suggest.post('/register',async (req:Request,res:Response,next:NextFunction) => {
     let secretKey:Secret|any =  process.env.JWT_SECRET;
     try {
         let decoded:any =  jwt.verify(Token,secretKey);
-        if(decoded[1] == 1) {
+        if(decoded[1] == 0) {
             let title = req.body.title;
             let content = req.body.content;
             let when = req.body.when;
@@ -75,27 +75,32 @@ suggest.post('/empathy',(req:Request,res:Response,next:NextFunction) => {
     let secretKey:Secret|any =  process.env.JWT_SECRET;
     try {
         let decoded:any =  jwt.verify(Token,secretKey);
-    } catch (err) {
-        console.log(err)
-        res.json({success:false,code:-401,message:'expired token'});
-    }
-    connection.query("SELECT empathy FROM crcdb.suggest WHERE suggestid = ?",[req.body.suggestid],
-    function(err:Error,results:any,fields:any) {
-        if(err) {
-            res.json({success:false,code:-100,message:'cannot connect db'});
-            console.log(err)
-        } else {
-            connection.query("UPDATE crcdb.suggest SET empathy = ? WHERE suggestid = ?",[results+1,req.body.suggestid],
-            function(err1:Error,results1:any,fields1:any) {
+        if(decoded == 0) {
+            connection.query("SELECT empathy FROM crcdb.suggest WHERE suggestid = ?",[req.body.suggestid],
+            function(err:Error,results:any,fields:any) {
                 if(err) {
                     res.json({success:false,code:-100,message:'cannot connect db'});
                     console.log(err)
                 } else {
-                    res.json({success:true,code:0,message:'empathy success'})
+                    connection.query("UPDATE crcdb.suggest SET empathy = ? WHERE suggestid = ?",[results+1,req.body.suggestid],
+                    function(err1:Error,results1:any,fields1:any) {
+                        if(err) {
+                            res.json({success:false,code:-100,message:'cannot connect db'});
+                            console.log(err)
+                        } else {
+                            res.json({success:true,code:0,message:'empathy success'})
+                        }
+                    })
                 }
-            })
+            });
+        } else {
+            res.json({success:false,code:-600,message:'wrong role'});
         }
-    })
+    } catch (err) {
+        console.log(err)
+        res.json({success:false,code:-401,message:'expired token'});
+    }
+    
 });
 
 suggest.post('/reply',(req:Request,res:Response,next:NextFunction) => {

@@ -53,7 +53,7 @@ review.post('/register',(request:Request, res:Response, next:NextFunction) => {
     try {
         let decoded:any =  jwt.verify(Token,secretKey);
         console.log(decoded[1])
-        if(decoded[1] == 1) {
+        if(decoded[1] == 0) {
             let review_star = request.body.review_star;
             let title = request.body.title;
             let content = request.body.content;
@@ -85,27 +85,31 @@ review.get('/empathy',(req:Request,res:Response,next:NextFunction) => {
     let secretKey:Secret|any =  process.env.JWT_SECRET;
     try {
         let decoded:any =  jwt.verify(Token,secretKey);
-    } catch (err) {
-        console.log(err)
-        res.json({success:false,code:-401,message:'expired token'});
-    }
-    connection.query("SELECT empathy FROM crcdb.reviewdata WHERE reviewid = ?",[req.body.reviewid],
-    function(err:Error,results:any,fields:any) {
-        if(err) {
-            res.json({success:false,code:-100,message:'cannot connect db'});
-            console.log(err)
-        } else {
-            connection.query("UPDATE crcdb.reviewdata SET empathy = ? WHERE reviewid = ?",[results+1,req.body.reviewid],
-            function(err1:Error,results1:any,fields1:any) {
+        if(decoded[1] == '0') {
+            connection.query("SELECT empathy FROM crcdb.reviewdata WHERE reviewid = ?",[req.body.reviewid],
+            function(err:Error,results:any,fields:any) {
                 if(err) {
                     res.json({success:false,code:-100,message:'cannot connect db'});
                     console.log(err)
                 } else {
-                    res.json({success:true,code:0,message:'empathy success'})
+                    connection.query("UPDATE crcdb.reviewdata SET empathy = ? WHERE reviewid = ?",[results+1,req.body.reviewid],
+                    function(err1:Error,results1:any,fields1:any) {
+                        if(err) {
+                            res.json({success:false,code:-100,message:'cannot connect db'});
+                            console.log(err)
+                        } else {
+                            res.json({success:true,code:0,message:'empathy success'})
+                        }
+                    })
                 }
-            })
+            });
+        } else {
+            res.json({success:false,code:-600,message:'wrong role'});
         }
-    });
+    } catch (err) {
+        console.log(err)
+        res.json({success:false,code:-401,message:'expired token'});
+    }
 });
 
 review.post('/reply',(req:Request,res:Response,next:NextFunction) => {
@@ -113,19 +117,24 @@ review.post('/reply',(req:Request,res:Response,next:NextFunction) => {
     let secretKey:Secret|any =  process.env.JWT_SECRET;
     try {
         let decoded:any =  jwt.verify(Token,secretKey);
+        if(decoded == 1) {
+            connection.query("UPDATE crcdb.reviewdata SET reply = ? WHERE reviewid = ?",[req.body.reply,req.body.reviewid],
+            function(err:Error,results:any,fields:any) {
+                if(err) {
+                    res.json({success:false,code:-100,message:'cannot connect db'});
+                    console.log(err)
+                } else {
+                    res.json({success:true,code:0,message:'reply success'});
+                }
+            });
+        } else {
+            res.json({success:false,code:-600,message:'wrong role'});
+        }
     } catch (err) {
         console.log(err)
         res.json({success:false,code:-401,message:'expired token'});
     }
-    connection.query("UPDATE crcdb.reviewdata SET reply = ? WHERE reviewid = ?",[req.body.reply,req.body.reviewid],
-    function(err:Error,results:any,fields:any) {
-        if(err) {
-            res.json({success:false,code:-100,message:'cannot connect db'});
-            console.log(err)
-        } else {
-            res.json({success:true,code:0,message:'reply success'});
-        }
-    });
+    
 });
 
 export = review;
