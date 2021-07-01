@@ -22,21 +22,23 @@ connection.connect();
 
 let notice_list:JSON;
 notice.get('/check', (req:Request, res:Response) => {
+  console.log('asdf')
   let Token:any = req.get('Token');
   let secretKey:Secret|any =  process.env.JWT_SECRET;
   try {
       let decoded:any =  jwt.verify(Token,secretKey);
+      connection.query("SELECT * FROM crcdb.notice", function(err:Error,results:any, fields:any) {
+        if(err) {
+            res.json({success:false,code:-100, message:'cant connect db'});
+        } else {
+            res.json({success:true,code:0,message:'notice list check',notice_list:results})
+        }
+    })
   } catch (err) {
       console.log(err)
       res.json({success:false,code:-401,message:'expired token'});
   }
-        connection.query("SELECT * FROM crcdb.notice", function(err:Error,results:any, fields:any) {
-            if(err) {
-                res.json({success:false,code:-100, message:'cant connect db'});
-            } else {
-                res.json({success:true,code:0,message:'notice list check',notice_list:results})
-            }
-        })
+        
 });
 
 notice.post('/register', (req:Request, res:Response) => {
@@ -44,7 +46,7 @@ notice.post('/register', (req:Request, res:Response) => {
   let secretKey:Secret|any =  process.env.JWT_SECRET;
   try {
       let decoded:any =  jwt.verify(Token,secretKey);
-      if(decoded[1] == 1) {
+      if(decoded.role == 1) {
         connection.query("SELECT * FROM crcdb.notice", function(err:Error,results:any, fields:any) {
           if(err) {
               res.json({success:false,code:-100, message:'cant connect db'});
@@ -54,7 +56,7 @@ notice.post('/register', (req:Request, res:Response) => {
             let today = new Date();
             let time = today.toLocaleString().substring(0,today.toLocaleString().indexOf(' ')-1);
         
-            connection.query("INSERT INTO crcdb.notice(title,content,time) VALUES(?,?,?)",[title,content,time],
+            connection.query("INSERT INTO crcdb.notice(notice_title,notice_content,notice_time) VALUES(?,?,?)",[title,content,time],
             function(err:Error, results:any,fields:any ) {
                 if(err) {
                     res.json({success:false,code:-100,message:'cannot connect db'});

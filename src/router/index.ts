@@ -25,7 +25,7 @@ connection.connect();
 let meal_text:string;
 let meal_text_split:string[];
 let school_meal_arr: string[] = [];
-let meal_data:JSON;
+let meal_data:any;
 let student:number = 0;
 
 index.get("/", (request: Request, response: Response, next: NextFunction) => {
@@ -39,36 +39,33 @@ index.get("/", (request: Request, response: Response, next: NextFunction) => {
   }
 });
 
-
-
-index.post('/refresh', (req:Request, res:Response) => {
-  
-})
-
-index.get("/get_meal",(req:Request, res:Response) => {
+index.get("/get_meal",async (req:Request, res:Response) => {
   let Token = req.get('Token');
   let decoded = jwt.decode(Token,process.env.JWT_SECRET);
 
   if(!decoded) {
       res.json({success:false,code:-401,message:'expired token'});
   } else {
-    client.fetch("http://gsm.gen.hs.kr/xboard/board.php?tbnum=8", {}, function (err:Error, $:any, res:Response, body:Body) {
+    await client.fetch("http://gsm.gen.hs.kr/xboard/board.php?tbnum=8", {}, function (err:Error, $:any, res:Response, body:Body) {
       for (let week:number = 2; week <= 6; week++) {
         for (let day:number = 2; day <= 6; day++) {
-          meal_text = $(`#xb_fm_list > div.calendar > ul:nth-child(${week}) > li:nth-child(${day}) > div > div.slemailer_food_list`).text();
-
+          meal_text = $(`#xb_fm_list > div.calendar > ul:nth-child(${week}) > li:nth-child(${day}) > div > div.slider_food_list.cycle-slideshow`).text();
+          //console.log(meal_text)
           meal_text = meal_text.replace(/\t/g,"");
           meal_text = meal_text.replace(/\r/g,"");
           meal_text = meal_text.replace(/\n\n\n\n\n\n\n/g,"day");
           meal_text = meal_text.replace(/\n/g,"");
 
           meal_text_split = meal_text.split("day");
-
           school_meal_arr.push(meal_text_split[0]);
           school_meal_arr.push(meal_text_split[1]);
           school_meal_arr.push(meal_text_split[2]);
         }
       }
+      console.log(school_meal_arr)
+    });
+    school_meal_arr.forEach(element => {
+      
     });
     res.json({success:true, code:0,message:'post meal data',meal_data:school_meal_arr})
   }

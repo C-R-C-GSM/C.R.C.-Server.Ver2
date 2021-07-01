@@ -52,15 +52,15 @@ review.post('/register',(request:Request, res:Response, next:NextFunction) => {
     let secretKey:Secret|any =  process.env.JWT_SECRET;
     try {
         let decoded:any =  jwt.verify(Token,secretKey);
-        console.log(decoded[1])
-        if(decoded[1] == 0) {
+        console.log(decoded.role)
+        if(decoded.role == 0 || decoded.role == null) {
             let review_star = request.body.review_star;
             let title = request.body.title;
             let content = request.body.content;
             let name = request.body.name;
             let when = request.body.when;
             let nickname= request.body.nickname;
-            connection.query("INSERT INTO crcdb.reviewdata(review_star,title,content,name,when,nickname) VALUES(?,?,?,?,?,?)",[review_star,title,content,name,when,nickname],
+            connection.query("INSERT INTO crcdb.reviewdata(review_star,title,content,name,review_when,nickname) VALUES(?,?,?,?,?,?)",[review_star,title,content,name,when,nickname],
             function(err:Error,results:any,fields:any) {
                 if(err) {
                     res.json({success:false,code:-100,message:'cannot connect db'});
@@ -80,12 +80,12 @@ review.post('/register',(request:Request, res:Response, next:NextFunction) => {
 
 });
 
-review.get('/empathy',(req:Request,res:Response,next:NextFunction) => {
+review.post('/empathy',(req:Request,res:Response,next:NextFunction) => {
     let Token:any = req.get('Token');
     let secretKey:Secret|any =  process.env.JWT_SECRET;
     try {
         let decoded:any =  jwt.verify(Token,secretKey);
-        if(decoded[1] == '0') {
+        if(decoded.role == 0 || decoded.role == null) {
             connection.query("SELECT empathy FROM crcdb.reviewdata WHERE reviewid = ?",[req.body.reviewid],
             function(err:Error,results:any,fields:any) {
                 if(err) {
@@ -117,7 +117,8 @@ review.post('/reply',(req:Request,res:Response,next:NextFunction) => {
     let secretKey:Secret|any =  process.env.JWT_SECRET;
     try {
         let decoded:any =  jwt.verify(Token,secretKey);
-        if(decoded == 1) {
+        console.log(decoded.role)
+        if(decoded.role == 1) {
             connection.query("UPDATE crcdb.reviewdata SET reply = ? WHERE reviewid = ?",[req.body.reply,req.body.reviewid],
             function(err:Error,results:any,fields:any) {
                 if(err) {

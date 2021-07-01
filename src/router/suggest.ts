@@ -43,7 +43,7 @@ suggest.post('/register',async (req:Request,res:Response,next:NextFunction) => {
     let secretKey:Secret|any =  process.env.JWT_SECRET;
     try {
         let decoded:any =  jwt.verify(Token,secretKey);
-        if(decoded[1] == 0) {
+        if(decoded.role == 0 || decoded.role == null) {
             let title = req.body.title;
             let content = req.body.content;
             let when = req.body.when;
@@ -75,7 +75,7 @@ suggest.post('/empathy',(req:Request,res:Response,next:NextFunction) => {
     let secretKey:Secret|any =  process.env.JWT_SECRET;
     try {
         let decoded:any =  jwt.verify(Token,secretKey);
-        if(decoded == 0) {
+        if(decoded.role == 0 || decoded.role == null) {
             connection.query("SELECT empathy FROM crcdb.suggest WHERE suggestid = ?",[req.body.suggestid],
             function(err:Error,results:any,fields:any) {
                 if(err) {
@@ -108,7 +108,7 @@ suggest.post('/reply',(req:Request,res:Response,next:NextFunction) => {
     let secretKey:Secret|any =  process.env.JWT_SECRET;
     try {
         let decoded:any =  jwt.verify(Token,secretKey);
-        if(decoded[1] == 1) {
+        if(decoded.role == 1) {
             connection.query("UPDATE crcdb.suggest SET reply = ? WHERE suggestid = ?",[req.body.reply,req.body.suggestid],
             function(err:Error,results:any,fields:any) {
                 if(err) {

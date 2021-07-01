@@ -23,9 +23,9 @@ login.post('/', function(req:Request,res: Response,next:NextFunction) {
     let email:string = req.body.email;
     let password = req.body.password;
     let key:number;
-    let roll:number;
+    let role:number;
     let name:string;
-    connection.query("SELECT userid,roll,name FROM crcdb.userdata WHERE email = ?",[email],
+    connection.query("SELECT userid,role,name FROM crcdb.userdata WHERE email = ?",[email],
     function(err:Error, results:any,fields:any) {
       if(err) {
         res.json({success:false,code:-100,message:'cannot connect db'});
@@ -33,7 +33,7 @@ login.post('/', function(req:Request,res: Response,next:NextFunction) {
       } else {
         if(results[0]) {
           key = results[0].userid;
-          roll = results[0].roll;
+          role = results[0].role;
           connection.query("SELECT password,salt FROM crcdb.userdata WHERE email = ?",[email],
             function(err:Error, results:any,fields:any) {
               if(err) {
@@ -54,7 +54,7 @@ login.post('/', function(req:Request,res: Response,next:NextFunction) {
                         console.log(err)
                       } else {
                         try {
-                          const accessToken = jwt.sign({ key, roll }, 
+                          const accessToken = jwt.sign({ key, role }, 
                             process.env.JWT_SECRET, { 
                               expiresIn: '1h',
                               issuer: 'C.R.C_SERVER' 
