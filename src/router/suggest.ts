@@ -24,11 +24,8 @@ console.log(time);
 suggest.get('/check', (req:Request,res:Response,next:NextFunction) => {
     let Token:any = req.get('Token');
     let secretKey:Secret|any =  process.env.JWT_SECRET;
-    console.log(secretKey)
-    let decoded =  jwt.decode(Token);
     try {
-        let data1:any =  jwt.verify(Token,secretKey);    
-        console.log(data1);
+        let decoded:any =  jwt.verify(Token,secretKey);
         connection.query("SELECT * FROM crcdb.suggest",
         async function(err:Error,results:any,fields:any) {
             suggest_data = await results;
@@ -43,33 +40,45 @@ suggest.get('/check', (req:Request,res:Response,next:NextFunction) => {
 
 suggest.post('/register',async (req:Request,res:Response,next:NextFunction) => {
     let Token:any = req.get('Token');
-    let decoded:any = jwt.decode(Token);
-    let data = Object.keys(decoded);
-    let key = data[0]
-    if(!decoded) {
+    let secretKey:Secret|any =  process.env.JWT_SECRET;
+    try {
+        let decoded:any =  jwt.verify(Token,secretKey);
+        if(decoded[1] == 1) {
+            let title = req.body.title;
+            let content = req.body.content;
+            let when = req.body.when;
+            let nickname = req.body.nickname
+            let today = await new Date();
+            let time = await today.toLocaleString().substring(0,today.toLocaleString().indexOf(' '));
+            connection.query("INSERT INTO crcdb.suggest(title,content,suggest_time,suggest_when,nickname) VALUES(?,?,?,?,?)",
+                [title,content,time,when,nickname],
+                function(err:Error, results:any,fields:any ) {
+                    if(err) {
+                        res.json({success:false,code:-100,message:'cannot connect db'});
+                        console.log(err)
+                    } else {
+                    res.json({success:true,code:0,message:'success'})
+                    }
+                });
+        } else {
+            res.json({success:false,code:-600,message:'wrong role'});
+        }
+    } catch (err) {
+        console.log(err)
         res.json({success:false,code:-401,message:'expired token'});
-    } else {
-        let title = req.body.title;
-        let content = req.body.content;
-        let when = req.body.when;
-        let nickname = req.body.nickname
-        let today = await new Date();
-        let time = await today.toLocaleString().substring(0,today.toLocaleString().indexOf(' '));
-        connection.query("INSERT INTO crcdb.suggest(title,content,suggest_time,suggest_when,nickname) VALUES(?,?,?,?,?)",
-            [title,content,time,when,nickname],
-            function(err:Error, results:any,fields:any ) {
-                if(err) {
-                    res.json({success:false,code:-100,message:'cannot connect db'});
-                    console.log(err)
-                } else {
-                res.json({success:true,code:0,message:'success'})
-                }
-            });
     }
     
 });
 
 suggest.post('/empathy',(req:Request,res:Response,next:NextFunction) => {
+    let Token:any = req.get('Token');
+    let secretKey:Secret|any =  process.env.JWT_SECRET;
+    try {
+        let decoded:any =  jwt.verify(Token,secretKey);
+    } catch (err) {
+        console.log(err)
+        res.json({success:false,code:-401,message:'expired token'});
+    }
     connection.query("SELECT empathy FROM crcdb.suggest WHERE suggestid = ?",[req.body.suggestid],
     function(err:Error,results:any,fields:any) {
         if(err) {
@@ -90,15 +99,29 @@ suggest.post('/empathy',(req:Request,res:Response,next:NextFunction) => {
 });
 
 suggest.post('/reply',(req:Request,res:Response,next:NextFunction) => {
-    connection.query("UPDATE crcdb.suggest SET reply = ? WHERE suggestid = ?",[req.body.reply,req.body.suggestid],
-    function(err:Error,results:any,fields:any) {
-        if(err) {
-            res.json({success:false,code:-100,message:'cannot connect db'});
-            console.log(err)
+    let Token:any = req.get('Token');
+    let secretKey:Secret|any =  process.env.JWT_SECRET;
+    try {
+        let decoded:any =  jwt.verify(Token,secretKey);
+        if(decoded[1] == 1) {
+            connection.query("UPDATE crcdb.suggest SET reply = ? WHERE suggestid = ?",[req.body.reply,req.body.suggestid],
+            function(err:Error,results:any,fields:any) {
+                if(err) {
+                    res.json({success:false,code:-100,message:'cannot connect db'});
+                    console.log(err)
+                } else {
+                    res.json({success:true,code:0,message:'reply success'});
+                }
+            });
         } else {
-            res.json({success:true,code:0,message:'reply success'});
+            res.json({success:false,code:-600,message:'wrong role'});
         }
-    });
+    } catch (err) {
+        console.log(err)
+        res.json({success:false,code:-401,message:'expired token'});
+    }
+
+    
 });
 
 export = suggest;

@@ -1,8 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
 import request from 'request';
+import jwt,{Secret} from "jsonwebtoken";
 
 const check = express.Router();
-const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 
 
@@ -62,63 +62,70 @@ check.post('/come_student', (req:Request, res:Response) => {
 
 check.get('/total', (req:Request, res:Response) => {
     let Token:any = req.get('Token');
-    let decoded = jwt.decode(Token);
-    if(!decoded) {
+    let secretKey:Secret|any =  process.env.JWT_SECRET;
+    try {
+        let decoded:any =  jwt.verify(Token,secretKey);
+    } catch (err) {
+        console.log(err)
         res.json({success:false,code:-401,message:'expired token'});
-    } else {
-        res.json({success:true, code:0,message:'total_data_send',total_num:total_num})
     }
-    
+    res.json({success:true, code:0,message:'total_data_send',total_num:total_num})
 });
 
 check.get('/one', (req:Request, res:Response) => {
     let Token:any = req.get('Token');
-    let decoded = jwt.decode(Token);
-    if(!decoded) {
+    let secretKey:Secret|any =  process.env.JWT_SECRET;
+    try {
+        let decoded:any =  jwt.verify(Token,secretKey);
+    } catch (err) {
+        console.log(err)
         res.json({success:false,code:-401,message:'expired token'});
-    } else {
-        connection.query("SELECT student_data1,student_name1,check1 FROM crcdb.student1",
-        function(err:Error,results:any, fields:any) {
-            if(err) res.json({success:false,code:-100,message:'cannot connect db'});
-            else {
-                res.json({success:true, code:0, message:'check success',oneData:results})
-            }
-        });
     }
+    connection.query("SELECT student_data1,student_name1,check1 FROM crcdb.student1",
+    function(err:Error,results:any, fields:any) {
+        if(err) res.json({success:false,code:-100,message:'cannot connect db'});
+        else {
+            res.json({success:true, code:0, message:'check success',oneData:results})
+        }
+    });
 
 });
 
 check.get('/two', (req:Request, res:Response) => {
     let Token:any = req.get('Token');
-    let decoded = jwt.decode(Token);
-    if(!decoded) {
+    let secretKey:Secret|any =  process.env.JWT_SECRET;
+    try {
+        let decoded:any =  jwt.verify(Token,secretKey);
+    } catch (err) {
+        console.log(err)
         res.json({success:false,code:-401,message:'expired token'});
-    } else {
-        connection.query("SELECT student_data2,student_name2,check2 FROM crcdb.student2",
-        function(err:Error,results:any, fields:any) {
-            if(err) res.json({success:false,code:-100,message:'cannot connect db'});
-            else {
-                res.json({success:true, code:0, message:'check success',twoData:results})
-            }
-        });
     }
+    connection.query("SELECT student_data2,student_name2,check2 FROM crcdb.student2",
+    function(err:Error,results:any, fields:any) {
+        if(err) res.json({success:false,code:-100,message:'cannot connect db'});
+        else {
+            res.json({success:true, code:0, message:'check success',twoData:results})
+        }
+    });
 
 });
 
 check.get('/three', (req:Request, res:Response) => {
     let Token:any = req.get('Token');
-    let decoded = jwt.decode(Token);
-    if(!decoded) {
+    let secretKey:Secret|any =  process.env.JWT_SECRET;
+    try {
+        let decoded:any =  jwt.verify(Token,secretKey);
+    } catch (err) {
+        console.log(err)
         res.json({success:false,code:-401,message:'expired token'});
-    } else {
-        connection.query("SELECT student_data3,student_name3,check3 FROM crcdb.student3",
-        function(err:Error,results:any, fields:any) {
-            if(err) res.json({success:false,code:-100,message:'cannot connect db'});
-            else {
-                res.json({success:true, code:0, message:'check success',threeData:results})
-            }
-        });
     }
+    connection.query("SELECT student_data3,student_name3,check3 FROM crcdb.student3",
+    function(err:Error,results:any, fields:any) {
+        if(err) res.json({success:false,code:-100,message:'cannot connect db'});
+        else {
+            res.json({success:true, code:0, message:'check success',threeData:results})
+        }
+    });
 
 });
 
