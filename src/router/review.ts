@@ -35,19 +35,20 @@ review.get('/check',(request:Request, res:Response, next:NextFunction) => {
     let secretKey:Secret|any =  process.env.JWT_SECRET;
     try {
         let decoded:any =  jwt.verify(Token,secretKey);
+        connection.query("SELECT * FROM crcdb.reviewdata",
+        async function(err:Error,results:any,fields:any) {
+            reviewdata_value = await results;
+            res.json({success:true,code:0,message:'token check success',review_data:reviewdata_value});
+            console.log('토큰 아직 있네요');    
+        })
     } catch (err) {
         console.log(err)
         res.json({success:false,code:-401,message:'expired token'});
     }
-    connection.query("SELECT * FROM crcdb.reviewdata",
-    async function(err:Error,results:any,fields:any) {
-        reviewdata_value = await results;
-    })
-    res.json({success:true,code:0,message:'token check success',review_data:reviewdata_value});
-    console.log('토큰 아직 있네요');
+
 });
 
-review.post('/register',(request:Request, res:Response, next:NextFunction) => {
+review.post('/register',async (request:Request, res:Response, next:NextFunction) => {
     let Token:any = request.get('Token');
     let secretKey:Secret|any =  process.env.JWT_SECRET;
     try {
@@ -60,7 +61,9 @@ review.post('/register',(request:Request, res:Response, next:NextFunction) => {
             let name = request.body.name;
             let when = request.body.when;
             let nickname= request.body.nickname;
-            connection.query("INSERT INTO crcdb.reviewdata(review_star,title,content,name,review_when,nickname) VALUES(?,?,?,?,?,?)",[review_star,title,content,name,when,nickname],
+            let today = await new Date();
+            let time = await today.toLocaleString().substring(0,today.toLocaleString().indexOf(' '));
+            connection.query("INSERT INTO crcdb.reviewdata(review_star,title,content,review_when,nickname,review_time) VALUES(?,?,?,?,?,?)",[review_star,title,content,when,nickname,time],
             function(err:Error,results:any,fields:any) {
                 if(err) {
                     res.json({success:false,code:-100,message:'cannot connect db'});
@@ -92,7 +95,7 @@ review.post('/empathy',(req:Request,res:Response,next:NextFunction) => {
                     res.json({success:false,code:-100,message:'cannot connect db'});
                     console.log(err)
                 } else {
-                    connection.query("UPDATE crcdb.reviewdata SET empathy = ? WHERE reviewid = ?",[results+1,req.body.reviewid],
+                    connection.query("UPDATE crcdb.reviewdata SET empathy = ? WHERE reviewid = ?",[results[0].empathy+1,req.body.reviewid],
                     function(err1:Error,results1:any,fields1:any) {
                         if(err) {
                             res.json({success:false,code:-100,message:'cannot connect db'});
