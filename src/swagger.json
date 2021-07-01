@@ -101,51 +101,6 @@
                 }
             }
         },
-        "/refresh": {
-            "post": {
-                "tags": [
-                    "Main"
-                ],
-                "summary": "accessToken 재발급",
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "미정",
-                        "schema": {
-                            "$ref": "#/definitions/get_accessToken"
-                        }
-                    },
-                    {
-                        "in": "header",
-                        "name": "Token",
-                        "type":"string"
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "accessToken issue Success",
-                        "examples":{
-                            "application/json": {
-                                "success":true,
-                                "code":0,
-                                "message":"reissue accessToken"
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Failed. Bad Request",
-                        "examples":{
-                            "application/json": {
-                                "success":false,
-                                "code":999,
-                                "message":"wrong user data"
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/login": {
             "post": {
                 "tags": [
@@ -597,7 +552,7 @@
             }
         },
         "/notice/check": {
-            "post": {
+            "get": {
                 "tags": [
                     "notice"
                 ],
@@ -736,7 +691,7 @@
         "Review_Write": {
             "properties": {
                 "review_star": {
-                    "type":"string"
+                    "type":"integer"
                 },
                 "title": {
                     "type":"string"

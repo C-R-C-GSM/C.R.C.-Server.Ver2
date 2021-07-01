@@ -8,6 +8,7 @@ import registerRouter from "./router/register"
 import reviewRouter from "./router/review"
 import suggestRouter from "./router/suggest"
 import checkRouter from './router/check'
+import noticeRouter from './router/notice'
 
 import swaggerUi from "swagger-ui-express";
 import * as swaggerDocument from './swagger.json'
@@ -41,6 +42,7 @@ app.use('/register',registerRouter);
 app.use('/review',reviewRouter);
 app.use('/suggest',suggestRouter);
 app.use('/check',checkRouter);
+app.use('/notice',noticeRouter)
 
 app.use('/swagger',swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
