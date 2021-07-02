@@ -18,17 +18,6 @@ var connection = mysql.createConnection({
 
 connection.connect();
 review.get('/check',(request:Request, res:Response, next:NextFunction) => {
-    /*
-    connection.query("SELECT userid FROM crcdb.userdata WHERE email = ?",[email],
-    function(err:Error, results:any,fields:any) {
-      if(err) {
-        response.send("DB ERROR");
-        console.log(err);
-      } else {
-        key = results[0].userid;
-      }
-    });
-    */
     let Token:any = request.get('Token');
     let secretKey:Secret|any =  process.env.JWT_SECRET;
     try {
@@ -41,7 +30,6 @@ review.get('/check',(request:Request, res:Response, next:NextFunction) => {
         console.log(err)
         res.json({success:false,code:-401,message:'expired token'});
     }
-
 });
 
 review.post('/register',async (request:Request, res:Response, next:NextFunction) => {
@@ -73,8 +61,6 @@ review.post('/register',async (request:Request, res:Response, next:NextFunction)
         console.log(err)
         res.json({success:false,code:-401,message:'expired token'});
     }
-
-
 });
 
 review.post('/empathy',(req:Request,res:Response,next:NextFunction) => {
@@ -97,7 +83,7 @@ review.post('/empathy',(req:Request,res:Response,next:NextFunction) => {
                         } else {
                             res.json({success:true,code:0,message:'empathy success'})
                         }
-                    })
+                    });
                 }
             });
         } else {

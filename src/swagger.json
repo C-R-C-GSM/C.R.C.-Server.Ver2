@@ -715,7 +715,7 @@
         "Review_Write": {
             "properties": {
                 "review_star": {
-                    "type":"number"
+                    "type":"integer"
                 },
                 "content": {
                     "type":"string"
