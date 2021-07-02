@@ -17,8 +17,6 @@ var connection = mysql.createConnection({
 });
 
 connection.connect();
-let reviewdata_value:JSON;
-
 review.get('/check',(request:Request, res:Response, next:NextFunction) => {
     /*
     connection.query("SELECT userid FROM crcdb.userdata WHERE email = ?",[email],
@@ -37,9 +35,7 @@ review.get('/check',(request:Request, res:Response, next:NextFunction) => {
         let decoded:any =  jwt.verify(Token,secretKey);
         connection.query("SELECT * FROM crcdb.reviewdata",
         async function(err:Error,results:any,fields:any) {
-            reviewdata_value = await results;
-            res.json({success:true,code:0,message:'token check success',review_data:reviewdata_value});
-            console.log('토큰 아직 있네요');    
+            res.json({success:true,code:0,message:'token check success',review_data:results});
         })
     } catch (err) {
         console.log(err)
@@ -53,7 +49,6 @@ review.post('/register',async (request:Request, res:Response, next:NextFunction)
     let secretKey:Secret|any =  process.env.JWT_SECRET;
     try {
         let decoded:any =  jwt.verify(Token,secretKey);
-        console.log(decoded.role)
         if(decoded.role == 0 || decoded.role == null) {
             let review_star = request.body.review_star;
             let content = request.body.content;
@@ -119,7 +114,6 @@ review.post('/reply',(req:Request,res:Response,next:NextFunction) => {
     let secretKey:Secret|any =  process.env.JWT_SECRET;
     try {
         let decoded:any =  jwt.verify(Token,secretKey);
-        console.log(decoded.role)
         if(decoded.role == 1) {
             connection.query("UPDATE crcdb.reviewdata SET reply = ? WHERE reviewid = ?",[req.body.reply,req.body.reviewid],
             function(err:Error,results:any,fields:any) {

@@ -21,7 +21,6 @@ connection.connect();
 
 
 register.post("/", (req: Request, res: Response, next: NextFunction) => {
-    console.log('register')
     let email:string = req.body.email;
     let password:string = req.body.password;
     let name:string = req.body.name;
@@ -68,7 +67,7 @@ register.post("/", (req: Request, res: Response, next: NextFunction) => {
                     res.json({success:false,code:-201,message:'invalid email address'})   //email send error
                     console.log(error);
                     } else {
-                    console.log('send success');
+                    //console.log('send success');
                     connection.query("INSERT INTO crcdb.userdata(email,password,name,salt,student_data,authNum) VALUES(?,?,?,?,?,?)",
                     [email,hashedPasswd,name,salt,student_data,authNum],
                     function(err:Error, results:any,fields:any ) {
@@ -91,7 +90,6 @@ register.post("/", (req: Request, res: Response, next: NextFunction) => {
 register.get("/:authNum", (request: Request, response: Response, next: NextFunction) => {
     let authNum = request.query.authNum;
     let email = request.query.email;
-    console.log(authNum,email);
     connection.query("SELECT authNum FROM crcdb.userdata WHERE email = ?",[email],
     function(err:Error, results:any,fields:any) {
         if(err) {

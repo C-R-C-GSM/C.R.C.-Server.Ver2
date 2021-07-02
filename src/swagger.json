@@ -3,7 +3,7 @@
     "info": {
         "version": "1.0.0",
         "title": "Swagger for Plask task API",
-        "description": "Open API docs with Swagger",
+        "description": "C.R.C 프로젝트 Swagger",
         "license": {
             "name": "MIT",
             "url": "http://10.120.75.224:3000"
@@ -715,7 +715,7 @@
         "Review_Write": {
             "properties": {
                 "review_star": {
-                    "type":"integer"
+                    "type":"number"
                 },
                 "content": {
                     "type":"string"

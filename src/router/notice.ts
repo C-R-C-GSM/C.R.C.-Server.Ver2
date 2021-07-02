@@ -22,7 +22,6 @@ connection.connect();
 
 let notice_list:JSON;
 notice.get('/check', (req:Request, res:Response) => {
-  console.log('asdf')
   let Token:any = req.get('Token');
   let secretKey:Secret|any =  process.env.JWT_SECRET;
   try {

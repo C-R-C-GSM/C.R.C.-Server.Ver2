@@ -19,7 +19,6 @@ let suggest_data:JSON;
 
 let today = new Date();
 let time = today.toLocaleString().substring(0,today.toLocaleString().indexOf(' '));
-console.log(time);
 
 suggest.get('/check', (req:Request,res:Response,next:NextFunction) => {
     let Token:any = req.get('Token');
@@ -31,7 +30,6 @@ suggest.get('/check', (req:Request,res:Response,next:NextFunction) => {
             suggest_data = await results;
         })
         res.json({success:true,code:0,message:'token check success',suggest_data:suggest_data});
-        console.log('토큰 아직 있네요');
     } catch (err) {
         console.log(err)
         res.json({success:false,code:-401,message:'expired token'});
