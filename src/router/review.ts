@@ -56,14 +56,13 @@ review.post('/register',async (request:Request, res:Response, next:NextFunction)
         console.log(decoded.role)
         if(decoded.role == 0 || decoded.role == null) {
             let review_star = request.body.review_star;
-            let title = request.body.title;
             let content = request.body.content;
             let name = request.body.name;
             let when = request.body.when;
             let nickname= request.body.nickname;
             let today = await new Date();
             let time = await today.toLocaleString().substring(0,today.toLocaleString().indexOf(' '));
-            connection.query("INSERT INTO crcdb.reviewdata(review_star,title,content,review_when,nickname,review_time) VALUES(?,?,?,?,?,?)",[review_star,title,content,when,nickname,time],
+            connection.query("INSERT INTO crcdb.reviewdata(review_star,content,review_when,nickname,review_time) VALUES(?,?,?,?,?)",[review_star,content,when,nickname,time],
             function(err:Error,results:any,fields:any) {
                 if(err) {
                     res.json({success:false,code:-100,message:'cannot connect db'});
