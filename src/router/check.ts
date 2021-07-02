@@ -37,7 +37,7 @@ check.post('/come_student', (req:Request, res:Response) => {
         function(err:Error,results:any, fields:any) {
             if(err) console.log(err)
             else {
-                console.log('success to change')
+                console.log('삐빅 1번!')
             }
         });
     } else if(student_id.substring(0,1) == "2") {
@@ -45,7 +45,7 @@ check.post('/come_student', (req:Request, res:Response) => {
         function(err:Error,results:any, fields:any) {
             if(err) console.log(err)
             else {
-                console.log('success to change')
+                console.log('삐빅 2번!')
             }
         });
     } else {
@@ -53,11 +53,46 @@ check.post('/come_student', (req:Request, res:Response) => {
         function(err:Error,results:any, fields:any) {
             if(err) console.log(err)
             else {
-                console.log('success to change')
+                console.log('삐빅 3번!')
             }
         });
     }
 });
+
+check.get('/reset_student', (req:Request, res:Response) => {
+    let Token:any = req.get('Token');
+    let secretKey:Secret|any =  process.env.JWT_SECRET;
+    try {
+        let decoded:any =  jwt.verify(Token,secretKey);
+        if(decoded.role == 1) {
+            connection.query("UPDATE crcdb.student3 SET student_check = 0",
+            function(err:Error,results:any, fields:any) {
+                if(err) res.json({success:false,code:-100,message:'cannot connect db'});
+                else {
+                    connection.query("UPDATE crcdb.student2 SET student_check = 0",
+                    function(err:Error,results:any, fields:any) {
+                        if(err) res.json({success:false,code:-100,message:'cannot connect db'});
+                        else {
+                            connection.query("UPDATE crcdb.student1 SET student_check = 0",
+                            function(err:Error,results:any, fields:any) {
+                                if(err) res.json({success:false,code:-100,message:'cannot connect db'});
+                                else {
+                                    res.json({success:true,code:0,message:'reset successs'});
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+            
+        } else {
+            res.json({success:false,code:-600,message:'wrong role'});
+        }
+    } catch (err) {
+        console.log(err)
+        res.json({success:false,code:-401,message:'expired token'});
+    }
+})
   
 
 check.get('/total', (req:Request, res:Response) => {
