@@ -3,7 +3,7 @@
     "info": {
         "version": "1.0.0",
         "title": "Swagger for Plask task API",
-        "description": "Open API docs with Swagger",
+        "description": "C.R.C 프로젝트 Swagger",
         "license": {
             "name": "MIT",
             "url": "http://10.120.75.224:3000"
@@ -65,7 +65,7 @@
             }
         },
         "/get_meal": {
-            "post": {
+            "get": {
                 "tags": [
                     "Main"
                 ],
@@ -95,51 +95,6 @@
                                 "success":false,
                                 "code":-401,
                                 "message":"expired token"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/refresh": {
-            "post": {
-                "tags": [
-                    "Main"
-                ],
-                "summary": "accessToken 재발급",
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "미정",
-                        "schema": {
-                            "$ref": "#/definitions/get_accessToken"
-                        }
-                    },
-                    {
-                        "in": "header",
-                        "name": "Token",
-                        "type":"string"
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "accessToken issue Success",
-                        "examples":{
-                            "application/json": {
-                                "success":true,
-                                "code":0,
-                                "message":"reissue accessToken"
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Failed. Bad Request",
-                        "examples":{
-                            "application/json": {
-                                "success":false,
-                                "code":999,
-                                "message":"wrong user data"
                             }
                         }
                     }
@@ -305,7 +260,7 @@
                         "name": "body",
                         "description": "Review Write",
                         "schema": {
-                            "$ref": "#/definitions/Reivew_Write"
+                            "$ref": "#/definitions/Review_Write"
                         }
                     },
                     {
@@ -391,7 +346,7 @@
                 "tags": [
                     "suggest"
                 ],
-                "summary": "리뷰 목록 확인",
+                "summary": "게시판 목록 확인",
                 "parameters": [
                     {
                         "in": "header",
@@ -414,7 +369,7 @@
                 "tags": [
                     "suggest"
                 ],
-                "summary": "리뷰 작성",
+                "summary": "게시판 작성",
                 "parameters": [
                     {
                         "in": "body",
@@ -446,7 +401,7 @@
                 "tags": [
                     "suggest"
                 ],
-                "summary": "리뷰 공감",
+                "summary": "게시판 공감",
                 "parameters": [
                     {
                         "in": "body",
@@ -477,7 +432,7 @@
                 "tags": [
                     "suggest"
                 ],
-                "summary": "리뷰 응답",
+                "summary": "게시판 응답",
                 "parameters": [
                     {
                         "in": "body",
@@ -516,6 +471,30 @@
                         "type":"string"
                     }
                 ],
+                "responses": {
+                    "201": {
+                        "description": "check Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
+        "/check/reset_student": {
+            "get": {
+                "tags": [
+                    "check"
+                ],
+                "summary": "학생 수 초기화",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
+                    }
+                ],
+                
                 "responses": {
                     "201": {
                         "description": "check Success"
@@ -597,7 +576,7 @@
             }
         },
         "/notice/check": {
-            "post": {
+            "get": {
                 "tags": [
                     "notice"
                 ],
@@ -736,10 +715,7 @@
         "Review_Write": {
             "properties": {
                 "review_star": {
-                    "type":"string"
-                },
-                "title": {
-                    "type":"string"
+                    "type":"integer"
                 },
                 "content": {
                     "type":"string"
