@@ -481,6 +481,30 @@
                 }
             }
         },
+        "/check/reset_student": {
+            "get": {
+                "tags": [
+                    "check"
+                ],
+                "summary": "학생 수 초기화",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
+                    }
+                ],
+                
+                "responses": {
+                    "201": {
+                        "description": "check Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
         "/check/one": {
             "get": {
                 "tags": [
@@ -692,9 +716,6 @@
             "properties": {
                 "review_star": {
                     "type":"integer"
-                },
-                "title": {
-                    "type":"string"
                 },
                 "content": {
                     "type":"string"
