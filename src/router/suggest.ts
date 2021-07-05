@@ -28,8 +28,8 @@ suggest.get('/check', (req:Request,res:Response,next:NextFunction) => {
         connection.query("SELECT * FROM crcdb.suggest",
         async function(err:Error,results:any,fields:any) {
             suggest_data = await results;
+            res.json({success:true,code:0,message:'token check success',suggest_data:suggest_data});
         })
-        res.json({success:true,code:0,message:'token check success',suggest_data:suggest_data});
     } catch (err) {
         console.log(err)
         res.json({success:false,code:-401,message:'expired token'});
@@ -48,8 +48,8 @@ suggest.post('/register',async (req:Request,res:Response,next:NextFunction) => {
             let nickname = req.body.nickname
             let today = await new Date();
             let time = await today.toLocaleString().substring(0,today.toLocaleString().indexOf(' '));
-            connection.query("INSERT INTO crcdb.suggest(title,content,suggest_time,suggest_when,nickname) VALUES(?,?,?,?,?)",
-                [title,content,time,when,nickname],
+            connection.query("INSERT INTO crcdb.suggest(title,content,suggest_time,nickname) VALUES(?,?,?,?)",
+                [title,content,time,nickname],
                 function(err:Error, results:any,fields:any ) {
                     if(err) {
                         res.json({success:false,code:-100,message:'cannot connect db'});
