@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "version": "1.0.0",
-        "title": "Swagger for Plask task API",
+        "title": "Swagger for crc API",
         "description": "C.R.C 프로젝트 Swagger",
         "license": {
             "name": "MIT",
@@ -754,9 +754,6 @@
                     "type":"string"
                 },
                 "nickname": {
-                    "type":"string"
-                },
-                "when":{
                     "type":"string"
                 }
             }
