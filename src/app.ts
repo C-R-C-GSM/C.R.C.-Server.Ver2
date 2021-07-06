@@ -13,9 +13,8 @@ import noticeRouter from './router/notice'
 import swaggerUi from "swagger-ui-express";
 import * as swaggerDocument from './swagger.json'
 
-const app = express();
+const app = express();  
 const hostname = "10.120.75.224";
-
 require('dotenv').config();
 
 const mysql = require("mysql");
