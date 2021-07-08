@@ -6,10 +6,10 @@
         "description": "C.R.C 프로젝트 Swagger",
         "license": {
             "name": "MIT",
-            "url": "http://10.120.75.224:3000"
+            "url": "http://ec2-3-142-201-241.us-east-2.compute.amazonaws.com:3000"
         }
     },
-    "host": "10.120.75.224:3000",
+    "host": "ec2-3-142-201-241.us-east-2.compute.amazonaws.com:3000",
     "basePath": "/",
     "tags": [
         {
