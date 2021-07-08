@@ -53,7 +53,7 @@ notice.post('/register', (req:Request, res:Response) => {
             let title:string = req.body.title;
             let content:string = req.body.content;
             let today = new Date();
-            let time = today.toLocaleString().substring(0,today.toLocaleString().indexOf(' ')-1);
+            let time = today.toLocaleString().substring(0,today.toLocaleString().indexOf(' '));
         
             connection.query("INSERT INTO crcdb.notice(notice_title,notice_content,notice_time) VALUES(?,?,?)",[title,content,time],
             function(err:Error, results:any,fields:any ) {
