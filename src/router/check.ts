@@ -163,9 +163,23 @@ check.get('/three', (req:Request, res:Response) => {
         console.log(err)
         res.json({success:false,code:-401,message:'expired token'});
     }
-    
-
 });
+
+check.get("/role",(req:Request,res:Response) => {
+    let Token:any = req.get('Token');
+    let secretKey:Secret|any =  process.env.JWT_SECRET;
+    try {
+        let decoded:any =  jwt.verify(Token,secretKey);
+        if(decoded.role == 1) {
+            res.json({success:true, code:0, message:'role check success'})
+        } else {
+            res.json({success:false,code:-600,message:'wrong role'});
+        }
+    } catch (err) {
+        console.log(err);
+        res.json({success:false,code:-401,message:'expired token'});
+    }
+})
 
 
 export = check;

@@ -575,6 +575,30 @@
                 }
             }
         },
+        "/check/role": {
+            "get": {
+                "tags": [
+                    "check"
+                ],
+                "summary": "권한 확인",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Token",
+                        "type":"string"
+                    }
+                ],
+                
+                "responses": {
+                    "201": {
+                        "description": "role check Success"
+                    },
+                    "404": {
+                        "description": "Failed. Bad Request"
+                    }
+                }
+            }
+        },
         "/notice/check": {
             "get": {
                 "tags": [
