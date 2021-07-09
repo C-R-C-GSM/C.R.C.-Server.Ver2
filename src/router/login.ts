@@ -25,7 +25,8 @@ login.post('/', function(req:Request,res: Response,next:NextFunction) {
     let key:number;
     let role:number;
     let name:string;
-    connection.query("SELECT userid,role,name FROM crcdb.userdata WHERE email = ?",[email],
+    let auth:number;
+    connection.query("SELECT userid,role,auth FROM crcdb.userdata WHERE email = ?",[email],
     function(err:Error, results:any,fields:any) {
       if(err) {
         res.json({success:false,code:-100,message:'cannot connect db'});
@@ -34,6 +35,8 @@ login.post('/', function(req:Request,res: Response,next:NextFunction) {
         if(results[0]) {
           key = results[0].userid;
           role = results[0].role;
+          auth = results[0];
+          if(auth == 1) {
           connection.query("SELECT password,salt FROM crcdb.userdata WHERE email = ?",[email],
             function(err:Error, results:any,fields:any) {
               if(err) {
@@ -72,6 +75,9 @@ login.post('/', function(req:Request,res: Response,next:NextFunction) {
                 }
               }
             });
+          } else {
+            res.json({success:false,code:-203,message:'no auth login try'})
+          }
         } else {
           res.json({success:false,code:-202,message:'cannot find this email'})
         }
