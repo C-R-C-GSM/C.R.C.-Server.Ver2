@@ -23,39 +23,36 @@ connection.connect();
 
 let total_num:number = 0;
 let student_id:string;
-let oneData:JSON;
-let twoData:JSON;
-let threeData:JSON;
+let now_time;
+function reset_student() {
+    connection.query("UPDATE crcdb.student3 SET student_check = 0");
+    connection.query("UPDATE crcdb.student2 SET student_check = 0");
+    connection.query("UPDATE crcdb.student1 SET student_check = 0");
+}
 
-check.post('/come_student', (req:Request, res:Response) => {
+while (true) {
+    setTimeout(() => {
+        now_time = new Date()
+    }, 1000);
+}
+
+let reset_time = new Date().getHours();
+check.post('/come_student', async (req:Request, res:Response) => {
+    let now_time = new Date().getHours();
+    if(now_time == 5 || now_time == 11 || now_time == 16) {
+        await reset_student();
+        total_num = 0;
+    }
     total_num +=1;
     student_id = req.body.student_num;
     console.log(student_id);
     res.json({Done:"Done"});
     if(student_id.substring(0,1) == "1") {
-        connection.query("UPDATE crcdb.student1 SET student_check = ? WHERE certify = ?",[1,student_id],
-        function(err:Error,results:any, fields:any) {
-            if(err) console.log(err)
-            else {
-                console.log('삐빅 1번!')
-            }
-        });
+        connection.query("UPDATE crcdb.student1 SET student_check = ? WHERE certify = ?",[1,student_id]);
     } else if(student_id.substring(0,1) == "2") {
-        connection.query("UPDATE crcdb.student2 SET student_check = ? WHERE certify = ?",[1,student_id],
-        function(err:Error,results:any, fields:any) {
-            if(err) console.log(err)
-            else {
-                console.log('삐빅 2번!')
-            }
-        });
+        connection.query("UPDATE crcdb.student2 SET student_check = ? WHERE certify = ?",[1,student_id]);
     } else {
-        connection.query("UPDATE crcdb.student3 SET student_check = ? WHERE certify = ?",[1,student_id],
-        function(err:Error,results:any, fields:any) {
-            if(err) console.log(err)
-            else {
-                console.log('삐빅 3번!')
-            }
-        });
+        connection.query("UPDATE crcdb.student3 SET student_check = ? WHERE certify = ?",[1,student_id]);
     }
 });
 
@@ -65,26 +62,7 @@ check.get('/reset_student', (req:Request, res:Response) => { //서버 킬때마�
     try {
         let decoded:any =  jwt.verify(Token,secretKey);
         if(decoded.role == 1) {
-            connection.query("UPDATE crcdb.student3 SET student_check = 0",
-            function(err:Error,results:any, fields:any) {
-                if(err) res.json({success:false,code:-100,message:'cannot connect db'});
-                else {
-                    connection.query("UPDATE crcdb.student2 SET student_check = 0",
-                    function(err:Error,results:any, fields:any) {
-                        if(err) res.json({success:false,code:-100,message:'cannot connect db'});
-                        else {
-                            connection.query("UPDATE crcdb.student1 SET student_check = 0",
-                            function(err:Error,results:any, fields:any) {
-                                if(err) res.json({success:false,code:-100,message:'cannot connect db'});
-                                else {
-                                    res.json({success:true,code:0,message:'reset successs'});
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-            
+            reset_student();
         } else {
             res.json({success:false,code:-600,message:'wrong role'});
         }
@@ -112,6 +90,7 @@ check.get('/one', (req:Request, res:Response) => {
     let secretKey:Secret|any =  process.env.JWT_SECRET;
     try {
         let decoded:any =  jwt.verify(Token,secretKey);
+        
         connection.query("SELECT student_data,student_name,student_check FROM crcdb.student1",
         function(err:Error,results:any, fields:any) {
             if(err) res.json({success:false,code:-100,message:'cannot connect db'});
@@ -166,6 +145,7 @@ check.get('/three', (req:Request, res:Response) => {
 });
 
 check.get("/role",(req:Request,res:Response) => {
+    
     let Token:any = req.get('Token');
     let secretKey:Secret|any =  process.env.JWT_SECRET;
     try {

@@ -35,7 +35,7 @@ login.post('/', function(req:Request,res: Response,next:NextFunction) {
         if(results[0]) {
           key = results[0].userid;
           role = results[0].role;
-          auth = results[0];
+          auth = results[0].auth;
           if(auth == 1) {
           connection.query("SELECT password,salt FROM crcdb.userdata WHERE email = ?",[email],
             function(err:Error, results:any,fields:any) {
