@@ -1,10 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
-import request from 'request';
 import jwt,{Secret} from "jsonwebtoken";
 
 const check = express.Router();
 const crypto = require('crypto');
-
 
 var client = require('cheerio-httpcli');
 
@@ -159,7 +157,6 @@ check.get("/role",(req:Request,res:Response) => {
         console.log(err);
         res.json({success:false,code:-401,message:'expired token'});
     }
-})
-
+});
 
 export = check;
