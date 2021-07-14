@@ -28,30 +28,29 @@ function reset_student() {
     connection.query("UPDATE crcdb.student1 SET student_check = 0");
 }
 
-while (true) {
-    setTimeout(() => {
-        now_time = new Date()
-    }, 1000);
-}
-
-let reset_time = new Date().getHours();
 check.post('/come_student', async (req:Request, res:Response) => {
+    /*
     let now_time = new Date().getHours();
     if(now_time == 5 || now_time == 11 || now_time == 16) {
         await reset_student();
         total_num = 0;
     }
-    total_num +=1;
-    student_id = req.body.student_num;
-    console.log(student_id);
-    res.json({Done:"Done"});
-    if(student_id.substring(0,1) == "1") {
-        connection.query("UPDATE crcdb.student1 SET student_check = ? WHERE certify = ?",[1,student_id]);
-    } else if(student_id.substring(0,1) == "2") {
-        connection.query("UPDATE crcdb.student2 SET student_check = ? WHERE certify = ?",[1,student_id]);
-    } else {
-        connection.query("UPDATE crcdb.student3 SET student_check = ? WHERE certify = ?",[1,student_id]);
-    }
+    */
+   connection.query("SELECT check FROM certify = ?",[req.body.student_num],
+   function(err:Error, results:any,fields:any) {
+       if(results[0].check = 0) {
+        total_num +=1;
+        if(student_id.substring(0,1) == "1") {
+                connection.query("UPDATE crcdb.student1 SET student_check = ? WHERE certify = ?",[1,student_id]);
+            } else if(student_id.substring(0,1) == "2") {
+                connection.query("UPDATE crcdb.student2 SET student_check = ? WHERE certify = ?",[1,student_id]);
+            } else {
+                connection.query("UPDATE crcdb.student3 SET student_check = ? WHERE certify = ?",[1,student_id]);
+            }
+       } else {
+        console.log('중복된 처리')
+       }
+   });
 });
 
 check.get('/reset_student', (req:Request, res:Response) => { //서버 킬때마다 초기화 시키게 만들 예정
@@ -60,7 +59,14 @@ check.get('/reset_student', (req:Request, res:Response) => { //서버 킬때마�
     try {
         let decoded:any =  jwt.verify(Token,secretKey);
         if(decoded.role == 1) {
-            reset_student();
+            try {
+                total_num = 0;
+                connection.query("UPDATE crcdb.student3 SET student_check = 0");
+                connection.query("UPDATE crcdb.student2 SET student_check = 0");
+                connection.query("UPDATE crcdb.student1 SET student_check = 0");
+            } catch (error) {
+                console.log(error)
+            }
         } else {
             res.json({success:false,code:-600,message:'wrong role'});
         }
