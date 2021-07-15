@@ -21,7 +21,7 @@ connection.connect();
 
 let total_num:number = 0;
 let student_id:string;
-let now_time;
+//let now_time;
 function reset_student() {
     connection.query("UPDATE crcdb.student3 SET student_check = 0");
     connection.query("UPDATE crcdb.student2 SET student_check = 0");
