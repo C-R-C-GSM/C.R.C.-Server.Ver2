@@ -21,21 +21,25 @@ connection.connect();
 
 let total_num:number = 0;
 let student_id:string;
-//let now_time;
+
+let now_time;
+
 function reset_student() {
     connection.query("UPDATE crcdb.student3 SET student_check = 0");
     connection.query("UPDATE crcdb.student2 SET student_check = 0");
     connection.query("UPDATE crcdb.student1 SET student_check = 0");
 }
 
-check.post('/come_student', async (req:Request, res:Response) => {
-    /*
-    let now_time = new Date().getHours();
+setTimeout(async () => {
+    now_time = new Date().getHours();
     if(now_time == 5 || now_time == 11 || now_time == 16) {
         await reset_student();
         total_num = 0;
     }
-    */
+}, 100000);
+
+check.post('/come_student', async (req:Request, res:Response) => {
+
    connection.query("SELECT check FROM certify = ?",[req.body.student_num],
    function(err:Error, results:any,fields:any) {
        if(results[0].check = 0) {
