@@ -30,13 +30,6 @@ function reset_student() {
     connection.query("UPDATE crcdb.student1 SET student_check = 0");
 }
 
-setTimeout(async () => {
-    now_time = new Date().getHours();
-    if(now_time == 5 || now_time == 11 || now_time == 16) {
-        await reset_student();
-        total_num = 0;
-    }
-}, 100000);
 
 check.post('/come_student', async (req:Request, res:Response) => {
 
@@ -168,5 +161,15 @@ check.get("/role",(req:Request,res:Response) => {
         res.json({success:false,code:-401,message:'expired token'});
     }
 });
+
+while(true) {
+    setTimeout(async () => {
+        now_time = new Date().getHours();
+        if(now_time == 5 || now_time == 11 || now_time == 16) {
+            await reset_student();
+            total_num = 0;
+        }
+    }, 100000);
+}
 
 export = check;
