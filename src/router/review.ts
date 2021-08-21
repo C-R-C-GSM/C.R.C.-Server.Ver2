@@ -43,8 +43,7 @@ review.post('/register',async (request:Request, res:Response, next:NextFunction)
             let name = request.body.name;
             let when = request.body.when;
             let nickname= request.body.nickname;
-            let today = await new Date();
-            let time = await today.toLocaleString().substring(0,today.toLocaleString().indexOf(' '));
+            let time = request.body.time;
             connection.query("INSERT INTO crcdb.reviewdata(review_star,content,review_when,nickname,review_time) VALUES(?,?,?,?,?)",[review_star,content,when,nickname,time],
             function(err:Error,results:any,fields:any) {
                 if(err) {

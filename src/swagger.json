@@ -749,6 +749,9 @@
                 },
                 "when": {
                     "type":"string"
+                },
+                "time":{
+                    "type":"string"
                 }
             }
         },
