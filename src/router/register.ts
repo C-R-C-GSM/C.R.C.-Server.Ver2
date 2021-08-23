@@ -19,6 +19,7 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
+let address:string = "http://10.120.75.224:3000";
 
 register.post("/", (req: Request, res: Response, next: NextFunction) => {
     let email:string = req.body.email;
@@ -59,7 +60,7 @@ register.post("/", (req: Request, res: Response, next: NextFunction) => {
                     from:process.env.NODEMAILER_USER,
                     to:req.body.email,
                     subject:"회원가입 E-Mail인증번호",
-                    text:`http://10.120.75.224:3000/register/email-num-check?authNum=${authNum}&email=${req.body.email}`
+                    text:address+`/register/email-num-check?authNum=${authNum}&email=${req.body.email}`
                 };
 
                 await smtpTransport.sendMail(mailOptions, (error:Error, response:Response)=> {
