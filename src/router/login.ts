@@ -62,7 +62,7 @@ login.post('/', function(req:Request,res: Response,next:NextFunction) {
                               expiresIn: '1h',
                               issuer: 'C.R.C_SERVER' 
                             });
-                            res.json({Token:accessToken,success:true,code:0,message:'Issue Token and Login Success'});
+                            res.json({Token:accessToken,success:true,code:0,message:'Issue Token and Login Success',role:role});
                         } catch (error) {
                           res.json({success:false,code:-400,message:'token error'})
                         }
