@@ -138,38 +138,7 @@
                                 "message":"cannot connect db"
                             }
                         }
-                    },
-                    "401": {
-                        "description": "cannot find this email",
-                        "examples":{
-                            "application/json": {
-                                "success":false,
-                                "code":-202,
-                                "message":"cannot find this email"
-                            }
-                        }
-                    },
-                    "402": {
-                        "description": "wrong password",
-                        "examples":{
-                            "application/json": {
-                                "success":false,
-                                "code":-300,
-                                "message":"wrong password"
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "token error",
-                        "examples":{
-                            "application/json": {
-                                "success":false,
-                                "code":-400,
-                                "message":"token error"
-                            }
-                        }
                     }
-                    
                 }
             }
         },
