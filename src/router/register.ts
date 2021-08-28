@@ -19,7 +19,7 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
-let address:string = "http://10.120.75.224:3000";
+let address:string = "http://ec2-3-34-189-53.ap-northeast-2.compute.amazonaws.com:3000";
 
 register.post("/", (req: Request, res: Response, next: NextFunction) => {
     let email:string = req.body.email;

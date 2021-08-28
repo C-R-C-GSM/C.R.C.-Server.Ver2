@@ -162,14 +162,5 @@ check.get("/role",(req:Request,res:Response) => {
     }
 });
 
-while(true) {
-    setTimeout(async () => {
-        now_time = new Date().getHours();
-        if(now_time == 5 || now_time == 11 || now_time == 16) {
-            await reset_student();
-            total_num = 0;
-        }
-    }, 100000);
-}
 
 export = check;
