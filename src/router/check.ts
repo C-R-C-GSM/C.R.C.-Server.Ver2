@@ -50,7 +50,7 @@ check.post('/come_student', async (req:Request, res:Response) => {
    });
 });
 
-check.get('/reset_student', (req:Request, res:Response) => { //서버 킬때마다 초기화 시키게 만들 예정
+check.get('/reset_student', (req:Request, res:Response) => {
     let Token:any = req.get('Token');
     let secretKey:Secret|any =  process.env.JWT_SECRET;
     try {
